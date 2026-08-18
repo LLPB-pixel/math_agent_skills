@@ -1,0 +1,10 @@
+name = "MathAgent"
+version = "0.1.0"
+defaultTargets = ["mathagent"]
+
+[[lean_lib]]
+name = "MathAgent"
+
+[[lean_exe]]
+name = "mathagent"
+root = "Main"

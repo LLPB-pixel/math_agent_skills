@@ -1,0 +1,142 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{geometry}
+\geometry{margin=2.5cm}
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\title{Soluciones Tests 16-20: Álgebra}
+\author{Mathematical AI Agent}
+\date{\today}
+\begin{document}
+\maketitle
+\section{Problemas}
+
+\subsection*{Test 16: Pequeño teorema de Fermat}
+
+\begin{theorem}[Pequeño teorema de Fermat]
+Sea $p$ un número primo y $a \in \mathbb{Z}$. Entonces $a^p \equiv a \pmod{p}$.
+\end{theorem}
+
+\begin{proof}
+Procedemos por inducción sobre $a$.
+
+\textbf{Caso base:} Para $a = 0$, tenemos $0^p = 0 \equiv 0 \pmod{p}$, lo cual es verdadero.
+
+\textbf{Paso inductivo:} Supongamos que el resultado vale para un entero $a \geq 0$, es decir, $a^p \equiv a \pmod{p}$. Debemos probar que $(a+1)^p \equiv a+1 \pmod{p}$.
+
+Por el binomio de Newton:
+\[
+(a+1)^p = \sum_{k=0}^{p} \binom{p}{k} a^k = a^p + \sum_{k=1}^{p-1} \binom{p}{k} a^k + 1.
+\]
+
+Para $1 \leq k \leq p-1$, el coeficiente binomial $\binom{p}{k} = \frac{p!}{k!(p-k)!}$ es divisible por $p$, ya que $p$ es primo y aparece en el numerador pero no en el denominador (pues $k < p$ y $p-k < p$). Por lo tanto, $\binom{p}{k} \equiv 0 \pmod{p}$ para $1 \leq k \leq p-1$.
+
+Así:
+\[
+(a+1)^p \equiv a^p + 1 \pmod{p}.
+\]
+
+Por hipótesis inductiva, $a^p \equiv a \pmod{p}$, de donde:
+\[
+(a+1)^p \equiv a + 1 \pmod{p}.
+\]
+
+Para el caso $a < 0$, basta notar que $(-a)^p \equiv -a \pmod{p}$ por lo demostrado, y como $p$ es primo impar (salvo $p=2$ que se verifica directamente), tenemos $(-a)^p = -a^p$, luego $-a^p \equiv -a \pmod{p}$, es decir, $a^p \equiv a \pmod{p}$.
+\end{proof}
+
+\subsection*{Test 17: Infinitud de primos}
+
+\begin{theorem}[Euclides]
+La conjunto de números primos es infinito.
+\end{theorem}
+
+\begin{proof}
+Supongamos, por contradicción, que existen solo un número finito de primos, digamos $p_1, p_2, \ldots, p_n$. Consideremos el número:
+\[
+N = p_1 p_2 \cdots p_n + 1.
+\]
+
+Claramente $N > 1$, por lo que $N$ tiene al menos un divisor primo, digamos $q$.
+
+Si $q$ fuera igual a algún $p_i$ con $1 \leq i \leq n$, entonces $q$ dividiría al producto $p_1 p_2 \cdots p_n$. Pero como $q$ divide a $N$, tendríamos que $q$ divide a $N - p_1 p_2 \cdots p_n = 1$, lo cual es imposible.
+
+Por lo tanto, $q$ no está en la lista $\{p_1, p_2, \ldots, p_n\}$, lo que contradice la suposición de que esta lista contenía todos los primos.
+
+Concluimos que debe existir infinitos números primos.
+\end{proof}
+
+\subsection*{Test 18: Irracionalidad de $\sqrt{2}$}
+
+\begin{theorem}
+El número $\sqrt{2}$ es irracional, es decir, $\sqrt{2} \notin \mathbb{Q}$.
+\end{theorem}
+
+\begin{proof}
+Supongamos, por contradicción, que $\sqrt{2}$ es racional. Entonces existen enteros $a, b$ con $b \neq 0$ tales que $\sqrt{2} = \frac{a}{b}$, donde podemos suponer que $\frac{a}{b}$ está en forma reducida, es decir, $\gcd(a, b) = 1$.
+
+Elevando al cuadrado:
+\[
+2 = \frac{a^2}{b^2} \implies a^2 = 2b^2.
+\]
+
+Esto implica que $a^2$ es par. Probemos que entonces $a$ es par. Si $a$ fuera impar, entonces $a = 2k+1$ para algún entero $k$, y:
+\[
+a^2 = (2k+1)^2 = 4k^2 + 4k + 1 = 2(2k^2 + 2k) + 1,
+\]
+lo cual es impar, contradiciendo que $a^2$ es par. Por lo tanto, $a$ es par, y podemos escribir $a = 2m$ para algún entero $m$.
+
+Sustituyendo en $a^2 = 2b^2$:
+\[
+(2m)^2 = 2b^2 \implies 4m^2 = 2b^2 \implies b^2 = 2m^2.
+\]
+
+Por el mismo argumento, $b^2$ es par, luego $b$ es par. Pero entonces tanto $a$ como $b$ son pares, lo que contradice la hipótesis de que $\gcd(a, b) = 1$.
+
+Por lo tanto, nuestra suposición inicial es falsa, y $\sqrt{2}$ es irracional.
+\end{proof}
+
+\subsection*{Test 19: Paridad y cuadrados (par)}
+
+\begin{proposition}
+Si $a^2$ es par, entonces $a$ es par.
+\end{proposition}
+
+\begin{proof}
+Lo demostramos por contrapositiva. El contrapositivo de ``si $a^2$ es par entonces $a$ es par'' es ``si $a$ es impar entonces $a^2$ es impar''.
+
+Supongamos que $a$ es impar. Entonces $a = 2k + 1$ para algún entero $k$. Entonces:
+\[
+a^2 = (2k+1)^2 = 4k^2 + 4k + 1 = 2(2k^2 + 2k) + 1.
+\]
+
+Como $2k^2 + 2k$ es un entero, $a^2$ tiene la forma $2m + 1$ con $m = 2k^2 + 2k \in \mathbb{Z}$, lo que significa que $a^2$ es impar.
+
+Por lo tanto, por contrapositiva, si $a^2$ es par entonces $a$ es par.
+\end{proof}
+
+\subsection*{Test 20: Paridad y cuadrados (impar)}
+
+\begin{proposition}
+Si $n^2$ es impar, entonces $n$ es impar.
+\end{proposition}
+
+\begin{proof}
+Lo demostramos por contrapositiva. El contrapositivo de ``si $n^2$ es impar entonces $n$ es impar'' es ``si $n$ es par entonces $n^2$ es par''.
+
+Supongamos que $n$ es par. Entonces $n = 2k$ para algún entero $k$. Entonces:
+\[
+n^2 = (2k)^2 = 4k^2 = 2(2k^2).
+\]
+
+Como $2k^2$ es un entero, $n^2$ tiene la forma $2m$ con $m = 2k^2 \in \mathbb{Z}$, lo que significa que $n^2$ es par.
+
+Por lo tanto, por contrapositiva, si $n^2$ es impar entonces $n$ es impar.
+\end{proof}
+
+\end{document}

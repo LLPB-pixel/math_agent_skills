@@ -1,0 +1,182 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{geometry}
+\geometry{margin=2.5cm}
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\title{Soluciones Tests 67-71: Probabilidad}
+\author{Mathematical AI Agent}
+\date{\today}
+\begin{document}
+\maketitle
+
+\section{Problemas}
+
+% ========================================================================
+% TEST 67: Varianza en función de los momentos
+% ========================================================================
+\begin{theorem}[Varianza en función de los momentos]
+Sea $X$ una variable aleatoria con esperanza finita. Entonces:
+\[
+\text{Var}(X) = E[X^2] - (E[X])^2
+\]
+\end{theorem}
+
+\begin{proof}
+Por definición, la varianza de $X$ es:
+\[
+\text{Var}(X) = E\left[(X - E[X])^2\right]
+\]
+Expandimos el cuadrado dentro de la esperanza:
+\[
+(X - E[X])^2 = X^2 - 2X\cdot E[X] + (E[X])^2
+\]
+Aplicando la linealidad de la esperanza:
+\begin{align*}
+\text{Var}(X) &= E\left[X^2 - 2X\cdot E[X] + (E[X])^2\right] \\
+&= E[X^2] - E\left[2X\cdot E[X]\right] + E\left[(E[X])^2\right]
+\end{align*}
+Observamos que $E[X]$ es una constante, por lo tanto:
+\begin{itemize}
+\item $E\left[2X\cdot E[X]\right] = 2E[X]\cdot E[X] = 2(E[X])^2$
+\item $E\left[(E[X])^2\right] = (E[X])^2$ (la esperanza de una constante es la constante misma)
+\end{itemize}
+Sustituyendo:
+\begin{align*}
+\text{Var}(X) &= E[X^2] - 2(E[X])^2 + (E[X])^2 \\
+&= E[X^2] - (E[X])^2
+\end{align*}
+\end{proof}
+
+% ========================================================================
+% TEST 68: Independencia y esperanza del producto
+% ========================================================================
+\begin{theorem}[Independencia y esperanza del producto]
+Sean $X$ e $Y$ variables aleatorias independientes con esperanzas finitas. Entonces:
+\[
+E[XY] = E[X]E[Y]
+\]
+\end{theorem}
+
+\begin{proof}
+Supongamos primero que $X$ e $Y$ son variables aleatorias discretas con funciones de masa de probabilidad $p_X(x)$ y $p_Y(y)$ respectivamente. Por independencia, la función de masa conjunta es:
+\[
+P(X = x, Y = y) = P(X = x) \cdot P(Y = y) = p_X(x) \cdot p_Y(y)
+\]
+La esperanza del producto es:
+\begin{align*}
+E[XY] &= \sum_{x}\sum_{y} xy \cdot P(X = x, Y = y) \\
+&= \sum_{x}\sum_{y} xy \cdot p_X(x) \cdot p_Y(y) \\
+&= \sum_{x} x \cdot p_X(x) \sum_{y} y \cdot p_Y(y) \quad \text{(factorizando, ya que los sumandos son independientes)} \\
+&= \left(\sum_{x} x \cdot p_X(x)\right) \cdot \left(\sum_{y} y \cdot p_Y(y)\right) \\
+&= E[X] \cdot E[Y]
+\end{align*}
+Para el caso continuo, la demostración es análoga usando integrales con las funciones de densidad conjunta $f_{X,Y}(x,y) = f_X(x) \cdot f_Y(y)$ (por independencia):
+\[
+E[XY] = \int_{-\infty}^{\infty}\int_{-\infty}^{\infty} xy \cdot f_X(x) \cdot f_Y(y) \, dx \, dy = E[X] \cdot E[Y]
+\]
+\end{proof}
+
+% ========================================================================
+% TEST 69: Varianza de una transformación afín
+% ========================================================================
+\begin{theorem}[Varianza de una transformación afín]
+Sea $X$ una variable aleatoria y $a, b$ constantes reales. Entonces:
+\[
+\text{Var}(aX + b) = a^2\text{Var}(X)
+\]
+\end{theorem}
+
+\begin{proof}
+Por definición de varianza:
+\[
+\text{Var}(aX + b) = E\left[(aX + b - E[aX + b])^2\right]
+\]
+Primero calculamos $E[aX + b]$ usando la linealidad de la esperanza:
+\[
+E[aX + b] = aE[X] + b
+\]
+Sustituyendo en la expresión de la varianza:
+\begin{align*}
+\text{Var}(aX + b) &= E\left[(aX + b - (aE[X] + b))^2\right] \\
+&= E\left[(aX + b - aE[X] - b)^2\right] \\
+&= E\left[(aX - aE[X])^2\right] \\
+&= E\left[a^2(X - E[X])^2\right] \\
+&= a^2 E\left[(X - E[X])^2\right] \quad \text{(por linealidad, $a^2$ es constante)} \\
+&= a^2 \text{Var}(X)
+\end{align*}
+\end{proof}
+
+% ========================================================================
+% TEST 70: Desigualdad de Markov
+% ========================================================================
+\begin{theorem}[Desigualdad de Markov]
+Sea $X$ una variable aleatoria no negativa (es decir, $P(X \geq 0) = 1$) con esperanza finita. Para cualquier $a > 0$:
+\[
+P(X \geq a) \leq \frac{E[X]}{a}
+\]
+\end{theorem}
+
+\begin{proof}
+Definimos el indicador del evento $\{X \geq a\}$:
+\[
+\mathbf{1}_{\{X \geq a\}} = \begin{cases} 1 & \text{si } X \geq a \\ 0 & \text{si } X < a \end{cases}
+\]
+Como $X \geq 0$, tenemos que para todo $\omega$ en el espacio muestral:
+\[
+X(\omega) \cdot \mathbf{1}_{\{X \geq a\}}(\omega) \geq a \cdot \mathbf{1}_{\{X \geq a\}}(\omega)
+\]
+Tomando esperanza en ambos lados (y usando que la esperanza preserva la desigualdad):
+\[
+E\left[X \cdot \mathbf{1}_{\{X \geq a\}}\right] \geq E\left[a \cdot \mathbf{1}_{\{X \geq a\}}\right] = a \cdot E\left[\mathbf{1}_{\{X \geq a\}}\right] = a \cdot P(X \geq a)
+\]
+Por otra parte, como $X \geq 0$:
+\[
+E[X] = E\left[X \cdot \mathbf{1}_{\{X \geq a\}}\right] + E\left[X \cdot \mathbf{1}_{\{X < a\}}\right] \geq E\left[X \cdot \mathbf{1}_{\{X \geq a\}}\right]
+\]
+Combinando las dos desigualdades:
+\[
+E[X] \geq a \cdot P(X \geq a)
+\]
+Dividiendo por $a > 0$:
+\[
+P(X \geq a) \leq \frac{E[X]}{a}
+\]
+\end{proof}
+
+% ========================================================================
+% TEST 71: Desigualdad de Chebyshev
+% ========================================================================
+\begin{theorem}[Desigualdad de Chebyshev]
+Sea $X$ una variable aleatoria con esperanza $\mu = E[X]$ y varianza $\text{Var}(X) = \sigma^2 < \infty$. Para cualquier $k > 0$:
+\[
+P(|X - \mu| \geq k\sigma) \leq \frac{1}{k^2}
+\]
+\end{theorem}
+
+\begin{proof}
+Sea $Y = (X - \mu)^2$. Esta variable aleatoria es no negativa, ya que es un cuadrado. Calculamos su esperanza:
+\[
+E[Y] = E[(X - \mu)^2] = \text{Var}(X) = \sigma^2
+\]
+Observamos que el evento $\{|X - \mu| \geq k\sigma\}$ es equivalente a $\{(X - \mu)^2 \geq k^2\sigma^2\}$, es decir:
+\[
+\{|X - \mu| \geq k\sigma\} = \{Y \geq k^2\sigma^2\}
+\]
+Aplicamos la desigualdad de Markov (Test 70) a la variable aleatoria no negativa $Y$ con el valor $a = k^2\sigma^2 > 0$:
+\[
+P(Y \geq k^2\sigma^2) \leq \frac{E[Y]}{k^2\sigma^2}
+\]
+Sustituyendo $E[Y] = \sigma^2$:
+\[
+P(|X - \mu| \geq k\sigma) = P(Y \geq k^2\sigma^2) \leq \frac{\sigma^2}{k^2\sigma^2} = \frac{1}{k^2}
+\]
+\end{proof}
+
+\end{document}

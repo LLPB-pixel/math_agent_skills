@@ -1,0 +1,186 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{geometry}
+\geometry{margin=2.5cm}
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\title{Soluciones Tests 51-55: Análisis}
+\author{Mathematical AI Agent}
+\date{\today}
+\begin{document}
+\maketitle
+\section{Problemas}
+
+\subsection{Extremos en compactos}
+
+\begin{theorem}[Extremos en compactos]
+Sea $K \subseteq \mathbb{R}$ un conjunto compacto y $f : K \to \mathbb{R}$ continua. Entonces $f$ alcanza su máximo y su mínimo en $K$; es decir, existen $x_0, x_1 \in K$ tales que $f(x_0) \leq f(x) \leq f(x_1)$ para todo $x \in K$.
+\end{theorem}
+
+\begin{proof}
+Sea $K$ compacto y $f : K \to \mathbb{R}$ continua. El conjunto imagen $f(K)$ es compacto porque la imagen de un compacto por una función continua es compacta. En $\mathbb{R}$, todo conjunto compacto es acotado y cerrado (por el teorema de Heine-Borel).
+
+\medskip
+\textbf{Existencia del máximo.} Sea $M = \sup f(K)$. Como $f(K)$ es acotado superiormente, $M$ está bien definido y $M < +\infty$. Por definición de supremo, para cada $n \in \mathbb{N}$ existe $y_n \in f(K)$ tal que
+\[
+M - \frac{1}{n} < y_n \leq M.
+\]
+Sea $x_n \in K$ tal que $f(x_n) = y_n$. La sucesión $(x_n)$ está en $K$ compacto, por lo que existe una subsucesión $(x_{n_k})$ que converge a algún $x_1 \in K$. Por la continuidad de $f$,
+\[
+f(x_1) = \lim_{k \to \infty} f(x_{n_k}) = \lim_{k \to \infty} y_{n_k} = M.
+\]
+Como $x_1 \in K$, se tiene $f(x_1) \leq M$. Pero $M$ es cota superior de $f(K)$, luego $f(x_1) \geq f(x)$ para todo $x \in K$. Por lo tanto, $f$ alcanza su máximo en $x_1$.
+
+\medskip
+\textbf{Existencia del mínimo.} Sea $m = \inf f(K)$. Análogamente, como $f(K)$ es acotado inferiormente, para cada $n \in \mathbb{N}$ existe $z_n \in f(K)$ tal que
+\[
+m \leq z_n < m + \frac{1}{n}.
+\]
+Sea $w_n \in K$ con $f(w_n) = z_n$. Como $K$ es compacto, existe una subsucesión $(w_{n_k})$ convergente a algún $x_0 \in K$. Por continuidad,
+\[
+f(x_0) = \lim_{k \to \infty} f(w_{n_k}) = \lim_{k \to \infty} z_{n_k} = m.
+\]
+Luego $f(x_0) \leq f(x)$ para todo $x \in K$, por lo que $f$ alcanza su mínimo en $x_0$.
+\end{proof}
+
+\subsection{Teorema de Bolzano-Weierstrass}
+
+\begin{theorem}[Bolzano-Weierstrass]
+Toda sucesión acotada en $\mathbb{R}$ admite una subsucesión convergente.
+\end{theorem}
+
+\begin{proof}
+Sea $(x_n)$ una sucesión acotada en $\mathbb{R}$. Entonces existe $M > 0$ tal que $x_n \in [-M, M]$ para todo $n \in \mathbb{N}$.
+
+\medskip
+Denotamos $I_0 = [-M, M]$. Dividimos $I_0$ en dos subintervalos de igual longitud:
+\[
+I_0^- = \left[-M, 0\right], \quad I_0^+ = \left[0, M\right].
+\]
+Por el principio del palomar, al menos uno de estos subintervalos contiene infinitos términos de la sucesión $(x_n)$. Sea $I_1$ uno de estos subintervalos.
+
+\medskip
+Ahora subdividimos $I_1$ en dos subintervalos de igual longitud. Por el mismo principio, al menos uno contiene infinitos términos de $(x_n)$. Sea $I_2$ ese subintervalo.
+
+\medskip
+Continuando de forma inductiva, construimos una sucesión de intervalos $I_0 \supseteq I_1 \supseteq I_2 \supseteq \cdots$ tales que:
+\begin{enumerate}
+    \item La longitud de $I_k$ es $\frac{2M}{2^k}$, que tiende a $0$ cuando $k \to \infty$.
+    \item Cada $I_k$ contiene infinitos términos de $(x_n)$.
+\end{enumerate}
+
+\medskip
+Por el \emph{principio de los intervalos anidados} (o por compacidad de $\mathbb{R}$), la intersección $\bigcap_{k=0}^{\infty} I_k$ contiene exactamente un punto, digamos $L$.
+
+\medskip
+Construimos ahora una subsucesión convergente. Sea $n_1$ el primer índice tal que $x_{n_1} \in I_1$. Dado $n_k$, sea $n_{k+1} > n_k$ el primer índice tal que $x_{n_{k+1}} \in I_{k+1}$ (tal índice existe porque $I_{k+1}$ contiene infinitos términos de la sucesión). Entonces
+\[
+|x_{n_k} - L| \leq \text{long}(I_k) = \frac{2M}{2^k} \to 0 \quad \text{cuando } k \to \infty.
+\]
+Por lo tanto, la subsucesión $(x_{n_k})$ converge a $L$.
+\end{proof}
+
+\subsection{Teorema de Heine-Borel en $\mathbb{R}$}
+
+\begin{theorem}[Heine-Borel]
+Un subconjunto $F \subseteq \mathbb{R}$ es compacto si y solo si $F$ es acotado y cerrado.
+\end{theorem}
+
+\begin{proof}
+\textbf{($\Rightarrow$) Si $F$ es compacto, entonces es acotado y cerrado.}
+
+\medskip
+Asumimos que $F$ no es acotado. Entonces para cada $n \in \mathbb{N}$ existe $x_n \in F$ tal que $|x_n| > n$. La sucesión $(x_n)$ no tiene subsucesión convergente porque cualquier subsucesión sería divergente (las distancias entre términos crecen sin cota). Esto contradice que $F$ sea compacto. Por lo tanto, $F$ es acotado.
+
+\medskip
+Sea $(x_n)$ una sucesión en $F$ que converge a algún $x \in \mathbb{R}$. Por la compacidad de $F$, existe una subsucesión $(x_{n_k})$ que converge a algún $y \in F$. Pero una sucesión con subsucesión convergente solo puede tener un único límite, luego $x = y \in F$. Esto demuestra que $F$ contiene todos sus puntos de acumulación, es decir, $F$ es cerrado.
+
+\medskip
+\textbf{($\Leftarrow$) Si $F$ es acotado y cerrado, entonces es compacto.}
+
+\medskip
+Sea $(x_n)$ una sucesión en $F$. Como $F$ es acotado, $(x_n)$ es una sucesión acotada. Por el teorema de Bolzano-Weierstrass, existe una subsucesión $(x_{n_k})$ convergente a algún $x \in \mathbb{R}$. Como $F$ es cerrado, $x \in F$.
+
+\medskip
+Esto demuestra que toda sucesión en $F$ admite una subsucesión convergente a un punto de $F$, que es la definición de compacto en $\mathbb{R}$.
+\end{proof}
+
+\subsection{Convergencia absoluta implica convergencia}
+
+\begin{theorem}
+Si la serie $\sum_{n=1}^{\infty} a_n$ converge absolutamente (es decir, $\sum_{n=1}^{\infty} |a_n|$ converge), entonces $\sum_{n=1}^{\infty} a_n$ converge.
+\end{theorem}
+
+\begin{proof}
+Supongamos que $\sum_{n=1}^{\infty} |a_n|$ converge. Definimos las partes positiva y negativa de $a_n$:
+\[
+a_n^+ = \max\{a_n, 0\} = \frac{|a_n| + a_n}{2}, \qquad a_n^- = \max\{-a_n, 0\} = \frac{|a_n| - a_n}{2}.
+\]
+Se tiene que $0 \leq a_n^+ \leq |a_n|$ y $0 \leq a_n^- \leq |a_n|$ para todo $n$.
+
+\medskip
+Por el criterio de comparación para series con términos no negativos, como $\sum |a_n|$ converge y $a_n^+, a_n^- \leq |a_n|$, entonces las series $\sum_{n=1}^{\infty} a_n^+$ y $\sum_{n=1}^{\infty} a_n^-$ convergen (son series con términos no negativos y acotadas por una serie convergente).
+
+\medskip
+Sea $S_N^+ = \sum_{n=1}^{N} a_n^+$ y $S_N^- = \sum_{n=1}^{N} a_n^-$. Por la convergencia de ambas series,
+\[
+\lim_{N \to \infty} S_N^+ = S^+ \in \mathbb{R}, \qquad \lim_{N \to \infty} S_N^- = S^- \in \mathbb{R}.
+\]
+Ahora, las sumas parciales de la serie original son:
+\[
+S_N = \sum_{n=1}^{N} a_n = \sum_{n=1}^{N} (a_n^+ - a_n^-) = S_N^+ - S_N^-.
+\]
+Por lo tanto,
+\[
+\lim_{N \to \infty} S_N = \lim_{N \to \infty} (S_N^+ - S_N^-) = S^+ - S^- \in \mathbb{R},
+\]
+lo que demuestra que la serie $\sum_{n=1}^{\infty} a_n$ converge.
+\end{proof}
+
+\subsection{Serie geométrica}
+
+\begin{theorem}[Serie geométrica]
+Para todo $r \in \mathbb{R}$ con $|r| < 1$, la serie geométrica $\sum_{n=0}^{\infty} r^n$ converge y su suma es $\frac{1}{1-r}$.
+\end{theorem}
+
+\begin{proof}
+Sea $S_N = \sum_{n=0}^{N} r^n = 1 + r + r^2 + \cdots + r^N$ la $N$-ésima suma parcial.
+
+\medskip
+\textbf{Fórmula de la suma parcial.} Multiplicamos $S_N$ por $r$:
+\[
+rS_N = r + r^2 + r^3 + \cdots + r^{N+1}.
+\]
+Restando:
+\[
+S_N - rS_N = (1 + r + r^2 + \cdots + r^N) - (r + r^2 + \cdots + r^{N+1}) = 1 - r^{N+1}.
+\]
+Factorizando:
+\[
+S_N(1 - r) = 1 - r^{N+1}.
+\]
+Como $|r| < 1$, tenemos $r \neq 1$, luego:
+\[
+S_N = \frac{1 - r^{N+1}}{1 - r}.
+\]
+
+\medskip
+\textbf{Convergencia.} Como $|r| < 1$, se tiene $|r^{N+1}| = |r|^{N+1} \to 0$ cuando $N \to \infty$. Por lo tanto,
+\[
+\lim_{N \to \infty} S_N = \lim_{N \to \infty} \frac{1 - r^{N+1}}{1 - r} = \frac{1 - 0}{1 - r} = \frac{1}{1 - r}.
+\]
+
+\medskip
+Esto demuestra que la serie geométrica converge y que
+\[
+\sum_{n=0}^{\infty} r^n = \frac{1}{1-r} \quad \text{para todo } r \in \mathbb{R} \text{ con } |r| < 1.
+\]
+\end{proof}
+
+\end{document}

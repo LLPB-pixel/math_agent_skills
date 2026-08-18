@@ -1,0 +1,147 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{geometry}
+\geometry{margin=2.5cm}
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\title{Soluciones Tests 26-30: C\'alculo}
+\author{Mathematical AI Agent}
+\date{\today}
+\begin{document}
+\maketitle
+\section{Problemas}
+
+% ============================================================
+% TEST 26: Integral de sin(x)
+% ============================================================
+\begin{proposition}\label{prop:26}
+$\displaystyle\int_0^\pi \sin x \, dx = 2.$
+\end{proposition}
+
+\begin{proof}
+Sabemos que la primitiva de $\sin x$ es $-\cos x$. Por el Teorema Fundamental del C\'alculo:
+\[
+\int_0^\pi \sin x \, dx = \bigl[-\cos x\bigr]_0^\pi = (-\cos \pi) - (-\cos 0).
+\]
+Como $\cos \pi = -1$ y $\cos 0 = 1$:
+\[
+(-\cos\pi) - (-\cos 0) = -(-1) - (-1) = 1 + 1 = 2.
+\]
+\end{proof}
+
+% ============================================================
+% TEST 27: L\'imite fundamental trigonom\'etrico
+% ============================================================
+\begin{proposition}\label{prop:27}
+$\displaystyle\lim_{x \to 0} \frac{\sin x}{x} = 1.$
+\end{proposition}
+
+\begin{proof}
+Sean $x \in \left(-\frac{\pi}{2}, \frac{\pi}{2}\right) \setminus \{0\}$.
+Probaremos la desigualdad geom\'etrica
+\[
+\cos x < \frac{\sin x}{x} < 1
+\]
+para $x$ cercano a $0$.
+
+\textbf{Cota superior:} En el c\'irculo unitario, el \'area del sector circular de \'angulo $|x|$ es $\frac{|x|}{2}$, mientras que el \'area del tri\'angulo con v\'ertices en $O$, $(\cos x, \sin x)$ y $(1,0)$ es $\frac{1}{2}\sin|x|$. Por inclusi\'on de \'areas,
+\[
+\frac{1}{2}\sin|x| < \frac{|x|}{2} \quad\Longrightarrow\quad \frac{\sin|x|}{|x|} < 1.
+\]
+Como $\frac{\sin(-x)}{-x} = \frac{\sin x}{x}$, basta considerar $x > 0$.
+
+\textbf{Cota inferior:} El \'area del tri\'angulo con v\'ertices $(0,0)$, $(\cos x, \sin x)$ y $(\cos x, 0)$ es $\frac{1}{2}\cos x \cdot \sin x$. Combinando con la desigualdad anterior y usando las identidades de suma:
+\[
+\frac{\sin x}{x} > \cos x \quad \text{para } 0 < |x| < \frac{\pi}{2}.
+\]
+
+Ahora aplicamos el Teorema del L\'imite Aplicado (\emph{Squeeze Theorem}). Dado que
+\[
+\cos x \leq \frac{\sin x}{x} \leq 1,
+\]
+y como $\lim_{x\to 0}\cos x = 1$ y $\lim_{x\to 0} 1 = 1$, se concluye que
+\[
+\lim_{x \to 0} \frac{\sin x}{x} = 1. \qedhere
+\]
+\end{proof}
+
+% ============================================================
+% TEST 28: L\'imite de (e^x - 1)/x
+% ============================================================
+\begin{proposition}\label{prop:28}
+$\displaystyle\lim_{x \to 0} \frac{e^x - 1}{x} = 1.$
+\end{proposition}
+
+\begin{proof}
+Sea $t = e^x - 1$. Entonces $x = \ln(1+t)$ y cuando $x \to 0$ se tiene $t \to 0$. Sustituyendo:
+\[
+\frac{e^x - 1}{x} = \frac{t}{\ln(1+t)}.
+\]
+Esperaremos en el Teorema 29 (\'area que probaremos a continuaci\'on) o bien podemos probar el l\'imite directamente usando la serie de Taylor. Usaremos la serie exponencial: para todo $x \in \mathbb{R}$,
+\[
+e^x = \sum_{n=0}^{\infty} \frac{x^n}{n!} = 1 + x + \frac{x^2}{2!} + \frac{x^3}{3!} + \cdots
+\]
+Luego,
+\[
+\frac{e^x - 1}{x} = \frac{x + \frac{x^2}{2!} + \frac{x^3}{3!} + \cdots}{x} = 1 + \frac{x}{2!} + \frac{x^2}{3!} + \cdots = 1 + \sum_{n=1}^{\infty} \frac{x^n}{(n+1)!}.
+\]
+La serie $\sum_{n=1}^{\infty} \frac{x^n}{(n+1)!}$ converge uniformemente en intervalos acotados, y en particular cuando $x \to 0$:
+\[
+\lim_{x \to 0} \frac{e^x - 1}{x} = 1 + 0 = 1. \qedhere
+\]
+\end{proof}
+
+% ============================================================
+% TEST 29: L\'imite de ln(1+x)/x
+% ============================================================
+\begin{proposition}\label{prop:29}
+$\displaystyle\lim_{x \to 0} \frac{\ln(1 + x)}{x} = 1.$
+\end{proposition}
+
+\begin{proof}
+Sea $t = \ln(1+x)$, de modo que $x = e^t - 1$. Cuando $x \to 0$ se tiene $t \to 0$. Entonces:
+\[
+\frac{\ln(1+x)}{x} = \frac{t}{e^t - 1}.
+\]
+Por el Teorema~\ref{prop:28}, $\lim_{t \to 0} \frac{e^t - 1}{t} = 1$, y por lo tanto su rec\'iproco tambi\'en tiende a $1$:
+\[
+\lim_{x \to 0} \frac{\ln(1+x)}{x} = \lim_{t \to 0} \frac{t}{e^t - 1} = \frac{1}{\displaystyle\lim_{t \to 0}\frac{e^t - 1}{t}} = \frac{1}{1} = 1. \qedhere
+\]
+\end{proof}
+
+% ============================================================
+% TEST 30: Desigualdad e^x >= 1 + x
+% ============================================================
+\begin{theorem}\label{thm:30}
+Para todo $x \in \mathbb{R}$, se tiene $e^x \geq 1 + x$.
+\end{theorem}
+
+\begin{proof}
+Definimos la funci\'on $f(x) = e^x - 1 - x$ para $x \in \mathbb{R}$. Debemos probar que $f(x) \geq 0$ para todo $x$.
+
+Calculamos las derivadas:
+\[
+f'(x) = e^x - 1, \qquad f''(x) = e^x > 0 \quad \text{para todo } x \in \mathbb{R}.
+\]
+Como $f''(x) > 0$ para todo $x$, la funci\'on $f$ es estrictamente convexa.
+
+El punto cr\'itico se obtiene de $f'(x) = 0$, es decir, $e^x = 1$, lo que da $x = 0$. Como $f$ es convexa, este punto cr\'itico es un m\'inimo global.
+
+Evaluamos:
+\[
+f(0) = e^0 - 1 - 0 = 1 - 1 = 0.
+\]
+Por lo tanto, $x = 0$ es el m\'inimo global de $f$, y en consecuencia:
+\[
+f(x) = e^x - 1 - x \geq f(0) = 0 \quad \text{para todo } x \in \mathbb{R}.
+\]
+Equivalentemente, $e^x \geq 1 + x$ para todo $x \in \mathbb{R}$, con igualdad si y solo si $x = 0$. \qedhere
+\end{proof}
+
+\end{document}

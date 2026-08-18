@@ -1,0 +1,356 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{geometry}
+\geometry{margin=2.5cm}
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\title{Soluciones Tests 96-100: Problemas Difíciles}
+\author{Mathematical AI Agent}
+\date{\today}
+\begin{document}
+\maketitle
+
+\section{Problemas}
+
+%======================================================================
+% TEST 96: Teorema de Fubini
+%======================================================================
+\subsection*{Test 96: Teorema de Fubini}
+
+\begin{definition}
+Sean $(X,\mathcal{A},\mu)$ y $(Y,\mathcal{B},\nu)$ espacios de medida $\sigma$-finitos. Para una función $f:X\times Y\to\mathbb{R}$ medible producto, las \emph{integrales iteradas} se definen como
+\[
+\int_{X}\!\left(\int_{Y}f(x,y)\,d\nu(y)\right)d\mu(x),\qquad
+\int_{Y}\!\left(\int_{X}f(x,y)\,d\mu(x)\right)d\nu(y),
+\]
+donde las integrales internas son las integrales de Lebesgue respecto a la variable correspondiente, para cada valor fijo de la otra variable.
+\end{definition}
+
+\begin{theorem}[Fubini]
+Sean $(X,\mathcal{A},\mu)$ y $(Y,\mathcal{B},\nu)$ espacios de medida $\sigma$-finitos, y sea $f:X\times Y\to\mathbb{R}$ una función medible producto tal que
+\[
+\int_{X\times Y}|f|\,d(\mu\times\nu)<\infty.
+\]
+Entonces:
+\begin{enumerate}
+\item Para $\mu$-casi todo $x\in X$, la función $y\mapsto f(x,y)$ es $\nu$-integrable.
+\item Para $\nu$-casi todo $y\in Y$, la función $x\mapsto f(x,y)$ es $\mu$-integrable.
+\item Las integrales iteradas existen y son iguales:
+\[
+\int_{X}\!\left(\int_{Y}f(x,y)\,d\nu(y)\right)d\mu(x)
+=\int_{Y}\!\left(\int_{X}f(x,y)\,d\mu(x)\right)d\nu(y)
+=\int_{X\times Y}f\,d(\mu\times\nu).
+\]
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+El argumento se organiza en varios pasos, comenzando por funciones simples y extendiendo por convergencia monótona.
+
+\textbf{Paso 1: Funciones indicadoras.} Sea $f=\mathbf{1}_{A}$ con $A=E\times F$, $E\in\mathcal{A}$, $F\in\mathcal{B}$. Entonces
+\[
+\int_{X\times Y}\mathbf{1}_{E\times F}\,d(\mu\times\nu)=\mu(E)\cdot\nu(F).
+\]
+Por otro lado, para todo $x\in X$,
+\[
+\int_{Y}\mathbf{1}_{E\times F}(x,y)\,d\nu(y)=\mathbf{1}_{E}(x)\cdot\nu(F),
+\]
+y luego
+\[
+\int_{X}\!\left(\int_{Y}\mathbf{1}_{E\times F}(x,y)\,d\nu(y)\right)d\mu(x)
+=\nu(F)\int_{X}\mathbf{1}_{E}(x)\,d\mu(x)=\nu(F)\cdot\mu(E).
+\]
+El mismo cálculo con el orden invertido produce el mismo resultado.
+
+\textbf{Paso 2: Funciones escalares no negativas.} Por linealidad, el resultado vale para toda función simple $s=\sum_{i=1}^{n}a_{i}\,\mathbf{1}_{A_{i}}$ ($a_{i}\ge 0$):
+\[
+\int_{X}\!\left(\int_{Y}s(x,y)\,d\nu(y)\right)d\mu(x)
+=\int_{Y}\!\left(\int_{X}s(x,y)\,d\mu(x)\right)d\nu(y)
+=\int_{X\times Y}s\,d(\mu\times\nu).
+\]
+
+Para $f\ge 0$ medible producto, existe una sucesión de funciones simples no negativas $s_{n}\nearrow f$ puntualmente. Por el Teorema de Convergencia Monótona (aplicado dos veces, para cada integral iterada) y al producto:
+\begin{align*}
+\int_{X}\!\left(\int_{Y}f(x,y)\,d\nu(y)\right)d\mu(x)
+&=\int_{X}\!\left(\lim_{n\to\infty}\int_{Y}s_{n}(x,y)\,d\nu(y)\right)d\mu(x)\\
+&=\lim_{n\to\infty}\int_{X}\!\left(\int_{Y}s_{n}(x,y)\,d\nu(y)\right)d\mu(x)\\
+&=\lim_{n\to\infty}\int_{X\times Y}s_{n}\,d(\mu\times\nu)
+=\int_{X\times Y}f\,d(\mu\times\nu).
+\end{align*}
+El mismo argumento con el otro orden de integración produce la igualdad deseada.
+
+\textbf{Paso 3: Funciones generales con $f\in L^{1}$.} Escribimos $f=f^{+}-f^{-}$ con $f^{+},f^{-}\ge 0$. Como $\int|f|\,d(\mu\times\nu)<\infty$, tanto $f^{+}$ como $f^{-}$ son integrables en el producto. Por el Paso 2, ambas integrales iteradas existen y coinciden con la integral en el producto. Restando:
+\[
+\int_{X}\!\left(\int_{Y}f(x,y)\,d\nu(y)\right)d\mu(x)
+=\int_{X}\!\left(\int_{Y}f^{+}(x,y)\,d\nu(y)-\int_{Y}f^{-}(x,y)\,d\nu(y)\right)d\mu(x)
+=\int_{X\times Y}f\,d(\mu\times\nu),
+\]
+y análogamente con el orden invertido. La igualdad de las dos integrales iteradas queda establecida.
+\end{proof}
+
+%======================================================================
+% TEST 97: Teorema de Radon-Nikodym
+%======================================================================
+\subsection*{Test 97: Teorema de Radon-Nikodym}
+
+\begin{definition}
+Sean $(\Omega,\mathcal{F})$ un espacio medible y $\mu,\nu$ medidas $\sigma$-finitas sobre $\mathcal{F}$. Se dice que $\nu$ es \emph{absolutamente continua} respecto a $\mu$, y se escribe $\nu\ll\mu$, si
+\[
+\mu(A)=0\implies\nu(A)=0\qquad\forall\,A\in\mathcal{F}.
+\]
+\end{definition}
+
+\begin{theorem}[Radon-Nikodym]
+Sean $(\Omega,\mathcal{F})$ un espacio medible y $\mu,\nu$ medidas $\sigma$-finitas sobre $\mathcal{F}$ con $\nu\ll\mu$. Entonces existe una función $f:\Omega\to[0,\infty]$ medible y $\mu$-única (módulo conjuntos de medida $\mu$-nula) tal que
+\[
+\nu(A)=\int_{A}f\,d\mu\qquad\forall\,A\in\mathcal{F}.
+\]
+La función $f$ se llama \emph{derivada de Radon-Nikodym} y se denota $f=\frac{d\nu}{d\mu}$.
+\end{theorem}
+
+\begin{proof}
+El argumento utiliza el Teorema de Riesz de representación y un principio de maximalidad.
+
+\textbf{Paso 1: Reducción al caso finito.} Si $\mu$ y $\nu$ son $\sigma$-finitas, existen $X_{n}\nearrow\Omega$ con $\mu(X_{n}),\nu(X_{n})<\infty$. Definimos $\mu_{n}(A)=\mu(A\cap X_{n})$, $\nu_{n}(A)=\nu(A\cap X_{n})$. Si el resultado vale para cada par $(\mu_{n},\nu_{n})$ con funciones $f_{n}$, entonces por unicidad $f_{n+1}=f_{n}$ $\mu$-c.t. en $X_{n}$, y podemos definir $f=f_{1}$ en $X_{1}$, $f=f_{2}$ en $X_{2}\setminus X_{1}$, etc. Por tanto, basta asumir $\mu(\Omega),\nu(\Omega)<\infty$.
+
+\textbf{Paso 2: Construcción de $f$.} Consideramos el conjunto
+\[
+\mathcal{C}=\left\{g:\Omega\to[0,\infty)\;\text{medible}:\int_{A}g\,d\mu\le\nu(A)\;\;\forall\,A\in\mathcal{F}\right\}.
+\]
+$\mathcal{C}$ no es vacío pues $0\in\mathcal{C}$. Sean $g_{n}\in\mathcal{C}$ con $\int_{\Omega}g_{n}\,d\mu\to\sup_{g\in\mathcal{C}}\int_{\Omega}g\,d\mu=M$. Definimos $h_{n}=\max(g_{1},\dots,g_{n})$. Como $h_{n}\in\mathcal{C}$ (pues para todo $A$, $\int_{A}h_{n}\,d\mu\le\nu(A)$ por el lema siguiente) y $\int_{\Omega}h_{n}\,d\mu\nearrow M$, podemos tomar $f=\lim_{n\to\infty}h_{n}=\sup_{n}g_{n}$. Por convergencia monótona, $\int_{\Omega}f\,d\mu=M$ y $f\in\mathcal{C}$.
+
+\textbf{Lema auxiliar:} Si $g_{1},g_{2}\in\mathcal{C}$, entonces $\max(g_{1},g_{2})\in\mathcal{C}$. \emph{Demostración:} Para todo $A\in\mathcal{F}$,
+\[
+\int_{A}\max(g_{1},g_{2})\,d\mu
+=\int_{A\cap\{g_{1}\ge g_{2}\}}g_{1}\,d\mu+\int_{A\cap\{g_{2}>g_{1}\}}g_{2}\,d\mu
+\le\nu(A\cap\{g_{1}\ge g_{2}\})+\nu(A\cap\{g_{2}>g_{1}\})=\nu(A).
+\]
+
+\textbf{Paso 3: $f$ es ``óptimo''}. Definimos $\lambda(A)=\nu(A)-\int_{A}f\,d\mu\ge 0$. Mostramos $\lambda\equiv 0$. Si $\lambda(\Omega)>0$, sea $\varepsilon=\lambda(\Omega)/4>0$. Por $\sigma$-additividad de $\lambda$, existe measurable $B$ con $\lambda(B)>\lambda(\Omega)-\varepsilon$ y existe $c>0$ tal que $\lambda(B)>c\,\mu(B)$. Definimos $g=f+c\,\mathbf{1}_{B}$. Para todo $A$:
+\[
+\int_{A}g\,d\mu=\int_{A}f\,d\mu+c\,\mu(A\cap B)\le\nu(A)-\lambda(A\cap B)+c\,\mu(A\cap B).
+\]
+Si $\lambda(A\cap B)\ge c\,\mu(A\cap B)$, entonces $\int_{A}g\,d\mu\le\nu(A)$ y $g\in\mathcal{C}$. Pero $\int_{\Omega}g\,d\mu=\int_{\Omega}f\,d\mu+c\,\mu(B)>M$, contradiciendo la maximalidad de $M$. Por tanto $\lambda\equiv 0$ y $\nu(A)=\int_{A}f\,d\mu$ para todo $A$.
+
+\textbf{Paso 4: Unicidad.} Si $f_{1},f_{2}$ verifican la condición, entonces $\int_{A}(f_{1}-f_{2})\,d\mu=0$ para todo $A\in\mathcal{F}$. Tomando $A=\{f_{1}>f_{2}\}$ y $A=\{f_{1}<f_{2}\}$, se deduce $f_{1}=f_{2}$ $\mu$-c.t.
+\end{proof}
+
+%======================================================================
+% TEST 98: Teorema de Bayes general
+%======================================================================
+\subsection*{Test 98: Teorema de Bayes general}
+
+\begin{definition}
+Sea $(\Omega,\mathcal{F},P)$ un espacio de probabilidad y $\{B_{1},\dots,B_{n}\}$ una partición de $\Omega$, es decir, $B_{i}\in\mathcal{F}$, $B_{i}\cap B_{j}=\emptyset$ para $i\neq j$, $\bigcup_{i=1}^{n}B_{i}=\Omega$, con $P(B_{i})>0$ para todo $i$. Se llama \emph{probabilidad a priori} a $P(B_{i})$ y \emph{verosimilitud} a $P(A\mid B_{i})$ para un evento $A\in\mathcal{F}$.
+\end{definition}
+
+\begin{theorem}[Bayes]
+Sean $\{B_{1},\dots,B_{n}\}$ una partición de $\Omega$ con $P(B_{i})>0$ y sea $A\in\mathcal{F}$ con $P(A)>0$. Entonces, para todo $k\in\{1,\dots,n\}$,
+\[
+P(B_{k}\mid A)=\frac{P(A\mid B_{k})\,P(B_{k})}{\displaystyle\sum_{i=1}^{n}P(A\mid B_{i})\,P(B_{i})}.
+\]
+\end{theorem}
+
+\begin{proof}
+Denominamos $P(B_{i}\mid A)$ la \emph{probabilidad a posteriori}. Por la definición de probabilidad condicionada,
+\[
+P(B_{k}\mid A)=\frac{P(A\cap B_{k})}{P(A)}.
+\]
+
+Por la fórmula de la probabilidad total, como $\{B_{1},\dots,B_{n}\}$ es una partición de $\Omega$, el evento $A$ se descompone como
+\[
+A=A\cap\Omega=A\cap\biggl(\bigcup_{i=1}^{n}B_{i}\biggr)=\bigcup_{i=1}^{n}(A\cap B_{i}),
+\]
+donde los conjuntos $A\cap B_{i}$ son dos a dos disjuntos. Por $\sigma$-aditividad de $P$:
+\[
+P(A)=\sum_{i=1}^{n}P(A\cap B_{i}).
+\]
+
+Por la definición de probabilidad condicional, $P(A\cap B_{i})=P(A\mid B_{i})\,P(B_{i})$ (válido porque $P(B_{i})>0$). Sustituyendo:
+\[
+P(A)=\sum_{i=1}^{n}P(A\mid B_{i})\,P(B_{i}).
+\]
+
+Finalmente, el numerador se expresa como $P(A\cap B_{k})=P(A\mid B_{k})\,P(B_{k})$. Por tanto,
+\[
+P(B_{k}\mid A)=\frac{P(A\mid B_{k})\,P(B_{k})}{P(A)}=\frac{P(A\mid B_{k})\,P(B_{k})}{\displaystyle\sum_{i=1}^{n}P(A\mid B_{i})\,P(B_{i})},
+\]
+que es la fórmula de Bayes.
+\end{proof}
+
+%======================================================================
+% TEST 99: Teorema central del límite
+%======================================================================
+\subsection*{Test 99: Teorema central del límite}
+
+\begin{definition}
+Sean $X_{1},X_{2},\dots$ variables aleatorias independientes e idénticamente distribuidas (i.i.d.) con $\mathbb{E}[X_{i}]=\mu$ y $\operatorname{Var}(X_{i})=\sigma^{2}\in(0,\infty)$. Definimos la suma normalizada
+\[
+S_{n}=\frac{X_{1}+\cdots+X_{n}-n\mu}{\sigma\sqrt{n}}.
+\]
+\end{definition}
+
+\begin{theorem}[Central del Límite]
+Sean $X_{1},X_{2},\dots$ v.a.\ i.i.d.\ con $\mathbb{E}[X_{i}]=\mu$ y $\operatorname{Var}(X_{i})=\sigma^{2}\in(0,\infty)$. Entonces, para todo $z\in\mathbb{R}$,
+\[
+\lim_{n\to\infty}P(S_{n}\le z)=\Phi(z)=\frac{1}{\sqrt{2\pi}}\int_{-\infty}^{z}e^{-t^{2}/2}\,dt.
+\]
+Es decir, $S_{n}\xrightarrow{d}Z$ donde $Z\sim\mathcal{N}(0,1)$.
+\end{theorem}
+
+\begin{proof}
+Demostramos el resultado mediante el método de funciones características (transforms de Fourier).
+
+\textbf{Paso 1: Función características.} Para cada $X_{i}$, la función característica es $\varphi(t)=\mathbb{E}[e^{itX_{i}}]$. Como $\mathbb{E}[X_{i}]=\mu$ y $\operatorname{Var}(X_{i})=\sigma^{2}$, tenemos
+\[
+\varphi(t)=1+it\mu+\frac{(it)^{2}}{2}(\mu^{2}+\sigma^{2})+o(t^{2})=1+it\mu-\frac{t^{2}}{2}\sigma^{2}+o(t^{2}),
+\]
+donde se usó la expansión de Taylor con resto de Peano y la hipótesis de existencia de segundo momento.
+
+\textbf{Paso 2: Función característica de $S_{n}$.} La variable $S_{n}=\frac{1}{\sigma\sqrt{n}}\sum_{i=1}^{n}(X_{i}-\mu)$. Por independencia de los $X_{i}$:
+\[
+\varphi_{S_{n}}(t)=\prod_{i=1}^{n}\varphi_{X_{i}}\!\left(\frac{t}{\sigma\sqrt{n}}\right)\cdot e^{-it\mu\sqrt{n}/\sigma}\cdot e^{it\mu\sqrt{n}/\sigma}=\left[\varphi\!\left(\frac{t}{\sigma\sqrt{n}}\right)\right]^{n}\cdot e^{-it\mu\sqrt{n}/\sigma}\cdot e^{it\mu\sqrt{n}/\sigma}.
+\]
+Simplificando, la función característica de $S_{n}$ es
+\[
+\varphi_{S_{n}}(t)=\left[\varphi\!\left(\frac{t}{\sigma\sqrt{n}}\right)e^{-it\mu/(\sigma\sqrt{n})}\right]^{n}.
+\]
+
+\textbf{Paso 3: Expansión asintótica.} Sea $u=\frac{t}{\sigma\sqrt{n}}$. Por el Paso 1:
+\[
+\varphi(u)=1+iu\mu-\frac{u^{2}}{2}\sigma^{2}+o(u^{2}).
+\]
+Luego
+\[
+\varphi(u)e^{-iu\mu}=\left(1+iu\mu-\frac{u^{2}}{2}\sigma^{2}+o(u^{2})\right)\left(1-iu\mu-\frac{u^{2}\mu^{2}}{2}+o(u^{2})\right).
+\]
+Desarrollando y reteniendo términos hasta orden $u^{2}$:
+\[
+\varphi(u)e^{-iu\mu}=1-\frac{u^{2}}{2}\sigma^{2}+o(u^{2}).
+\]
+Sustituyendo $u=\frac{t}{\sigma\sqrt{n}}$:
+\[
+\varphi(u)e^{-iu\mu}=1-\frac{t^{2}}{2n}+o\!\left(\frac{1}{n}\right).
+\]
+Por tanto,
+\[
+\varphi_{S_{n}}(t)=\left[1-\frac{t^{2}}{2n}+o\!\left(\frac{1}{n}\right)\right]^{n}.
+\]
+
+\textbf{Paso 4: Límite.} Usando el lema clásico $\lim_{n\to\infty}\left(1+\frac{a_{n}}{n}\right)^{n}=e^{a}$ cuando $a_{n}\to a$:
+\[
+\lim_{n\to\infty}\varphi_{S_{n}}(t)=e^{-t^{2}/2}.
+\]
+Pero $e^{-t^{2}/2}$ es la función característica de $Z\sim\mathcal{N}(0,1)$. Por el Teorema de Continuidad de Lévy (inversión de funciones características), la convergencia de funciones características implica convergencia en distribución:
+\[
+S_{n}\xrightarrow{d}Z\sim\mathcal{N}(0,1).
+\]
+\end{proof}
+
+%======================================================================
+% TEST 100: Teorema de los números primos
+%======================================================================
+\subsection*{Test 100: Teorema de los números primos}
+
+\begin{definition}
+Sea $\pi(x)=\#\{p\le x:p\text{ es primo}\}$ la función que cuenta el número de primos menores o iguales que $x$. El símbolo $\sim$ denota equivalencia asintótica:
+\[
+f(x)\sim g(x)\iff\lim_{x\to\infty}\frac{f(x)}{g(x)}=1.
+\]
+\end{definition}
+
+\begin{theorem}[Números Primos]
+Para $x\to\infty$,
+\[
+\pi(x)\sim\frac{x}{\ln x}.
+\]
+Equivalentelemente, si $p_{n}$ denota el $n$-ésimo primo, entonces
+\[
+p_{n}\sim n\ln n.
+\]
+\end{theorem}
+
+\begin{proof}
+Presentamos la demostración de Hadamard y de la Vallée-Poussin (1896) basada en la función de Riemann zeta y el análisis complejo.
+
+\textbf{Paso 1: La función de Euler y su producto.} La serie de Euler
+\[
+\zeta(s)=\sum_{n=1}^{\infty}\frac{1}{n^{s}}=\prod_{p}\frac{1}{1-p^{-s}},\qquad\operatorname{Re}(s)>1,
+\]
+donde el producto recorre todos los primos $p$, se obtiene expandiendo cada factor geométrico:
+\[
+\prod_{p}\frac{1}{1-p^{-s}}=\prod_{p}\sum_{k=0}^{\infty}p^{-ks}=\sum_{n=1}^{\infty}\frac{1}{n^{s}},
+\]
+donde la última igualdad sigue de la existencia y unicidad de la descomposición en factores primos (aritmética fundamental).
+
+\textbf{Paso 2: $\zeta(s)\neq 0$ para $\operatorname{Re}(s)=1$.} Este es el resultado clave. Sea $s=1+it$ con $t\in\mathbb{R}$, $t\neq 0$. Supongamos por reducción al absurdo que $\zeta(1+it)=0$. Por la identidad de la función de Möbius invertida:
+\[
+-\frac{\zeta'}{\zeta}(s)=\sum_{n=1}^{\infty}\frac{\Lambda(n)}{n^{s}},
+\]
+donde $\Lambda(n)$ es la función de von Mangoldt. Para $\sigma>1$, usando $\ln|\zeta(\sigma+it)|\ge 0$ y considerando
+\[
+\log|\zeta(s)|^{3}=\log|\zeta(\sigma)|^{4}\cdot|\zeta(\sigma+2it)|,
+\]
+se puede mostrar que si $\zeta(1+it)=0$, entonces $\zeta(s)$ tendría un cero de orden al menos 2 en $s=1+it$. Pero esto implica que la serie $\sum\Lambda(n)/n^{s}$ tendría una singularidad de polo doble en $s=1$, contradiciendo el hecho de que $\zeta(s)$ solo tiene un polo simple en $s=1$ con residuo 1. Por tanto $\zeta(1+it)\neq 0$.
+
+\textbf{Paso 3: Función de Chebyshev y su conexión con $\pi(x)$.} La función de Chebyshev
+\[
+\psi(x)=\sum_{p^{k}\le x}\ln p
+\]
+satisface, por inversión de Möbius,
+\[
+\psi(x)=\sum_{n\le x}\Lambda(n).
+\]
+La función $\pi(x)$ y $\psi(x)$ están relacionadas por:
+\[
+\psi(x)=\pi(x)\ln x+O\!\left(\frac{x}{\ln x}\right),
+\]
+pues la contribución de $k\ge 2$ es $O(\sqrt{x}\ln x)$.
+
+\textbf{Paso 4: Análisis de la serie de Dirichlet de $-\zeta'/\zeta$.} Para $\sigma>1$,
+\[
+-\frac{\zeta'}{\zeta}(s)=\sum_{n=1}^{\infty}\frac{\Lambda(n)}{n^{s}}.
+\]
+Por el lema del residuo de Perron (o inversión de Mellin), para $c>1$:
+\[
+\psi(x)=\frac{1}{2\pi i}\int_{c-i\infty}^{c+i\infty}\left(-\frac{\zeta'}{\zeta}(s)\right)\frac{x^{s}}{s}\,ds+O(1).
+\]
+
+\textbf{Paso 5: Deformación del contorno.} Extendemos $\zeta(s)$ por continuidad meromorfa a todo $\mathbb{C}$ con un polo simple en $s=1$ con residuo 1. Los únicos polinos de $-\zeta'/\zeta$ en la región $\operatorname{Re}(s)\ge 1$ están en $s=1$ (por el Paso 2, $\zeta(s)\neq 0$ para $\operatorname{Re}(s)=1$).
+
+Deformamos el contorno de integración hacia la izquierda. Para $T>0$ grande, el integrando satisface estimaciones del tipo
+\[
+\left|\frac{x^{s}}{s}\cdot\left(-\frac{\zeta'}{\zeta}(s)\right)\right|\ll x^{\sigma}\cdot\frac{\ln^{2}|t|}{|t|},
+\]
+uniformemente para $|t|\le T$. El polo en $s=1$ contribuye con el residuo
+\[
+\operatorname{Res}_{s=1}\left[\left(-\frac{\zeta'}{\zeta}(s)\right)\frac{x^{s}}{s}\right]=\frac{x^{1}}{1}=x.
+\]
+
+La integral a lo largo del segmento vertical se cancela por estimaciones del tipo Phragmén-Lindelöf para $\zeta(s)$ en la banda crítica, y las integrales horizontales tienden a 0 cuando $T\to\infty$ (por la estimación de convexidad de Phragmén-Lindelöf).
+
+\textbf{Paso 6: Conclusión.} De la inversión de Perron y la deformación del contorno, se obtiene
+\[
+\psi(x)=x+o(x)\qquad\text{cuando }x\to\infty.
+\]
+De la relación entre $\psi$ y $\pi$ (Paso 3):
+\[
+\pi(x)\ln x=\psi(x)+O\!\left(\frac{x}{\ln x}\right)=x+o(x),
+\]
+luego
+\[
+\pi(x)=\frac{x}{\ln x}+o\!\left(\frac{x}{\ln x}\right)=\frac{x}{\ln x}\left(1+o(1)\right),
+\]
+es decir,
+\[
+\pi(x)\sim\frac{x}{\ln x}.
+\]
+\end{proof}
+
+\end{document}

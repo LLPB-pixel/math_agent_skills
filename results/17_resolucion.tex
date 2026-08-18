@@ -1,0 +1,133 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{geometry}
+\geometry{margin=2.5cm}
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\title{Soluciones Tests 77-81: Estadística}
+\author{Mathematical AI Agent}
+\date{\today}
+\begin{document}
+\maketitle
+
+\section{Problemas}
+
+\begin{proposition}[77. Varianza de $\bar{X}$]
+Sean $X_1, X_2, \ldots, X_n$ una muestra aleatoria de variables independientes e idénticamente distribuidas (i.i.d.) con $\mathbb{E}[X_i] = \mu$ y $\operatorname{Var}(X_i) = \sigma^2 < \infty$. Entonces:
+\[
+\operatorname{Var}(\bar{X}) = \frac{\sigma^2}{n}
+\]
+donde $\bar{X} = \frac{1}{n}\sum_{i=1}^n X_i$.
+\end{proposition}
+
+\begin{proof}
+Por definición de la media muestral:
+\[
+\bar{X} = \frac{1}{n}\sum_{i=1}^n X_i
+\]
+Aplicando la propiedad de varianza de una suma de variables aleatorias independientes:
+\[
+\operatorname{Var}\left(\frac{1}{n}\sum_{i=1}^n X_i\right) = \frac{1}{n^2}\sum_{i=1}^n \operatorname{Var}(X_i)
+\]
+Dado que las $X_i$ son i.i.d. con $\operatorname{Var}(X_i) = \sigma^2$ para toda $i$:
+\[
+\operatorname{Var}(\bar{X}) = \frac{1}{n^2}\sum_{i=1}^n \sigma^2 = \frac{1}{n^2} \cdot n\sigma^2 = \frac{\sigma^2}{n}
+\]
+\end{proof}
+
+\begin{proposition}[78. EMV de $\mu$ en la normal]
+Sea $X_1, X_2, \ldots, X_n$ una muestra aleatoria de una distribución normal $N(\mu, \sigma^2)$ con $\sigma^2$ conocido. El estimador de máxima verosimilitud de $\mu$ es la media muestral $\bar{X}$.
+\end{proposition}
+
+\begin{proof}
+La función de verosimilitud para una muestra normal i.i.d. es:
+\[
+L(\mu) = \prod_{i=1}^n \frac{1}{\sqrt{2\pi\sigma^2}} \exp\left(-\frac{(X_i - \mu)^2}{2\sigma^2}\right) = (2\pi\sigma^2)^{-n/2} \exp\left(-\frac{1}{2\sigma^2}\sum_{i=1}^n (X_i - \mu)^2\right)
+\]
+El logaritmo de la verosimilitud es:
+\[
+\ell(\mu) = -\frac{n}{2}\ln(2\pi\sigma^2) - \frac{1}{2\sigma^2}\sum_{i=1}^n (X_i - \mu)^2
+\]
+Derivando con respecto a $\mu$ e igualando a cero:
+\[
+\frac{d\ell}{d\mu} = \frac{1}{\sigma^2}\sum_{i=1}^n (X_i - \mu) = 0
+\]
+\[
+\sum_{i=1}^n X_i - n\mu = 0 \implies \mu = \frac{1}{n}\sum_{i=1}^n X_i = \bar{X}
+\]
+La segunda derivada es $\frac{d^2\ell}{d\mu^2} = -\frac{n}{\sigma^2} < 0$, confirmando que $\bar{X}$ es un máximo. Por tanto, $\hat{\mu}_{EMV} = \bar{X}$.
+\end{proof}
+
+\begin{proposition}[79. Insesgamiento de $S^2$]
+Sean $X_1, X_2, \ldots, X_n$ una muestra aleatoria i.i.d. con $\mathbb{E}[X_i] = \mu$ y $\operatorname{Var}(X_i) = \sigma^2$. La varianza muestral $S^2 = \frac{1}{n-1}\sum_{i=1}^n (X_i - \bar{X})^2$ es un estimador insesgado de $\sigma^2$, es decir, $\mathbb{E}[S^2] = \sigma^2$.
+\end{proposition}
+
+\begin{proof}
+Expandimos la suma de cuadrados:
+\[
+\sum_{i=1}^n (X_i - \bar{X})^2 = \sum_{i=1}^n \left((X_i - \mu) - (\bar{X} - \mu)\right)^2 = \sum_{i=1}^n (X_i - \mu)^2 - n(\bar{X} - \mu)^2
+\]
+Aplicando el operador esperanza:
+\[
+\mathbb{E}\left[\sum_{i=1}^n (X_i - \bar{X})^2\right] = \sum_{i=1}^n \mathbb{E}[(X_i - \mu)^2] - n\mathbb{E}[(\bar{X} - \mu)^2]
+\]
+Sabemos que $\mathbb{E}[(X_i - \mu)^2] = \operatorname{Var}(X_i) = \sigma^2$ y $\mathbb{E}[(\bar{X} - \mu)^2] = \operatorname{Var}(\bar{X}) = \frac{\sigma^2}{n}$ (por el resultado 77). Sustituyendo:
+\[
+\mathbb{E}\left[\sum_{i=1}^n (X_i - \bar{X})^2\right] = n\sigma^2 - n \cdot \frac{\sigma^2}{n} = n\sigma^2 - \sigma^2 = (n-1)\sigma^2
+\]
+Por tanto:
+\[
+\mathbb{E}[S^2] = \frac{1}{n-1}\mathbb{E}\left[\sum_{i=1}^n (X_i - \bar{X})^2\right] = \frac{1}{n-1} \cdot (n-1)\sigma^2 = \sigma^2
+\]
+\end{proof}
+
+\begin{proposition}[80. Independencia $\bar{X}$ y $S^2$]
+Sea $X_1, X_2, \ldots, X_n$ una muestra aleatoria de una distribución normal. Entonces $\bar{X}$ y $S^2$ son independientes.
+\end{proposition}
+
+\begin{proof}
+Consideremos la transformación lineal $Y_i = X_i - \mu$, donde $Y_i \sim N(0, \sigma^2)$. Podemos escribir:
+\[
+\bar{X} = \mu + \bar{Y}, \quad S^2 = \frac{1}{n-1}\sum_{i=1}^n (Y_i - \bar{Y})^2
+\]
+El vector $\mathbf{Y} = (Y_1, \ldots, Y_n)^T$ tiene distribución normal multivariante $N(\mathbf{0}, \sigma^2 I_n)$. Definimos la matriz ortogonal $A$ cuya primera fila es $(1/\sqrt{n}, \ldots, 1/\sqrt{n})$. Entonces $\mathbf{Z} = A\mathbf{Y}$ tiene distribución $N(\mathbf{0}, \sigma^2 I_n)$, y en particular:
+\[
+Z_1 = \sqrt{n}\bar{Y}, \quad Z_2^2 + \cdots + Z_n^2 = \frac{1}{\sigma^2}\sum_{i=1}^n (Y_i - \bar{Y})^2 = \frac{(n-1)S^2}{\sigma^2}
+\]
+Como $Z_1, Z_2, \ldots, Z_n$ son normales independientes con media cero,
+$Z_1$ es independiente del vector $(Z_2, \ldots, Z_n)$ y, por tanto, de
+cualquier función medible de ese vector. En particular,
+\[
+\sum_{i=2}^n Z_i^2 = \frac{(n-1)S^2}{\sigma^2}.
+\]
+Como $Z_1 = \sqrt{n}\bar{Y}$, esta independencia implica que $\bar{X}$ y
+$S^2$ son independientes.
+\end{proof}
+
+\begin{proposition}[81. Distribución de $\bar{X}$ tipificada]
+Sea $X_1, X_2, \ldots, X_n$ una muestra aleatoria de una distribución $N(\mu, \sigma^2)$. Entonces la variable aleatoria:
+\[
+Z = \frac{\bar{X} - \mu}{\sigma/\sqrt{n}}
+\]
+tiene distribución normal estándar $N(0, 1)$.
+\end{proposition}
+
+\begin{proof}
+Sabemos que $\bar{X} \sim N(\mu, \sigma^2/n)$ por las propiedades de la distribución normal (la suma de normales independientes es normal). Estandarizando:
+\[
+Z = \frac{\bar{X} - \mu}{\sqrt{\operatorname{Var}(\bar{X})}} = \frac{\bar{X} - \mu}{\sqrt{\sigma^2/n}} = \frac{\bar{X} - \mu}{\sigma/\sqrt{n}}
+\]
+Dado que $\bar{X} \sim N(\mu, \sigma^2/n)$, la variable $\bar{X} - \mu \sim N(0, \sigma^2/n)$. Dividiendo por su desviación típica $\sigma/\sqrt{n}$:
+\[
+Z = \frac{\bar{X} - \mu}{\sigma/\sqrt{n}} \sim N\left(0, \frac{\sigma^2/n}{(\sigma/\sqrt{n})^2}\right) = N(0, 1)
+\]
+Alternativamente, usando la transformación lineal de normales: si $Y \sim N(\mu_Y, \sigma_Y^2)$, entonces $\frac{Y - \mu_Y}{\sigma_Y} \sim N(0,1)$. Aplicando esto a $Y = \bar{X}$ con $\mu_Y = \mu$ y $\sigma_Y = \sigma/\sqrt{n}$, obtenemos el resultado.
+\end{proof}
+
+\end{document}

@@ -1,0 +1,274 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{geometry}
+\geometry{margin=2.5cm}
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\title{Soluciones Tests 82-85: Estadística}
+\author{Mathematical AI Agent}
+\date{\today}
+\begin{document}
+\maketitle
+
+\section{Problemas}
+
+\subsection{Test 82: Distribución chi-cuadrado de $S^2$}
+
+\begin{theorem}[Distribución chi-cuadrado de la varianza muestral]
+Sean $X_1, X_2, \ldots, X_n$ una muestra aleatoria de una distribución normal $\mathcal{N}(\mu, \sigma^2)$, con $\mu$ y $\sigma^2$ parámetros conocidos o desconocidos. La variable aleatoria
+\[
+T = \frac{(n-1)S^2}{\sigma^2}
+\]
+sigue una distribución chi-cuadrado con $n-1$ grados de libertad, donde $S^2 = \frac{1}{n-1}\sum_{i=1}^{n}(X_i - \bar{X})^2$ es la varianza muestral.
+\end{theorem}
+
+\begin{proof}
+Definimos las variables aleatorias estandarizadas:
+\[
+Z_i = \frac{X_i - \mu}{\sigma}, \quad i = 1, 2, \ldots, n.
+\]
+Cada $Z_i \sim \mathcal{N}(0,1)$ independientes entre sí. Sea $\bar{Z} = \frac{1}{n}\sum_{i=1}^{n}Z_i = \frac{\bar{X} - \mu}{\sigma}$.
+
+Consideramos la suma de cuadrados:
+\[
+\sum_{i=1}^{n} Z_i^2 = \sum_{i=1}^{n} \left(\frac{X_i - \mu}{\sigma}\right)^2 = \frac{1}{\sigma^2}\sum_{i=1}^{n}(X_i - \mu)^2.
+\]
+
+Descomponemos la suma de cuadrados total en la suma de cuadrados dentro y entre grupos. Definimos las variables:
+\[
+W_i = Z_i - \bar{Z}, \quad i = 1, 2, \ldots, n.
+\]
+
+Observamos que $\sum_{i=1}^{n} W_i = \sum_{i=1}^{n}(Z_i - \bar{Z}) = n\bar{Z} - n\bar{Z} = 0$.
+
+Entonces:
+\begin{align*}
+\sum_{i=1}^{n} Z_i^2 &= \sum_{i=1}^{n}(W_i + \bar{Z})^2 \\
+&= \sum_{i=1}^{n} W_i^2 + 2\bar{Z}\sum_{i=1}^{n} W_i + n\bar{Z}^2 \\
+&= \sum_{i=1}^{n} W_i^2 + n\bar{Z}^2.
+\end{align*}
+
+Ahora, notamos que:
+\[
+\sum_{i=1}^{n} W_i^2 = \sum_{i=1}^{n}(Z_i - \bar{Z})^2 = \sum_{i=1}^{n}\left(\frac{X_i - \mu}{\sigma} - \frac{\bar{X} - \mu}{\sigma}\right)^2 = \frac{1}{\sigma^2}\sum_{i=1}^{n}(X_i - \bar{X})^2 = \frac{(n-1)S^2}{\sigma^2}.
+\]
+
+Por el lema de Cochran, sabemos que si $\sum_{i=1}^{n} Z_i^2 \sim \chi^2_n$, entonces $\sum_{i=1}^{n} W_i^2 \sim \chi^2_{n-1}$ y $n\bar{Z}^2 \sim \chi^2_1$ son independientes, y se cumple la descomposición:
+\[
+\sum_{i=1}^{n} Z_i^2 = \sum_{i=1}^{n} W_i^2 + n\bar{Z}^2.
+\]
+
+Para demostrar la independencia, notamos que las variables $W_i$ son combinaciones lineales de las $Z_i$ con la restricción $\sum W_i = 0$. Por la propiedad de la distribución normal multivariante, como $\bar{Z}$ es una función lineal de las $Z_i$ y $\sum W_i = 0$, y dado que la distribución conjunta de las $Z_i$ es simétrica bajo rotaciones en el subespacio ortogonal a $(1,1,\ldots,1)$, concluimos que $\sum W_i^2$ es independiente de $\bar{Z}$.
+
+Finalmente, como $\sum_{i=1}^{n} Z_i^2 \sim \chi^2_n$ y $\sum_{i=1}^{n} Z_i^2 = \sum_{i=1}^{n} W_i^2 + n\bar{Z}^2$ con $\sum_{i=1}^{n} W_i^2$ independiente de $n\bar{Z}^2 \sim \chi^2_1$, por la aditividad de los grados de libertad de distribuciones chi-cuadrado independientes, se sigue que:
+\[
+\frac{(n-1)S^2}{\sigma^2} = \sum_{i=1}^{n} W_i^2 \sim \chi^2_{n-1}.
+\]
+\end{proof}
+
+\subsection{Test 83: EMV de $p$ en Bernoulli}
+
+\begin{theorem}[Estimador de máxima verosimilitud para la distribución Bernoulli]
+Sea $X_1, X_2, \ldots, X_n$ una muestra aleatoria de una distribución Bernoulli con parámetro $p \in (0,1)$. El estimador de máxima verosimilitud de $p$ es $\hat{p} = \bar{X} = \frac{1}{n}\sum_{i=1}^{n} X_i$.
+\end{theorem}
+
+\begin{proof}
+La función de masa de probabilidad de una distribución Bernoulli es:
+\[
+P(X = x) = p^x (1-p)^{1-x}, \quad x \in \{0, 1\}.
+\]
+
+Para una muestra aleatoria $X_1, X_2, \ldots, X_n$ independientes e idénticamente distribuidas, la función de verosimilitud es:
+\begin{align*}
+L(p; x_1, \ldots, x_n) &= \prod_{i=1}^{n} P(X_i = x_i) \\
+&= \prod_{i=1}^{n} p^{x_i} (1-p)^{1-x_i} \\
+&= p^{\sum_{i=1}^{n} x_i} (1-p)^{n - \sum_{i=1}^{n} x_i}.
+\end{align*}
+
+Definimos $S = \sum_{i=1}^{n} X_i$ como el número de éxitos en la muestra. Entonces la función de verosimilitud se escribe como:
+\[
+L(p) = p^S (1-p)^{n-S}.
+\]
+
+Para facilitar la maximización, tomamos el logaritmo de la verosimilitud (log-verosimilitud):
+\begin{align*}
+\ell(p) &= \log L(p) = S \log p + (n-S) \log(1-p).
+\end{align*}
+
+Derivamos respecto a $p$ e igualamos a cero:
+\[
+\frac{d\ell}{dp} = \frac{S}{p} - \frac{n-S}{1-p} = 0.
+\]
+
+Resolviendo para $p$:
+\begin{align*}
+\frac{S}{p} &= \frac{n-S}{1-p} \\
+S(1-p) &= (n-S)p \\
+S - Sp &= np - Sp \\
+S &= np \\
+\hat{p} &= \frac{S}{n} = \frac{1}{n}\sum_{i=1}^{n} X_i = \bar{X}.
+\end{align*}
+
+Verificamos que es un máximo calculando la segunda derivada:
+\[
+\frac{d^2\ell}{dp^2} = -\frac{S}{p^2} - \frac{n-S}{(1-p)^2} < 0, \quad \text{para } p \in (0,1),
+\]
+ya que $S \geq 0$ y $n-S \geq 0$, con $S > 0$ o $n-S > 0$ (para $0 < p < 1$ con probabilidad 1). Por tanto, $\hat{p} = \bar{X}$ es un punto de máximo de la función de verosimilitud.
+
+Además, como la función de verosimilitud es continua en $p \in (0,1)$ y $\hat{p} = \bar{X} \in [0,1]$, si $\bar{X} = 0$ o $\bar{X} = 1$, el máximo se alcanza en el borde del dominio. Para $0 < \bar{X} < 1$, el EMV es $\hat{p} = \bar{X}$, que es un estimador insesgado y consistente de $p$.
+\end{proof}
+
+\subsection{Test 84: Información de Fisher en Bernoulli}
+
+\begin{theorem}[Información de Fisher para distribución Bernoulli]
+Sea $X_1, X_2, \ldots, X_n$ una muestra aleatoria de una distribución Bernoulli con parámetro $p \in (0,1)$. La información de Fisher para las $n$ observaciones es:
+\[
+I(p) = \frac{n}{p(1-p)}.
+\]
+\end{theorem}
+
+\begin{proof}
+La función de masa de probabilidad de una distribución Bernoulli es:
+\[
+f(x; p) = p^x (1-p)^{1-x}, \quad x \in \{0, 1\}.
+\]
+
+Para una sola observación, el logaritmo de la función de verosimilitud es:
+\[
+\ell(p; x) = \log f(x; p) = x \log p + (1-x) \log(1-p).
+\]
+
+Calculamos la primera derivada (escoración o \textit{score}):
+\begin{align*}
+\frac{d\ell}{dp} &= \frac{x}{p} - \frac{1-x}{1-p}.
+\end{align*}
+
+La información de Fisher para una observación es:
+\[
+I_1(p) = -\mathbb{E}\left[\frac{d^2\ell}{dp^2}\right].
+\]
+
+Calculamos la segunda derivada:
+\[
+\frac{d^2\ell}{dp^2} = -\frac{x}{p^2} - \frac{1-x}{(1-p)^2}.
+\]
+
+Tomamos la esperanza:
+\begin{align*}
+\mathbb{E}\left[\frac{d^2\ell}{dp^2}\right] &= \mathbb{E}\left[-\frac{X}{p^2} - \frac{1-X}{(1-p)^2}\right] \\
+&= -\frac{\mathbb{E}[X]}{p^2} - \frac{1 - \mathbb{E}[X]}{(1-p)^2} \\
+&= -\frac{p}{p^2} - \frac{1-p}{(1-p)^2} \quad (\text{ya que } \mathbb{E}[X] = p) \\
+&= -\frac{1}{p} - \frac{1}{1-p} \\
+&= -\frac{(1-p) + p}{p(1-p)} \\
+&= -\frac{1}{p(1-p)}.
+\end{align*}
+
+Por tanto, la información de Fisher para una observación es:
+\[
+I_1(p) = -\mathbb{E}\left[\frac{d^2\ell}{dp^2}\right] = \frac{1}{p(1-p)}.
+\]
+
+Para $n$ observaciones independientes e idénticamente distribuidas, la información de Fisher es aditiva:
+\[
+I(p) = n \cdot I_1(p) = \frac{n}{p(1-p)}.
+\]
+
+Esto se demuestra directamente: para $n$ observaciones, la log-verosimilitud conjunta es $\ell_n(p) = \sum_{i=1}^{n} \ell(p; x_i)$, y la segunda derivada es $\frac{d^2\ell_n}{dp^2} = \sum_{i=1}^{n} \frac{d^2\ell(p; x_i)}{dp^2}$. Por linealidad de la esperanza:
+\[
+I(p) = -\mathbb{E}\left[\frac{d^2\ell_n}{dp^2}\right] = \sum_{i=1}^{n} \left(-\mathbb{E}\left[\frac{d^2\ell(p; X_i)}{dp^2}\right]\right) = n \cdot \frac{1}{p(1-p)} = \frac{n}{p(1-p)}.
+\]
+\end{proof}
+
+\subsection{Test 85: Desigualdad de Cramér-Rao}
+
+\begin{theorem}[Desigualdad de Cramér-Rao]
+Sea $\mathbf{X} = (X_1, \ldots, X_n)$ una variable aleatoria con función de densidad (o masa) $f(\mathbf{x}; \theta)$ que depende de un parámetro $\theta \in \Theta \subseteq \mathbb{R}$. Supongamos que:
+\begin{enumerate}
+    \item El soporte de $f$ no depende de $\theta$.
+    \item Las derivadas parciales de primer y segundo orden de $f$ respecto a $\theta$ existen y son integrables (o sumables) para todo $\theta$.
+    \item La información de Fisher $I(\theta) = \mathbb{E}\left[\left(\frac{\partial \log f}{\partial \theta}\right)^2\right] > 0$ existe y es finita.
+\end{enumerate}
+Entonces, para cualquier estimador insesgado $\hat{\theta}$ de $\theta$, se cumple:
+\[
+\operatorname{Var}(\hat{\theta}) \geq \frac{1}{I(\theta)} = \frac{1}{\mathbb{E}\left[\left(\frac{\partial \log f}{\partial \theta}\right)^2\right]}.
+\]
+\end{theorem}
+
+\begin{proof}
+Definimos la \textit{escorada} (score function) como:
+\[
+U(\theta) = \frac{\partial \log f(\mathbf{X}; \theta)}{\partial \theta}.
+\]
+
+\textbf{Paso 1: Propiedades de la escorada.}
+Demostramos que $\mathbb{E}[U(\theta)] = 0$ para todo $\theta$. La función de densidad satisface:
+\[
+\int f(\mathbf{x}; \theta) \, d\mathbf{x} = 1 \quad \text{(o } \sum_{\mathbf{x}} f(\mathbf{x}; \theta) = 1 \text{ para el caso discreto)}.
+\]
+Derivando ambos lados respecto a $\theta$:
+\[
+\frac{\partial}{\partial \theta} \int f(\mathbf{x}; \theta) \, d\mathbf{x} = \int \frac{\partial f(\mathbf{x}; \theta)}{\partial \theta} \, d\mathbf{x} = 0.
+\]
+Por la regla de la cadena:
+\[
+\frac{\partial f}{\partial \theta} = f(\mathbf{x}; \theta) \cdot \frac{\partial \log f(\mathbf{x}; \theta)}{\partial \theta} = f(\mathbf{x}; \theta) \cdot U(\theta).
+\]
+Por tanto:
+\[
+\int U(\theta) f(\mathbf{x}; \theta) \, d\mathbf{x} = \int \frac{\partial f(\mathbf{x}; \theta)}{\partial \theta} \, d\mathbf{x} = 0,
+\]
+lo que implica $\mathbb{E}[U(\theta)] = 0$.
+
+\textbf{Paso 2: Covarianza entre $U(\theta)$ y $\hat{\theta}$.}
+Sea $\hat{\theta} = g(\mathbf{X})$ un estimador insesgado de $\theta$, es decir, $\mathbb{E}[\hat{\theta}] = \theta$ para todo $\theta$. Entonces:
+\[
+\frac{\partial}{\partial \theta} \mathbb{E}[\hat{\theta}] = \frac{\partial \theta}{\partial \theta} = 1.
+\]
+Por otro lado:
+\begin{align*}
+\frac{\partial}{\partial \theta} \mathbb{E}[\hat{\theta}] &= \frac{\partial}{\partial \theta} \int \hat{\mathbf{x}}(\mathbf{x}) f(\mathbf{x}; \theta) \, d\mathbf{x} \\
+&= \int \hat{\mathbf{x}}(\mathbf{x}) \frac{\partial f(\mathbf{x}; \theta)}{\partial \theta} \, d\mathbf{x} \\
+&= \int \hat{\mathbf{x}}(\mathbf{x}) U(\theta) f(\mathbf{x}; \theta) \, d\mathbf{x} \\
+&= \mathbb{E}[\hat{\theta} \cdot U(\theta)].
+\end{align*}
+Por tanto, $\mathbb{E}[\hat{\theta} \cdot U(\theta)] = 1$.
+
+Calculamos la covarianza entre $\hat{\theta}$ y $U(\theta)$:
+\begin{align*}
+\operatorname{Cov}(\hat{\theta}, U(\theta)) &= \mathbb{E}[\hat{\theta} \cdot U(\theta)] - \mathbb{E}[\hat{\theta}] \cdot \mathbb{E}[U(\theta)] \\
+&= 1 - \theta \cdot 0 = 1.
+\end{align*}
+
+\textbf{Paso 3: Aplicación de la desigualdad de Cauchy-Schwarz.}
+Por la desigualdad de Cauchy-Schwarz:
+\[
+[\operatorname{Cov}(\hat{\theta}, U(\theta))]^2 \leq \operatorname{Var}(\hat{\theta}) \cdot \operatorname{Var}(U(\theta)).
+\]
+
+Calculamos $\operatorname{Var}(U(\theta))$:
+\begin{align*}
+\operatorname{Var}(U(\theta)) &= \mathbb{E}[U(\theta)^2] - (\mathbb{E}[U(\theta)])^2 \\
+&= \mathbb{E}\left[\left(\frac{\partial \log f}{\partial \theta}\right)^2\right] - 0^2 \\
+&= I(\theta).
+\end{align*}
+
+Sustituyendo en la desigualdad de Cauchy-Schwarz:
+\[
+1^2 \leq \operatorname{Var}(\hat{\theta}) \cdot I(\theta).
+\]
+
+Despejando:
+\[
+\operatorname{Var}(\hat{\theta}) \geq \frac{1}{I(\theta)}.
+\]
+
+Esto completa la demostración de la desigualdad de Cramér-Rao. El límite inferior $\frac{1}{I(\theta)}$ se conoce como el \textbf{límite inferior de Cramér-Rao} (CRLB). Un estimador que alcanza este límite se dice que es \textbf{eficiente}.
+\end{proof}
+
+\end{document}

@@ -1,0 +1,73 @@
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{booktabs}
+\usepackage{geometry}
+\usepackage{hyperref}
+
+\geometry{margin=2.5cm}
+
+% Theorem environments
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\title{Mathematical Report Title}
+\author{Author Name}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+% Concisely summarize the problem, method, and main results.
+\end{abstract}
+
+\section{Introduction}
+% Provide motivation, define non-standard notation, and state the objective.
+
+\section{Main Results}
+
+\begin{definition}
+% State a definition needed by the results.
+\end{definition}
+
+\begin{theorem}
+% State the primary mathematical claim clearly, including all hypotheses.
+\end{theorem}
+
+\begin{proof}
+% Give a logically complete proof. Explain non-obvious transformations.
+\end{proof}
+
+\section{Computational Verification and Figures}
+
+% Distinguish exact symbolic calculations, numerical approximations, and
+% empirical observations. Do not call numerical agreement a proof.
+
+% Example figure block (uncomment when an actual file is available):
+% \begin{figure}[ht]
+% \centering
+% \includegraphics[width=0.75\textwidth]{figures/example.pdf}
+% \caption{A meaningful description of the figure.}
+% \label{fig:results}
+% \end{figure}
+
+\section{Conclusion}
+% Summarize the proved results, computational evidence, limitations, and open questions.
+
+\end{document}

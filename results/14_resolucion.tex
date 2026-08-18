@@ -1,0 +1,207 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{geometry}
+\geometry{margin=2.5cm}
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\title{Soluciones Tests 62-66: Probabilidad}
+\author{Mathematical AI Agent}
+\date{\today}
+\begin{document}
+\maketitle
+\section{Problemas}
+
+% ============================================================
+% TEST 62: Probabilidad de la unión
+% ============================================================
+\begin{proposition}[Probabilidad de la unión]
+Sean $A$ y $B$ eventos en un espacio muestral $\Omega$. Entonces:
+\[
+P(A \cup B) = P(A) + P(B) - P(A \cap B).
+\]
+\end{proposition}
+
+\begin{proof}
+Descomponemos el evento $A \cup B$ en la unión de tres subconjuntos mutuamente excluyentes:
+\[
+A \cup B = A \;\cup\; (B \setminus A),
+\]
+donde $B \setminus A = B \cap A^c$ contiene los elementos que están en $B$ pero no en $A$. Por aditividad de la medida de probabilidad sobre eventos disjuntos:
+\[
+P(A \cup B) = P(A) + P(B \setminus A).
+\]
+Ahora observamos que $B$ se puede descomponer como:
+\[
+B = (B \cap A) \;\cup\; (B \cap A^c),
+\]
+y estos dos conjuntos son disjuntos. Por aditividad:
+\[
+P(B) = P(A \cap B) + P(B \cap A^c).
+\]
+Despejando $P(B \cap A^c) = P(B \setminus A)$:
+\[
+P(B \setminus A) = P(B) - P(A \cap B).
+\]
+Sustituyendo en la expresión original:
+\[
+P(A \cup B) = P(A) + P(B) - P(A \cap B).
+\]
+\end{proof}
+
+% ============================================================
+% TEST 63: Independencia y productoria
+% ============================================================
+\begin{proposition}[Independencia y productoria]
+Sean $A$ y $B$ eventos independientes en un espacio muestral $\Omega$. Entonces:
+\[
+P(A \cap B) = P(A) \cdot P(B).
+\]
+\end{proposition}
+
+\begin{proof}
+Por definición, dos eventos $A$ y $B$ son independientes si y solo si:
+\[
+P(A \mid B) = P(A) \quad \text{y} \quad P(B \mid A) = P(B),
+\]
+siempre que $P(B) > 0$ y $P(A) > 0$ respectivamente.
+
+Consideremos la definición de probabilidad condicional. Si $P(B) > 0$, entonces:
+\[
+P(A \mid B) = \frac{P(A \cap B)}{P(B)}.
+\]
+Por la hipótesis de independencia, $P(A \mid B) = P(A)$. Sustituyendo:
+\[
+P(A) = \frac{P(A \cap B)}{P(B)}.
+\]
+Multiplicando ambos lados por $P(B)$:
+\[
+P(A) \cdot P(B) = P(A \cap B).
+\]
+Si $P(B) = 0$, entonces $P(A \cap B) = 0$ ya que $A \cap B \subseteq B$, y en este caso $P(A) \cdot P(B) = P(A) \cdot 0 = 0$, por lo que la igualdad se mantiene trivialmente.
+
+Análogamente, si usamos $P(B \mid A) = P(B)$ cuando $P(A) > 0$, obtenemos el mismo resultado. En el caso $P(A) = 0$, por la misma razón $P(A \cap B) = 0 = P(A) \cdot P(B)$.
+
+Por lo tanto, en todos los casos:
+\[
+P(A \cap B) = P(A) \cdot P(B).
+\]
+\end{proof}
+
+% ============================================================
+% TEST 64: Fórmula de Bayes
+% ============================================================
+\begin{proposition}[Fórmula de Bayes]
+Sean $A$ y $B$ eventos con $P(B) > 0$. Entonces:
+\[
+P(A \mid B) = \frac{P(B \mid A) \cdot P(A)}{P(B)}.
+\]
+\end{proposition}
+
+\begin{proof}
+Partimos de la definición de probabilidad condicional de $A$ dado $B$:
+\[
+P(A \mid B) = \frac{P(A \cap B)}{P(B)}, \quad \text{si } P(B) > 0.
+\]
+De forma análoga, la probabilidad condicional de $B$ dado $A$ es:
+\[
+P(B \mid A) = \frac{P(A \cap B)}{P(A)}, \quad \text{si } P(A) > 0.
+\]
+De esta última expresión, despejamos $P(A \cap B)$:
+\[
+P(A \cap B) = P(B \mid A) \cdot P(A).
+\]
+Sustituyendo esta expresión en la primera ecuación:
+\[
+P(A \mid B) = \frac{P(B \mid A) \cdot P(A)}{P(B)}.
+\]
+Si $P(A) = 0$, entonces $P(A \cap B) = 0$ ya que $A \cap B \subseteq A$, y la fórmula también se satisface trivialmente ya que ambos lados son iguales a cero.
+
+Por lo tanto, la fórmula de Bayes queda demostrada:
+\[
+\boxed{P(A \mid B) = \frac{P(B \mid A) \cdot P(A)}{P(B)}}.
+\]
+\end{proof}
+
+% ============================================================
+% TEST 65: Ley de la probabilidad total
+% ============================================================
+\begin{proposition}[Ley de la probabilidad total]
+Sean $B_1, B_2, \ldots, B_n$ una partición del espacio muestral $\Omega$, es decir, eventos mutuamente excluyentes tales que $\bigcup_{i=1}^n B_i = \Omega$. Para cualquier evento $A$:
+\[
+P(A) = \sum_{i=1}^{n} P(A \mid B_i) \cdot P(B_i).
+\]
+\end{proposition}
+
+\begin{proof}
+Dado que $\{B_1, B_2, \ldots, B_n\}$ es una partición de $\Omega$, podemos escribir el evento $A$ como:
+\[
+A = A \cap \Omega = A \cap \left( \bigcup_{i=1}^{n} B_i \right) = \bigcup_{i=1}^{n} (A \cap B_i),
+\]
+donde la última igualdad se sigue por distributividad de la intersección sobre la unión.
+
+Los eventos $\{A \cap B_1, A \cap B_2, \ldots, A \cap B_n\}$ son mutuamente excluyentes, ya que si $i \neq j$, entonces $B_i \cap B_j = \emptyset$, y por lo tanto $(A \cap B_i) \cap (A \cap B_j) \subseteq B_i \cap B_j = \emptyset$.
+
+Por la axioma de aditividad de la probabilidad:
+\[
+P(A) = P\left( \bigcup_{i=1}^{n} (A \cap B_i) \right) = \sum_{i=1}^{n} P(A \cap B_i).
+\]
+Para cada $i$, aplicamos la definición de probabilidad condicional:
+\[
+P(A \cap B_i) = P(A \mid B_i) \cdot P(B_i), \quad \text{si } P(B_i) > 0.
+\]
+Si $P(B_i) = 0$, entonces $P(A \cap B_i) = 0$ ya que $A \cap B_i \subseteq B_i$, y el término $P(A \mid B_i) \cdot P(B_i) = P(A \mid B_i) \cdot 0 = 0$, por lo que la fórmula también se cumple trivialmente en este caso.
+
+Sustituyendo en la suma:
+\[
+P(A) = \sum_{i=1}^{n} P(A \mid B_i) \cdot P(B_i).
+\]
+\end{proof}
+
+% ============================================================
+% TEST 66: Linealidad de la esperanza
+% ============================================================
+\begin{proposition}[Linealidad de la esperanza]
+Sean $X$ y $Y$ variables aleatorias con valor esperado finito. Entonces:
+\[
+E[X + Y] = E[X] + E[Y].
+\]
+\end{proposition}
+
+\begin{proof}
+Supongamos que $X$ y $Y$ son variables aleatorias discretas con funciones de masa de probabilidad $p_X$ y $p_Y$ respectivamente. (El caso continuo es análogo sustituyendo sumas por integrales.)
+
+Por definición, el valor esperado de $X + Y$ es:
+\[
+E[X + Y] = \sum_{x} \sum_{y} (x + y) \cdot P(X = x, Y = y),
+\]
+donde la suma se extiende sobre todos los valores posibles de $x$ e $y$.
+
+Aplicando la linealidad de la suma:
+\[
+E[X + Y] = \sum_{x} \sum_{y} x \cdot P(X = x, Y = y) + \sum_{x} \sum_{y} y \cdot P(X = x, Y = y).
+\]
+En el primer término, factorizamos $x$ fuera de la suma sobre $y$:
+\[
+\sum_{x} \sum_{y} x \cdot P(X = x, Y = y) = \sum_{x} x \left( \sum_{y} P(X = x, Y = y) \right) = \sum_{x} x \cdot P(X = x) = E[X],
+\]
+donde usamos que $\sum_{y} P(X = x, Y = y) = P(X = x)$ (ley de la probabilidad total, marginalización).
+
+Análogamente, en el segundo término:
+\[
+\sum_{x} \sum_{y} y \cdot P(X = x, Y = y) = \sum_{y} y \left( \sum_{x} P(X = x, Y = y) \right) = \sum_{y} y \cdot P(Y = y) = E[Y],
+\]
+donde usamos que $\sum_{x} P(X = x, Y = y) = P(Y = y)$.
+
+Por lo tanto:
+\[
+E[X + Y] = E[X] + E[Y].
+\]
+\end{proof}
+
+\end{document}

@@ -1,0 +1,184 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{geometry}
+\geometry{margin=2.5cm}
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\title{Soluciones Tests 31-35: Cálculo}
+\author{Mathematical AI Agent}
+\date{\today}
+\begin{document}
+\maketitle
+
+\section{Problemas}
+
+\begin{theorem}[Desigualdad $\ln x \leq x - 1$]
+Para todo $x > 0$ se cumple que $\ln x \leq x - 1$.
+\end{theorem}
+
+\begin{proof}
+Sea $f(x) = \ln x - (x - 1) = \ln x - x + 1$ para $x > 0$.
+
+Calculamos la derivada:
+\[
+f'(x) = \frac{1}{x} - 1 = \frac{1 - x}{x}
+\]
+
+Igualamos a cero: $f'(x) = 0$ si y solo si $x = 1$.
+
+Análisis de signos de $f'(x)$:
+\begin{itemize}
+    \item Para $0 < x < 1$: $1 - x > 0$ y $x > 0$, por lo tanto $f'(x) > 0$ (f creciente).
+    \item Para $x > 1$: $1 - x < 0$ y $x > 0$, por lo tanto $f'(x) < 0$ (f decreciente).
+\end{itemize}
+
+Por tanto, $f$ alcanza un máximo absoluto en $x = 1$.
+
+Calculamos el valor máximo:
+\[
+f(1) = \ln 1 - 1 + 1 = 0
+\]
+
+Como $f(x) \leq f(1) = 0$ para todo $x > 0$, concluimos que:
+\[
+\ln x - (x - 1) \leq 0 \implies \ln x \leq x - 1
+\]
+\end{proof}
+
+\begin{theorem}[Convexidad de $e^x$]
+La función $f(x) = e^x$ es convexa en $\mathbb{R}$.
+\end{theorem}
+
+\begin{proof}
+Una función es convexa si y solo si su segunda derivada es no negativa.
+
+La función es $f(x) = e^x$.
+
+Calculamos la primera derivada:
+\[
+f'(x) = e^x
+\]
+
+Calculamos la segunda derivada:
+\[
+f''(x) = e^x
+\]
+
+Como $e^x > 0$ para todo $x \in \mathbb{R}$, tenemos que $f''(x) > 0$ para todo $x \in \mathbb{R}$.
+
+Por el criterio de la segunda derivada, la función $f(x) = e^x$ es estrictamente convexa en $\mathbb{R}$.
+\end{proof}
+
+\begin{theorem}[Desigualdad de Jensen para dos puntos]
+Sea $f: I \to \mathbb{R}$ una función convexa definida en un intervalo $I$, y sean $x, y \in I$. Para todo $t \in [0, 1]$ se cumple:
+\[
+f(tx + (1-t)y) \leq tf(x) + (1-t)f(y)
+\]
+\end{theorem}
+
+\begin{proof}
+Sea $z = tx + (1-t)y$. Dado que $I$ es un intervalo y $x, y \in I$, entonces $z \in I$.
+
+Por la convexidad de $f$, para todo $\lambda \in [0, 1]$:
+\[
+f(\lambda a + (1-\lambda)b) \leq \lambda f(a) + (1-\lambda)f(b)
+\]
+
+Aplicamos esta definición con $a = x$, $b = y$ y $\lambda = t$:
+\[
+f(tx + (1-t)y) \leq tf(x) + (1-t)f(y)
+\]
+
+Para verificar que la combinación convexa $tx + (1-t)y$ está bien definida, observamos que:
+\begin{enumerate}
+    \item $t + (1-t) = 1$ (las ponderaciones suman 1).
+    \item $t \geq 0$ y $1-t \geq 0$ (ponderaciones no negativas).
+    \item $x, y \in I$ donde $I$ es convexo (intervalo).
+\end{enumerate}
+
+Por lo tanto, la desigualdad de Jensen se cumple por la definición misma de convexidad.
+\end{proof}
+
+\begin{theorem}[Máximo y mínimo de funciones continuas]
+Sea $f: [a, b] \to \mathbb{R}$ continua. Entonces $f$ alcanza su valor máximo y su valor mínimo en $[a, b]$.
+\end{theorem}
+
+\begin{proof}
+Sea $f: [a, b] \to \mathbb{R}$ continua. Probaremos que $f$ alcanza máximo y mínimo por separado.
+
+\textbf{Parte 1: Existencia del máximo.}
+
+Sea $S = f([a, b]) = \{f(x) : x \in [a, b]\}$ el conjunto imagen de $f$. Como $f$ es continua y $[a, b]$ es un conjunto conexo y compacto, por el teorema de Weierstrass (o por la imagen continua de un compacto), $S$ es un subconjunto acotado y cerrado de $\mathbb{R}$.
+
+Sea $M = \sup S$. Como $S$ es cerrado y acotado, $M \in S$ (ya que un conjunto cerrado y acotado en $\mathbb{R}$ es compacto, y un subconjunto cerrado de un compacto es compacto). Por lo tanto, existe $c \in [a, b]$ tal que $f(c) = M$.
+
+\textbf{Parte 2: Existencia del mínimo.}
+
+Análogamente, sea $m = \inf S$. Como $S$ es cerrado, $m \in S$. Por lo tanto, existe $d \in [a, b]$ tal que $f(d) = m$.
+
+\textbf{Justificación formal de que $S$ es compacto:}
+
+Por el teorema de Heine-Borel, $[a, b]$ es compacto. La imagen de un conjunto compacto por una función continua es compacta. Por lo tanto, $S = f([a, b])$ es compacto en $\mathbb{R}$.
+
+Un conjunto compacto en $\mathbb{R}$ es cerrado y acotado (nuevamente por Heine-Borel). Por lo tanto:
+\begin{itemize}
+    \item $S$ tiene un elemento máximo $M$ (ya que es cerrado y acotado, su supremo pertenece al conjunto).
+    \item $S$ tiene un elemento mínimo $m$ (ya que es cerrado y acotado, su ínfimo pertenece al conjunto).
+\end{itemize}
+
+Concluimos que existen $c, d \in [a, b]$ tales que $f(c) = \max_{x \in [a,b]} f(x)$ y $f(d) = \min_{x \in [a,b]} f(x)$.
+\end{proof}
+
+\begin{theorem}[Teorema del Valor Intermedio]
+Sea $f: [a, b] \to \mathbb{R}$ continua, y sea $y$ un valor tal que $f(a) \leq y \leq f(b)$ (o $f(b) \leq y \leq f(a)$). Entonces existe $c \in [a, b]$ tal que $f(c) = y$.
+\end{theorem}
+
+\begin{proof}
+Sin pérdida de generalidad, supongamos que $f(a) < y < f(b)$ (el caso $f(a) > y > f(b)$ es análogo, y los casos de igualdad son triviales).
+
+Definimos el conjunto:
+\[
+S = \{x \in [a, b] : f(x) \leq y\}
+\]
+
+Observaciones:
+\begin{enumerate}
+    \item $a \in S$ ya que $f(a) < y$.
+    \item $S$ está acotado superiormente por $b$, por lo que existe $c = \sup S$.
+    \item Como $[a, b]$ es cerrado, $c \in [a, b]$.
+\end{enumerate}
+
+Probaremos que $f(c) = y$ por contradicción. Supongamos que $f(c) \neq y$. Entonces hay dos casos:
+
+\textbf{Caso 1: $f(c) < y$.}
+
+Por continuidad de $f$, existe $\delta > 0$ tal que para todo $x \in (c - \delta, c + \delta) \cap [a, b]$:
+\[
+|f(x) - f(c)| < y - f(c)
+\]
+Esto implica $f(x) < y$ para todo $x \in (c - \delta, c + \delta) \cap [a, b]$.
+
+En particular, si $c < b$, existe $x_0 = \min\{c + \delta/2, b\}$ tal que $f(x_0) < y$, lo que contradice que $c$ sea cota superior de $S$ (ya que $x_0 > c$ y $x_0 \in S$).
+
+\textbf{Caso 2: $f(c) > y$.}
+
+Por continuidad de $f$, existe $\delta > 0$ tal que para todo $x \in (c - \delta, c + \delta) \cap [a, b]$:
+\[
+|f(x) - f(c)| < f(c) - y
+\]
+Esto implica $f(x) > y$ para todo $x \in (c - \delta, c + \delta) \cap [a, b]$.
+
+En particular, si $c > a$, existe $x_1 = \max\{c - \delta/2, a\}$ tal que $f(x_1) > y$, lo que implica que $x_1 \notin S$, contradiciendo que $c$ sea el supremo de $S$ (ya que hay un punto menor que $c$ que no está en $S$, pero $c$ debería ser el ínfimo de los puntos que no están en $S$).
+
+Ambos casos llevan a contradicción. Por lo tanto, $f(c) = y$.
+
+Concluimos que existe $c \in [a, b]$ tal que $f(c) = y$.
+\end{proof}
+
+\end{document}

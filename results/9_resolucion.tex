@@ -1,0 +1,180 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{geometry}
+\geometry{margin=2.5cm}
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\title{Soluciones Tests 41-45: Análisis}
+\author{Mathematical AI Agent}
+\date{\today}
+\begin{document}
+\maketitle
+\section{Problemas}
+
+% ============================================================
+% TEST 41: Convergente implica acotada
+% ============================================================
+
+\begin{theorem}[Convergente implica acotada]
+Sea $(a_n)$ una sucesión convergente en $\mathbb{R}$. Entonces $(a_n)$ es acotada.
+\end{theorem}
+
+\begin{proof}
+Sea $\lim_{n\to\infty} a_n = a$ para algún $a \in \mathbb{R}$. Por definición de convergencia, para $\varepsilon = 1 > 0$ existe $N \in \mathbb{N}$ tal que para todo $n > N$:
+\[
+|a_n - a| < 1 \quad \Longrightarrow \quad |a_n| < |a| + 1.
+\]
+Definimos:
+\[
+M = \max\{|a_1|, |a_2|, \ldots, |a_N|, |a| + 1\}.
+\]
+Entonces, para todo $n \in \mathbb{N}$:
+\begin{itemize}
+    \item Si $n \leq N$, entonces $|a_n| \leq \max\{|a_1|, \ldots, |a_N|\} \leq M$.
+    \item Si $n > N$, entonces $|a_n| < |a| + 1 \leq M$.
+\end{itemize}
+En ambos casos, $|a_n| \leq M$ para todo $n \in \mathbb{N}$. Por lo tanto, $(a_n)$ es acotada.
+\end{proof}
+
+% ============================================================
+% TEST 42: Unicidad del límite
+% ============================================================
+
+\begin{theorem}[Unicidad del límite]
+Si una sucesión $(a_n)$ converge, entonces su límite es único.
+\end{theorem}
+
+\begin{proof}
+Supongamos que $\lim_{n\to\infty} a_n = a$ y $\lim_{n\to\infty} a_n = b$. Debemos demostrar que $a = b$.
+
+Sea $\varepsilon > 0$ arbitrario. Por la definición de convergencia:
+\begin{itemize}
+    \item Existe $N_1 \in \mathbb{N}$ tal que para todo $n > N_1$: $|a_n - a| < \dfrac{\varepsilon}{2}$.
+    \item Existe $N_2 \in \mathbb{N}$ tal que para todo $n > N_2$: $|a_n - b| < \dfrac{\varepsilon}{2}$.
+\end{itemize}
+Tomamos $N = \max\{N_1, N_2\}$. Para todo $n > N$, por la desigualdad triangular:
+\[
+|a - b| = |a - a_n + a_n - b| \leq |a_n - a| + |a_n - b| < \frac{\varepsilon}{2} + \frac{\varepsilon}{2} = \varepsilon.
+\]
+Dado que $\varepsilon > 0$ es arbitrario, se concluye que $|a - b| = 0$, es decir, $a = b$.
+\end{proof}
+
+% ============================================================
+% TEST 43: Límite del producto
+% ============================================================
+
+\begin{theorem}[Límite del producto]
+Si $(a_n)$ y $(b_n)$ son sucesiones convergentes en $\mathbb{R}$ con $\lim_{n\to\infty} a_n = a$ y $\lim_{n\to\infty} b_n = b$, entonces:
+\[
+\lim_{n\to\infty} a_n b_n = ab.
+\]
+\end{theorem}
+
+\begin{proof}
+Sean $\varepsilon > 0$ arbitrario. Como $(a_n)$ converge, es acotada por el Teorema 41, de modo que existe $K > 0$ tal que $|a_n| \leq K$ para todo $n \in \mathbb{N}$.
+
+Consideramos la identidad:
+\[
+|a_n b_n - ab| = |a_n b_n - a_n b + a_n b - ab| = |a_n(b_n - b) + b(a_n - a)| \leq |a_n| \cdot |b_n - b| + |b| \cdot |a_n - a|.
+\]
+Por la convergencia de $(a_n)$ y $(b_n)$:
+\begin{itemize}
+    \item Existe $N_1$ tal que $|a_n - a| < \dfrac{\varepsilon}{2(|b| + 1)}$ para $n > N_1$.
+    \item Existe $N_2$ tal que $|b_n - b| < \dfrac{\varepsilon}{2(K + 1)}$ para $n > N_2$.
+\end{itemize}
+(Se usa $|b|+1$ y $K+1$ en el denominador para evitar división por cero.)
+
+Para $n > N = \max\{N_1, N_2\}$:
+\[
+|a_n b_n - ab| \leq K \cdot \frac{\varepsilon}{2(K + 1)} + |b| \cdot \frac{\varepsilon}{2(|b| + 1)} < \frac{\varepsilon}{2} + \frac{\varepsilon}{2} = \varepsilon.
+\]
+Por lo tanto, $\lim_{n\to\infty} a_n b_n = ab$.
+\end{proof}
+
+% ============================================================
+% TEST 44: Límite del inverso
+% ============================================================
+
+\begin{theorem}[Límite del inverso]
+Si $(a_n)$ es una sucesión convergente con $\lim_{n\to\infty} a_n = a$ y $a \neq 0$, entonces:
+\[
+\lim_{n\to\infty} \frac{1}{a_n} = \frac{1}{a}.
+\]
+\end{theorem}
+
+\begin{proof}
+Como $a \neq 0$, sea $\delta = \dfrac{|a|}{2} > 0$. Por la convergencia de $(a_n)$, existe $N_1 \in \mathbb{N}$ tal que para todo $n > N_1$:
+\[
+|a_n - a| < \delta = \frac{|a|}{2}.
+\]
+Por la desigualdad triangular inversa, para $n > N_1$:
+\[
+|a_n| = |a - (a - a_n)| \geq |a| - |a - a_n| > |a| - \frac{|a|}{2} = \frac{|a|}{2} > 0.
+\]
+En particular, $a_n \neq 0$ para todo $n > N_1$.
+
+Sea $\varepsilon > 0$ arbitrario. Por la convergencia de $(a_n)$, existe $N_2 \in \mathbb{N}$ tal que para todo $n > N_2$:
+\[
+|a_n - a| < \frac{a^2 \varepsilon}{2}.
+\]
+Para $n > N = \max\{N_1, N_2\}$:
+\[
+\left|\frac{1}{a_n} - \frac{1}{a}\right| = \left|\frac{a - a_n}{a \cdot a_n}\right| = \frac{|a_n - a|}{|a| \cdot |a_n|} < \frac{|a_n - a|}{|a| \cdot \frac{|a|}{2}} = \frac{2|a_n - a|}{a^2} < \frac{2 \cdot \frac{a^2 \varepsilon}{2}}{a^2} = \varepsilon.
+\]
+Por lo tanto, $\lim_{n\to\infty} \dfrac{1}{a_n} = \dfrac{1}{a}$.
+\end{proof}
+
+% ============================================================
+% TEST 45: Completeza de R (sucesiones de Cauchy)
+% ============================================================
+
+\begin{definition}[Sucesión de Cauchy]
+Una sucesión $(a_n)$ en $\mathbb{R}$ es de Cauchy si para todo $\varepsilon > 0$ existe $N \in \mathbb{N}$ tal que para todo $m, n > N$:
+\[
+|a_m - a_n| < \varepsilon.
+\]
+\end{definition}
+
+\begin{theorem}[Completeza de $\mathbb{R}$]
+Toda sucesión de Cauchy en $\mathbb{R}$ es convergente.
+\end{theorem}
+
+\begin{proof}
+Sea $(a_n)$ una sucesión de Cauchy en $\mathbb{R}$. Demostraremos que $(a_n)$ converge.
+
+\textbf{Paso 1: $(a_n)$ es acotada.}
+Tomando $\varepsilon = 1$, existe $N_0$ tal que $|a_m - a_n| < 1$ para todo $m, n > N_0$. En particular, para $n > N_0$:
+\[
+|a_n| \leq |a_n - a_{N_0+1}| + |a_{N_0+1}| < 1 + |a_{N_0+1}|.
+\]
+Definiendo $M = \max\{|a_1|, \ldots, |a_{N_0}|, 1 + |a_{N_0+1}|\}$, tenemos $|a_n| \leq M$ para todo $n$.
+
+\textbf{Paso 2: Construcción de un punto límite.}
+Por el Teorema de Bolzano-Weierstrass, toda sucesión acotada en $\mathbb{R}$ tiene una subsucesión convergente. Sea $(a_{n_k})$ una subsucesión convergente con:
+\[
+\lim_{k\to\infty} a_{n_k} = L.
+\]
+
+\textbf{Paso 3: La sucesión completa converge a $L$.}
+Sea $\varepsilon > 0$. Como $(a_n)$ es de Cauchy, existe $N_1$ tal que:
+\[
+|a_m - a_n| < \frac{\varepsilon}{2} \quad \text{para todo } m, n > N_1.
+\]
+Como $a_{n_k} \to L$, existe $K$ tal que $n_K > N_1$ y:
+\[
+|a_{n_K} - L| < \frac{\varepsilon}{2}.
+\]
+Para todo $n > N_1$, por la desigualdad triangular:
+\[
+|a_n - L| = |a_n - a_{n_K} + a_{n_K} - L| \leq |a_n - a_{n_K}| + |a_{n_K} - L| < \frac{\varepsilon}{2} + \frac{\varepsilon}{2} = \varepsilon.
+\]
+Dado que $\varepsilon > 0$ es arbitrario, concluimos que $\lim_{n\to\infty} a_n = L$. Por lo tanto, toda sucesión de Cauchy en $\mathbb{R}$ converge.
+\end{proof}
+
+\end{document}

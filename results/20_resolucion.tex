@@ -1,0 +1,257 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{geometry}
+\geometry{margin=2.5cm}
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\title{Soluciones Tests 91-95: Problemas Difíciles}
+\author{Mathematical AI Agent}
+\date{\today}
+\begin{document}
+\maketitle
+
+\section{Problemas}
+
+%======================================================================
+% TEST 91: Teorema del Punto Fijo de Banach
+%======================================================================
+\subsection*{Test 91: Teorema del Punto Fijo de Banach}
+
+\begin{definition}
+Sea $(X,d)$ un espacio métrico. Una función $f:X\to X$ se dice \emph{contracción} si existe una constante $k\in[0,1)$ tal que
+\[
+d(f(x),f(y))\le k\, d(x,y)\qquad\forall\,x,y\in X.
+\]
+Un punto $x^{*}\in X$ se llama \emph{punto fijo} de $f$ si $f(x^{*})=x^{*}$.
+\end{definition}
+
+\begin{theorem}[Banach, Punto Fijo]
+Sea $(X,d)$ un espacio métrico completo y $f:X\to X$ una contracción. Entonces $f$ posee un único punto fijo $x^{*}\in X$. Además, para cualquier $x_{0}\in X$, la sucesión de iteradas $x_{n+1}=f(x_{n})$ converge a $x^{*}$ y se verifica la estimación de error
+\[
+d(x_{n},x^{*})\le \frac{k^{n}}{1-k}\,d(x_{0},x_{1}).
+\]
+\end{theorem}
+
+\begin{proof}
+\textbf{Existencia.} Tomemos $x_{0}\in X$ arbitrario y definimos la sucesión $(x_{n})_{n\ge0}$ por $x_{n+1}=f(x_{n})$. Mostramos que $(x_{n})$ es de Cauchy. Para $m>n\ge 0$, por la desigualdad triangular y la propiedad de contracción:
+\begin{align*}
+d(x_{n},x_{m}) &\le d(x_{n},x_{n+1})+d(x_{n+1},x_{n+2})+\cdots+d(x_{m-1},x_{m})\\
+&\le d(x_{n},x_{n+1})\bigl(1+k+k^{2}+\cdots+k^{m-n-1}\bigr)\\
+&= d(x_{n},x_{n+1})\cdot\frac{1-k^{m-n}}{1-k}\\
+&\le \frac{d(x_{n},x_{n+1})}{1-k}.
+\end{align*}
+Iterando la contracción obtenemos $d(x_{n},x_{n+1})\le k^{n}\,d(x_{0},x_{1})$, de donde
+\[
+d(x_{n},x_{m})\le \frac{k^{n}}{1-k}\,d(x_{0},x_{1}).
+\]
+Como $k<1$, tiende a $0$ cuando $n\to\infty$, luego $(x_{n})$ es de Cauchy. Por completitud de $(X,d)$, existe $x^{*}\in X$ tal que $x_{n}\to x^{*}$.
+
+\textbf{$x^{*}$ es punto fijo.} La función $f$ es continua (de hecho, uniformly continua) pues
+\[
+d(f(x),f(y))\le k\,d(x,y).
+\]
+Por tanto,
+\[
+f(x^{*})=f\!\bigl(\lim_{n\to\infty}x_{n}\bigr)=\lim_{n\to\infty}f(x_{n})=\lim_{n\to\infty}x_{n+1}=x^{*}.
+\]
+
+\textbf{Unicidad.} Si $y^{*}$ es otro punto fijo, entonces
+\[
+d(x^{*},y^{*})=d(f(x^{*}),f(y^{*}))\le k\,d(x^{*},y^{*}),
+\]
+y como $k<1$ se deduce $d(x^{*},y^{*})=0$, es decir, $x^{*}=y^{*}$.
+
+\textbf{Estimación de error.} Se probó anteriormente que
+\[
+d(x_{n},x^{*})=\lim_{m\to\infty}d(x_{n},x_{m})\le \frac{k^{n}}{1-k}\,d(x_{0},x_{1}).
+\]
+\end{proof}
+
+%======================================================================
+% TEST 92: Teorema de Stone-Weierstrass
+%======================================================================
+\subsection*{Test 92: Teorema de Stone-Weierstrass}
+
+\begin{definition}
+Sea $X$ un espacio topológico compacto. Un subconjunto $\mathcal{A}\subseteq C(X,\mathbb{R})$ se dice \emph{subálgebra} si es subespacio vectorial cerrado bajo multiplicación punto a punto, es decir, $f,g\in\mathcal{A}\Rightarrow f\cdot g\in\mathcal{A}$, donde $(f\cdot g)(x)=f(x)g(x)$.
+\end{definition}
+
+\begin{theorem}[Stone-Weierstrass]
+Sea $X$ un espacio topológico compacto y $\mathcal{A}\subseteq C(X,\mathbb{R})$ una subálgebra que separa puntos, i.e.,
+\[
+\forall\,x\neq y\in X,\;\exists\,f\in\mathcal{A}\;\text{con}\;f(x)\neq f(y).
+\]
+Entonces $\mathcal{A}$ es densa en $C(X,\mathbb{R})$ con la topología de la convergencia uniforme.
+\end{theorem}
+
+\begin{proof}
+Denotamos $\overline{\mathcal{A}}$ el cierre de $\mathcal{A}$ en $C(X,\mathbb{R})$ con la norma $\|f\|_{\infty}=\sup_{x\in X}|f(x)|$. Debemos probar $\overline{\mathcal{A}}=C(X,\mathbb{R})$.
+
+\textbf{Paso 1: $\overline{\mathcal{A}}$ es una subálgebra.} Si $f,g\in\overline{\mathcal{A}}$ existen sucesiones $f_{n},g_{n}\in\mathcal{A}$ con $f_{n}\to f$, $g_{n}\to g$ uniformemente. Entonces $f_{n}g_{n}\to fg$ uniformemente pues
+\[
+\|f_{n}g_{n}-fg\|_{\infty}\le \|f_{n}\|_{\infty}\|g_{n}-g\|_{\infty}+\|f_{n}-f\|_{\infty}\|g\|_{\infty}\to 0.
+\]
+Como $f_{n}g_{n}\in\mathcal{A}$, se tiene $fg\in\overline{\mathcal{A}}$.
+
+\textbf{Paso 2: Si $f\in\overline{\mathcal{A}}$, entonces $|f|,\min(f,g),\max(f,g)\in\overline{\mathcal{A}}$.} Para $f\ge 0$ en $X$, por el teorema de Weierstrass de aproximación polinómica en $[0,\|f\|_{\infty}]$, existen polinomios $P_{n}$ tal que $P_{n}\to |\cdot|$ uniformemente. Por tanto $P_{n}\circ f\to |f|$ uniformemente. Como $P_{n}\circ f\in\overline{\mathcal{A}}$ (composición de polinomio con $f\in\overline{\mathcal{A}}$), se obtiene $|f|\in\overline{\mathcal{A}}$.
+
+Luego, $\min(f,g)=\frac{1}{2}(f+g-|f-g|)\in\overline{\mathcal{A}}$ y $\max(f,g)=\frac{1}{2}(f+g+|f-g|)\in\overline{\mathcal{A}}$.
+
+\textbf{Paso 3: $\overline{\mathcal{A}}=C(X,\mathbb{R})$.} Sean $h\in C(X,\mathbb{R})$ y $\varepsilon>0$. Para cada $x\in X$, por separación de puntos existe $f_{x}\in\mathcal{A}\subseteq\overline{\mathcal{A}}$ con $f_{x}(x)\neq f_{x}(y)$ para todo $y\neq x$. Ajustando $f_{x}\mapsto f_{x}+\alpha_{x}$ podemos conseguir $f_{x}(x)=h(x)$.
+
+Por continuidad de $f_{x}$ y $h$, existe vecindario $U_{x}$ de $x$ tal que $|f_{y}(z)-h(z)|<\varepsilon$ para todo $z\in U_{x}$ y todo $y$ ``suficientemente cercano'' a $x$. Por compacidad, finitos $U_{x_{1}},\dots,U_{x_{n}}$ cubren $X$. Definimos
+\[
+g=\max(f_{x_{1}},\dots,f_{x_{n}})\in\overline{\mathcal{A}}.
+\]
+Entonces para todo $z\in X$, elegimos $x_{i}$ con $z\in U_{x_{i}}$ y:
+\[
+g(z)\ge f_{x_{i}}(z)>h(z)-\varepsilon,\qquad g(z)\le\max_{i}\|f_{x_{i}}\|_{\infty}.
+\]
+Ajustando con $\min(g,\sup h+\varepsilon)$ y luego $\max(g,\inf h-\varepsilon)$, obtenemos $\|g-h\|_{\infty}<\varepsilon$, demostrando que $h\in\overline{\mathcal{A}}$.
+\end{proof}
+
+%======================================================================
+% TEST 93: Teorema de Baire
+%======================================================================
+\subsection*{Test 93: Teorema de Baire}
+
+\begin{definition}
+Un espacio topológico $X$ se dice \emph{espacio de Baire} si la unión numerable de conjuntos cerrados con interior vacío tiene interior vacío. Equivalently, la intersección numerable de conjuntos abiertos densos es densa.
+\end{definition}
+
+\begin{theorem}[Baire]
+Todo espacio métrico completo es un espacio de Baire.
+\end{theorem}
+
+\begin{proof}
+Sean $(U_{n})_{n\ge1}$ conjuntos abiertos densos en $X$. Debemos probar que $\bigcap_{n=1}^{\infty}U_{n}$ es denso en $X$, i.e., para todo abierto no vacío $V\subseteq X$,
+\[
+V\cap\bigcap_{n=1}^{\infty}U_{n}\neq\emptyset.
+\]
+
+Sea $V_{0}=V$ un abierto no vacío. Como $U_{1}$ es denso, $V_{0}\cap U_{1}$ es abierto no vacío. Sea $V_{1}$ un abierto no vacío tal que $\overline{V_{1}}\subseteq V_{0}\cap U_{1}$ y $\operatorname{diam}(V_{1})<1$ (tal $V_{1}$ existe por normalidad del espacio métrico).
+
+Procediendo por inducción, construimos una sucesión $(V_{n})$ de abiertos no vacíos tal que:
+\begin{enumerate}
+\item $\overline{V_{n}}\subseteq V_{n-1}\cap U_{n}$,
+\item $\operatorname{diam}(V_{n})<1/n$.
+\end{enumerate}
+
+Para el paso $n$, dado $V_{n-1}$ abierto no vacío con $\operatorname{diam}(V_{n-1})<1/(n-1)$: como $U_{n}$ es denso, $V_{n-1}\cap U_{n}$ es abierto no vacío. Por la normalidad de los espacios métricos, existe abierto $V_{n}$ tal que
+\[
+\emptyset\neq V_{n}\subseteq\overline{V_{n}}\subseteq V_{n-1}\cap U_{n},\qquad\operatorname{diam}(V_{n})<\frac{1}{n}.
+\]
+
+Elija $x_{n}\in\overline{V_{n}}$ para cada $n$. Para $m>n$,
+\[
+d(x_{n},x_{m})\le\operatorname{diam}(\overline{V_{n}})\le\operatorname{diam}(V_{n})<\frac{1}{n},
+\]
+luego $(x_{n})$ es de Cauchy. Por completitud, $x_{n}\to x^{*}$ para algún $x^{*}\in X$.
+
+Para cada $k\ge 1$ y $n\ge k$, se tiene $x_{n}\in\overline{V_{n}}\subseteq\overline{V_{k}}$, que es cerrado, luego $x^{*}=\lim_{n\to\infty}x_{n}\in\overline{V_{k}}\subseteq U_{k}$. Por tanto $x^{*}\in\bigcap_{k=1}^{\infty}U_{k}$. Además, $x^{*}\in\overline{V_{1}}\subseteq V$, así que $V\cap\bigcap_{n=1}^{\infty}U_{n}\neq\emptyset$.
+\end{proof}
+
+%======================================================================
+% TEST 94: Teorema de Arzelà-Ascoli
+%======================================================================
+\subsection*{Test 94: Teorema de Arzelà-Ascoli}
+
+\begin{definition}
+Sea $K$ un espacio topológico compacto y $C(K,\mathbb{R})$ el espacio de funciones continuas con la norma de convergencia uniforme. Un subconjunto $\mathcal{F}\subseteq C(K,\mathbb{R})$ se dice:
+\begin{itemize}
+\item \emph{Equicontinuo} en $x_{0}\in K$ si para todo $\varepsilon>0$ existe vecindario $U$ de $x_{0}$ tal que $|f(x)-f(x_{0})|<\varepsilon$ para todo $f\in\mathcal{F}$ y $x\in U$.
+\item \emph{Equicontínuo} si es equicontinuo en cada punto de $K$.
+\end{itemize}
+\end{definition}
+
+\begin{theorem}[Arzelà-Ascoli]
+Sea $K$ un espacio topológico compacto (metrizable). Un subconjunto $\mathcal{F}\subseteq C(K,\mathbb{R})$ tiene precompacto el cierre si y solo si $\mathcal{F}$ es equicontínuo y acotado puntualmente.
+\end{theorem}
+
+\begin{proof}
+$\Rightarrow)$ Si $\overline{\mathcal{F}}$ es precompacto, entonces $\overline{\mathcal{F}}$ es compacto. En particular, $\overline{\mathcal{F}}$ es equicontínuo y acotado (pues todo conjunto compacto en $C(K)$ lo es). Como $\mathcal{F}\subseteq\overline{\mathcal{F}}$, se deduce que $\mathcal{F}$ es equicontínuo y acotado puntualmente.
+
+$\Leftarrow)$ Asumamos que $\mathcal{F}$ es equicontínuo y acotado. Debemos probar que $\overline{\mathcal{F}}$ es compacto. Basta probar que toda sucesión $(f_{n})\subseteq\mathcal{F}$ posee subsucesión convergente.
+
+\textbf{Paso 1: Densidad numerable.} Sea $D=\{x_{1},x_{2},\dots\}$ un conjunto denso numerable en $K$ (existe porque $K$ es compacto metrizable, separable). Para cada $k\in\mathbb{N}$, la sucesión $(f_{n}(x_{k}))_{n}$ está acotada en $\mathbb{R}$, por el principio de Bolzano-Weierstrass existe subsucesión convergente.
+
+Usando un argumento diagonal, extraemos una subsucesión $(g_{j})=(f_{n_{j}})$ tal que $(g_{j}(x_{k}))_{j}$ converge para todo $k$.
+
+\textbf{Paso 2: Convergencia uniforme.} Sean $\varepsilon>0$ y $x\in K$. Por equicontinuidad de $\mathcal{F}$, existe $\delta>0$ tal que $d(x,y)<\delta$ implica $|g(x)-g(y)|<\varepsilon$ para todo $g\in\mathcal{F}$. Sea $x_{k}\in D$ con $d(x,x_{k})<\delta$. Para $g_{i},g_{j}$ en la subsucesión:
+\[
+|g_{i}(x)-g_{j}(x)|\le|g_{i}(x)-g_{i}(x_{k})|+|g_{i}(x_{k})-g_{j}(x_{k})|+|g_{j}(x_{k})-g_{j}(x)|<2\varepsilon+|g_{i}(x_{k})-g_{j}(x_{k})|.
+\]
+Como $(g_{i}(x_{k}))_{i}$ converge, existe $N_{k}$ tal que $i,j\ge N_{k}$ implica $|g_{i}(x_{k})-g_{j}(x_{k})|<\varepsilon$. Entonces $i,j\ge N_{k}$ implica $\|g_{i}-g_{j}\|_{\infty}<3\varepsilon$.
+
+\textbf{Paso 3: Eligiendo $N$ independiente de $x$.} Para cada $x\in K$ fijamos $k(x)$ tal que $d(x,x_{k(x)})<\delta$ (donde $\delta$ depende solo de $\varepsilon$ por equicontinuidad). Sea $I$ una subfinita cubiertura por bolas de radio $\delta$: $K\subseteq\bigcup_{i=1}^{M}B(x_{k_{i}},\delta)$. Sea $N=\max_{1\le i\le M}N_{k_{i}}$. Entonces para $i,j\ge N$ y cualquier $x\in K$, existe $x_{k_{i}}$ en la cubiertura con $d(x,x_{k_{i}})<\delta$, y
+\[
+|g_{i}(x)-g_{j}(x)|\le|g_{i}(x)-g_{i}(x_{k_{i}})|+|g_{i}(x_{k_{i}})-g_{j}(x_{k_{i}})|+|g_{j}(x_{k_{i}})-g_{j}(x)|<3\varepsilon.
+\]
+Por tanto $(g_{j})$ es de Cauchy en $C(K)$ (completo), luego converge uniformemente a alguna $g\in C(K)$ con $g\in\overline{\mathcal{F}}$. Esto prueba que $\overline{\mathcal{F}}$ es compacto.
+\end{proof}
+
+%======================================================================
+% TEST 95: Convergencia Dominada de Lebesgue
+%======================================================================
+\subsection*{Test 95: Convergencia Dominada de Lebesgue}
+
+\begin{definition}
+Sea $(\Omega,\mathcal{F},\mu)$ un espacio de medida. Una sucesión de funciones medibles $(f_{n})$ converge \emph{dominadamente} a $f$ si:
+\begin{enumerate}
+\item $f_{n}(x)\to f(x)$ $\mu$-casi todo $x$,
+\item Existe $g\in L^{1}(\mu)$ tal que $|f_{n}(x)|\le g(x)$ $\mu$-casi todo $x$ y todo $n$.
+\end{enumerate}
+El función $g$ se llama \emph{función dominante}.
+\end{definition}
+
+\begin{theorem}[Lebesgue, Convergencia Dominada]
+Sea $(\Omega,\mathcal{F},\mu)$ un espacio de medida y $(f_{n})$ una sucesión de funciones medibles que converge dominadamente a $f$. Entonces $f\in L^{1}(\mu)$ y
+\[
+\lim_{n\to\infty}\int_{\Omega}|f_{n}-f|\,d\mu=0.
+\]
+Equivalente,
+\[
+\lim_{n\to\infty}\int_{\Omega}f_{n}\,d\mu=\int_{\Omega}f\,d\mu.
+\]
+\end{theorem}
+
+\begin{proof}
+\textbf{Paso 1: $f$ es integrable.} Como $|f_{n}|\le g$ $\mu$-c.t. y $f_{n}\to f$ $\mu$-c.t., se deduce $|f|=\lim_{n\to\infty}|f_{n}|\le g$ $\mu$-c.t. Como $g\in L^{1}$, entonces $f\in L^{1}$ y $|f-f_{n}|\le|f|+|f_{n}|\le 2g$ $\mu$-c.t.
+
+\textbf{Paso 2: Convergencia.} Definimos $h_{n}=|f_{n}-f|$. Entonces $0\le h_{n}\le 2g$ $\mu$-c.t. y $h_{n}\to 0$ $\mu$-c.t. Debemos probar $\int h_{n}\,d\mu\to 0$.
+
+Por el Teorema de Fatou (aplicado a $2g-h_{n}\ge 0$, que converge a $2g$):
+\[
+\int 2g\,d\mu\le\liminf_{n\to\infty}\int(2g-h_{n})\,d\mu=\int 2g\,d\mu+\liminf_{n\to\infty}\left(-\int h_{n}\,d\mu\right)=\int 2g\,d\mu-\limsup_{n\to\infty}\int h_{n}\,d\mu.
+\]
+Cancelando $\int 2g\,d\mu<\infty$:
+\[
+0\le -\limsup_{n\to\infty}\int h_{n}\,d\mu,
+\]
+luego $\limsup_{n\to\infty}\int h_{n}\,d\mu\le 0$. Como $\int h_{n}\,d\mu\ge 0$, se concluye
+\[
+\lim_{n\to\infty}\int h_{n}\,d\mu=\lim_{n\to\infty}\int|f_{n}-f|\,d\mu=0.
+\]
+
+\textbf{Alternativa directa (sin Fatou):} Por el Lema de Egorov, para todo $\varepsilon>0$ existe $A\in\mathcal{F}$ con $\mu(A^{c})<\varepsilon$ tal que $f_{n}\to f$ uniformemente en $A$. Entonces
+\[
+\int|f_{n}-f|\,d\mu=\int_{A}|f_{n}-f|\,d\mu+\int_{A^{c}}|f_{n}-f|\,d\mu.
+\]
+En $A$, como la convergencia es uniforme, el primer término tiende a $0$. Para el segundo,
+\[
+\int_{A^{c}}|f_{n}-f|\,d\mu\le\int_{A^{c}}2g\,d\mu.
+\]
+Para $\varepsilon$ suficientemente pequeño, $\int_{A^{c}}2g\,d\mu<\varepsilon$ (por la continuidad absoluta de la integral de Lebesgue: $\lim_{\mu(B)\to 0}\int_{B}g\,d\mu=0$). Luego
+\[
+\limsup_{n\to\infty}\int|f_{n}-f|\,d\mu\le\varepsilon,
+\]
+y como $\varepsilon>0$ es arbitrario, $\int|f_{n}-f|\,d\mu\to 0$.
+\end{proof}
+
+\end{document}

@@ -1,0 +1,205 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{geometry}
+\geometry{margin=2.5cm}
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\title{Soluciones Tests 36-40: Cálculo}
+\author{Mathematical AI Agent}
+\date{\today}
+\begin{document}
+\maketitle
+
+\section{Problemas}
+
+\subsection{Teorema de Rolle}
+
+\begin{theorem}[Rolle]
+Sea $f: [a,b] \to \mathbb{R}$ una función que verifica:
+\begin{enumerate}
+    \item $f$ es continua en $[a,b]$,
+    \item $f$ es derivable en $(a,b)$,
+    \item $f(a) = f(b)$.
+\end{enumerate}
+Entonces existe al menos un punto $c \in (a,b)$ tal que $f'(c) = 0$.
+\end{theorem}
+
+\begin{proof}
+Sea $f: [a,b] \to \mathbb{R}$ que satisface las hipótesis del teorema.
+
+Por el \textbf{teorema de Weierstrass}, dado que $f$ es continua en el intervalo cerrado y acotado $[a,b]$, existen puntos $m, M \in [a,b]$ tales que:
+\[
+f(m) = \min_{x \in [a,b]} f(x), \quad f(M) = \max_{x \in [a,b]} f(x).
+\]
+
+\textbf{Caso 1:} Si $f(m) = f(M)$, entonces $f$ es constante en $[a,b]$, pues para todo $x \in [a,b]$:
+\[
+f(m) \leq f(x) \leq f(M) = f(m).
+\]
+En este caso, $f'(x) = 0$ para todo $x \in (a,b)$, y cualquier punto $c \in (a,b)$ cumple la conclusión.
+
+\textbf{Caso 2:} Si $f(m) \neq f(M)$, como $f(a) = f(b)$, al menos uno de los extremos $m$ o $M$ no puede ser igual a $a$ ni $b$. Supongamos, sin pérdida de generalidad, que $c \in (a,b)$ es un punto donde se alcanza el máximo o mínimo (es decir, $f(c) = f(m)$ o $f(c) = f(M)$).
+
+Por el \textbf{teorema de Fermat}, si $f$ alcanza un extremo local en un punto interior $c \in (a,b)$ donde $f$ es derivable, entonces:
+\[
+f'(c) = 0.
+\]
+
+Alternativamente, podemos demostrarlo directamente usando el \textbf{criterio de crecimiento}: si $f'(c) > 0$ en algún punto, existiría una vecindad donde $f$ es creciente, contradiciendo que $c$ sea un máximo local. Análogamente, si $f'(c) < 0$, existiría una vecindad donde $f$ es decreciente, contradiciendo que $c$ sea un mínimo local.
+
+Por lo tanto, existe $c \in (a,b)$ tal que $f'(c) = 0$.
+\end{proof}
+
+\subsection{Teorema del Valor Medio}
+
+\begin{theorem}[Del Valor Medio]
+Sea $f: [a,b] \to \mathbb{R}$ una función que verifica:
+\begin{enumerate}
+    \item $f$ es continua en $[a,b]$,
+    \item $f$ es derivable en $(a,b)$.
+\end{enumerate}
+Entonces existe al menos un punto $c \in (a,b)$ tal que:
+\[
+f'(c) = \frac{f(b) - f(a)}{b - a}.
+\]
+\end{theorem}
+
+\begin{proof}
+Definimos la función auxiliar $g: [a,b] \to \mathbb{R}$ por:
+\[
+g(x) = f(x) - f(a) - \frac{f(b) - f(a)}{b - a}(x - a).
+\]
+
+Verificamos que $g$ satisface las hipótesis del \textbf{teorema de Rolle}:
+
+\begin{itemize}
+    \item $g$ es continua en $[a,b]$: La función $f$ es continua por hipótesis, y las funciones $x \mapsto f(a)$ y $x \mapsto \frac{f(b)-f(a)}{b-a}(x-a)$ son continuas (son funciones lineales o constantes).
+    
+    \item $g$ es derivable en $(a,b)$: Análogamente, $f$ es derivable por hipótesis, y las demás funciones que componen $g$ son derivables.
+    
+    \item Verificación de las condiciones en los extremos:
+    \[
+    g(a) = f(a) - f(a) - \frac{f(b) - f(a)}{b - a}(a - a) = 0,
+    \]
+    \[
+    g(b) = f(b) - f(a) - \frac{f(b) - f(a)}{b - a}(b - a) = f(b) - f(a) - (f(b) - f(a)) = 0.
+    \]
+\end{itemize}
+
+Por el \textbf{teorema de Rolle}, existe $c \in (a,b)$ tal que $g'(c) = 0$.
+
+Calculamos $g'(x)$:
+\[
+g'(x) = f'(x) - \frac{f(b) - f(a)}{b - a}.
+\]
+
+Evaluando en $c$:
+\[
+g'(c) = f'(c) - \frac{f(b) - f(a)}{b - a} = 0.
+\]
+
+Por lo tanto:
+\[
+f'(c) = \frac{f(b) - f(a)}{b - a}.
+\]
+\end{proof}
+
+\subsection{Derivada Nula Implica Constante}
+
+\begin{theorem}
+Sea $f: I \to \mathbb{R}$ una función derivable en un intervalo abierto $I$, y sea $f'(x) = 0$ para todo $x \in I$. Entonces $f$ es constante en $I$.
+\end{theorem}
+
+\begin{proof}
+Sea $a, b \in I$ con $a < b$. El intervalo $[a,b] \subseteq I$ (pues $I$ es abierto, podemos considerar un intervalo más pequeño si es necesario, pero la propiedad se extiende por transitividad).
+
+Aplicamos el \textbf{teorema del valor medio} a $f$ en $[a,b]$:
+\[
+f(b) - f(a) = f'(c)(b - a)
+\]
+para algún $c \in (a,b)$.
+
+Por hipótesis, $f'(c) = 0$, por lo tanto:
+\[
+f(b) - f(a) = 0 \cdot (b - a) = 0,
+\]
+lo que implica $f(b) = f(a)$.
+
+Dado que $a$ y $b$ son arbitrarios en $I$, concluimos que $f(x) = f(a)$ para todo $x \in I$, es decir, $f$ es constante en $I$.
+\end{proof}
+
+\subsection{Derivada Positiva Implica Creciente}
+
+\begin{theorem}
+Sea $f: I \to \mathbb{R}$ una función derivable en un intervalo abierto $I$, y sea $f'(x) > 0$ para todo $x \in I$. Entonces $f$ es estrictamente creciente en $I$.
+\end{theorem}
+
+\begin{proof}
+Sea $a, b \in I$ con $a < b$.
+
+Aplicamos el \textbf{teorema del valor medio} a $f$ en $[a,b]$:
+\[
+f(b) - f(a) = f'(c)(b - a)
+\]
+para algún $c \in (a,b)$.
+
+Por hipótesis, $f'(c) > 0$, y como $a < b$ tenemos $b - a > 0$. Por lo tanto:
+\[
+f(b) - f(a) = f'(c)(b - a) > 0,
+\]
+lo que implica $f(b) > f(a)$.
+
+Dado que $a$ y $b$ son arbitrarios con $a < b$, concluimos que $f$ es estrictamente creciente en $I$.
+\end{proof}
+
+\subsection{Sucesiones Monótonas y Acotadas}
+
+\begin{theorem}
+Toda sucesión monótona y acotada en $\mathbb{R}$ converge.
+\end{theorem}
+
+\begin{proof}
+Sea $(x_n)_{n \in \mathbb{N}}$ una sucesión monótona y acotada en $\mathbb{R}$.
+
+\textbf{Caso 1:} Supongamos que $(x_n)$ es creciente (es decir, $x_n \leq x_{n+1}$ para todo $n$) y acotada superiormente.
+
+Por el \textbf{axioma de completitud} de $\mathbb{R}$ (o \textbf{propiedad del supremo}), el conjunto $A = \{x_n : n \in \mathbb{N}\}$ tiene supremo. Definimos:
+\[
+L = \sup_{n \in \mathbb{N}} x_n.
+\]
+
+Probaremos que $\lim_{n \to \infty} x_n = L$. Sea $\varepsilon > 0$ arbitrario.
+
+Como $L$ es el supremo de $A$, $L - \varepsilon$ no es cota superior de $A$. Por lo tanto, existe un índice $N \in \mathbb{N}$ tal que:
+\[
+x_N > L - \varepsilon.
+\]
+
+Dado que $(x_n)$ es creciente, para todo $n \geq N$:
+\[
+x_n \geq x_N > L - \varepsilon.
+\]
+
+Además, como $L$ es cota superior:
+\[
+x_n \leq L < L + \varepsilon.
+\]
+
+Por lo tanto, para todo $n \geq N$:
+\[
+|x_n - L| = L - x_n < \varepsilon,
+\]
+ya que $x_n \leq L$. Esto demuestra que $\lim_{n \to \infty} x_n = L$.
+
+\textbf{Caso 2:} Si $(x_n)$ es decreciente y acotada inferiormente, definimos $L = \inf_{n \in \mathbb{N}} x_n$ y la demostración es análoga.
+
+Por lo tanto, toda sucesión monótona y acotada en $\mathbb{R}$ converge.
+\end{proof}
+
+\end{document}

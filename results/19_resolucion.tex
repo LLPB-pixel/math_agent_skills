@@ -1,0 +1,254 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{geometry}
+\geometry{margin=2.5cm}
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\title{Soluciones Tests 86-90: Problemas Difíciles}
+\author{Mathematical AI Agent}
+\date{\today}
+\begin{document}
+\maketitle
+\section{Problemas}
+
+\subsection{Test 86: Teorema Fundamental del Álgebra}
+
+\begin{theorem}[Teorema Fundamental del Álgebra]
+Todo polinomio $p(z) = a_n z^n + a_{n-1} z^{n-1} + \cdots + a_1 z + a_0$ con coeficientes complejos y $a_n \neq 0$, $n \geq 1$, tiene al menos una raíz en $\mathbb{C}$.
+\end{theorem}
+
+\begin{proof}
+Sea $p: \mathbb{C} \to \mathbb{C}$ un polinomio de grado $n \geq 1$. Demostraremos que $p$ tiene al menos una raíz por contradiction.
+
+Supongamos que $p(z) \neq 0$ para todo $z \in \mathbb{C}$. Entonces la función $f: \mathbb{C} \to \mathbb{C}$ definida por $f(z) = \frac{1}{p(z)}$ está bien definida y es holomorfa en todo $\mathbb{C}$.
+
+Escribimos $p(z) = a_n z^n + a_{n-1} z^{n-1} + \cdots + a_0$ con $a_n \neq 0$. Entonces:
+\[
+|p(z)| = |z|^n \left| a_n + \frac{a_{n-1}}{z} + \cdots + \frac{a_0}{z^n} \right|
+\]
+Cuando $|z| \to \infty$, el término entre paréntesis converge a $|a_n| > 0$, por lo que $|p(z)| \to \infty$.
+
+Esto implica que $|f(z)| = \frac{1}{|p(z)|} \to 0$ cuando $|z| \to \infty$. Por lo tanto, $f$ es acotada: existe $M > 0$ tal que $|f(z)| \leq M$ para todo $z \in \mathbb{C}$.
+
+Por el \textbf{lema de Liouville}, toda función holomorfa acotada en $\mathbb{C}$ es constante. Por lo tanto, $f(z) = c$ para alguna constante $c \in \mathbb{C}$. Esto implica que $p(z) = \frac{1}{c}$ es constante, contradictiendo que $\deg(p) = n \geq 1$.
+
+La contradicción demuestra que existe $z_0 \in \mathbb{C}$ tal que $p(z_0) = 0$.
+\end{proof}
+
+\subsection{Test 87: Teorema de Cayley-Hamilton}
+
+\begin{theorem}[Teorema de Cayley-Hamilton]
+Sea $A$ una matriz $n \times n$ sobre un cuerpo $\mathbb{F}$, y sea $p_A(\lambda) = \det(\lambda I - A)$ su polinomio característico. Entonces $p_A(A) = 0$, es decir, $A$ satisface su propio polinomio característico.
+\end{theorem}
+
+\begin{proof}
+Sea $B(\lambda) = \lambda I - A$ la matriz característica. Por la definición de inversa de una matriz, tenemos:
+\[
+\operatorname{adj}(\lambda I - A) \cdot (\lambda I - A) = \det(\lambda I - A) \cdot I = p_A(\lambda) \cdot I
+\]
+donde $\operatorname{adj}(\lambda I - A)$ es la matriz adjunta de $(\lambda I - A)$. Los elementos de $\operatorname{adj}(\lambda I - A)$ son cofactores de $(\lambda I - A)$, que son polinomios en $\lambda$ de grado a lo sumo $n-1$.
+
+Podemos escribir:
+\[
+\operatorname{adj}(\lambda I - A) = B_{n-1} \lambda^{n-1} + B_{n-2} \lambda^{n-2} + \cdots + B_1 \lambda + B_0
+\]
+donde $B_i$ son matrices $n \times n$ con coeficientes en $\mathbb{F}$.
+
+Por otro lado, el polinomio característico es:
+\[
+p_A(\lambda) = \lambda^n + c_{n-1} \lambda^{n-1} + \cdots + c_1 \lambda + c_0
+\]
+por lo que:
+\[
+p_A(\lambda) \cdot I = I \lambda^n + c_{n-1} I \lambda^{n-1} + \cdots + c_1 I \lambda + c_0 I
+\]
+
+Igualando coeficientes en la identidad $\operatorname{adj}(\lambda I - A) \cdot (\lambda I - A) = p_A(\lambda) \cdot I$:
+\begin{align*}
+B_{n-1} &= I \\
+B_{n-2} - B_{n-1} A &= c_{n-1} I \\
+B_{n-3} - B_{n-2} A &= c_{n-2} I \\
+&\vdots \\
+B_0 - B_1 A &= c_1 I \\
+-B_0 A &= c_0 I
+\end{align*}
+
+Multiplicamos la primera ecuación por $A^n$, la segunda por $A^{n-1}$, ..., y la última por $I$, y sumamos todas:
+\begin{align*}
+&B_{n-1} A^n + (B_{n-2} - B_{n-1} A) A^{n-1} + (B_{n-3} - B_{n-2} A) A^{n-2} + \cdots + (-B_0 A) \\
+&= I A^n + c_{n-1} I A^{n-1} + c_{n-2} I A^{n-2} + \cdots + c_0 I
+\end{align*}
+
+El lado izquierdo simplifica por cancelación telescópica:
+\[
+B_{n-1} A^n + B_{n-2} A^{n-1} - B_{n-1} A^n + B_{n-3} A^{n-2} - B_{n-2} A^{n-1} + \cdots = 0
+\]
+
+El lado derecho es:
+\[
+A^n + c_{n-1} A^{n-1} + \cdots + c_1 A + c_0 I = p_A(A)
+\]
+
+Por lo tanto, $p_A(A) = 0$.
+\end{proof}
+
+\subsection{Test 88: Teorema Espectral}
+
+\begin{theorem}[Teorema Espectral para Matrices Simétricas Reales]
+Sea $A$ una matriz real simétrica ($A = A^T$). Entonces existe una matriz ortogonal $Q$ ($Q^T Q = I$) tal que $Q^T A Q = D$, donde $D$ es una matriz diagonal con los eigenvalores de $A$ en la diagonal. Equivalentemente, $A$ tiene una base ortonormal de eigenvalores reales.
+\end{theorem}
+
+\begin{proof}
+Proceed by induction on the size $n$ of the matrix $A$.
+
+\textbf{Caso base ($n = 1$)}: Toda matriz $1 \times 1$ es diagonal, y la matriz identidad $1 \times 1$ es ortogonal. El resultado es trivial.
+
+\textbf{Paso inductivo}: Supongamos que todo matriz simétrica $k \times k$ (con $k < n$) admite diagonalización ortogonal. Sea $A$ una matriz simétrica $n \times n$.
+
+\textbf{Paso 1: Existencia de eigenvalor real.} El polinomio característico $p_A(\lambda) = \det(\lambda I - A)$ tiene coeficientes reales y grado $n$. Si $n$ es impar, al menos un eigenvalor es real. Si $n$ es par, los eigenvalores no reales aparecen en pares conjugados.
+
+Alternativamente, por el \textbf{teorema del valor extremo}: la función $f: \mathbb{R}^n \to \mathbb{R}$ definida por $f(x) = x^T A x$ es continua y alcanza su máximo en la esfera unitaria $S^{n-1} = \{x \in \mathbb{R}^n : \|x\| = 1\}$ (que es compacta). Por el método de multiplicadores de Lagrange, en el punto máximo $v$ existe $\lambda$ tal que $\nabla f(v) = \lambda \nabla g(v)$, donde $g(x) = \|x\|^2 - 1$. Como $\nabla f(x) = 2Ax$ y $\nabla g(x) = 2x$, obtenemos $Av = \lambda v$, es decir, $\lambda$ es un eigenvalor real con eigenvector $v$ unitario.
+
+\textbf{Paso 2: Construcción de la base ortonormal.} Sean $\lambda_1$ un eigenvalor real y $v_1$ un eigenvector unitario correspondiente ($Av_1 = \lambda_1 v_1$, $\|v_1\| = 1$). Completamos $\{v_1\}$ a una base ortonormal $\{v_1, u_2, \ldots, u_n\}$ de $\mathbb{R}^n$ usando el proceso de Gram-Schmidt.
+
+Sea $Q_1 = [v_1 \mid u_2 \mid \cdots \mid u_n]$ la matriz con estos vectores como columnas. Entonces $Q_1$ es ortogonal y:
+\[
+Q_1^T A Q_1 = \begin{pmatrix} \lambda_1 & 0 \\ 0 & A_1 \end{pmatrix}
+\]
+donde $A_1$ es una matriz $(n-1) \times (n-1)$. Esencialmente, la primera columna de $Q_1^T A Q_1$ es $Q_1^T A v_1 = Q_1^T (\lambda_1 v_1) = \lambda_1 Q_1^T v_1 = \lambda_1 e_1$.
+
+\textbf{Paso 3: Simetría de $A_1$.} Verificamos que $A_1$ es simétrica. Por la estructura de $Q_1^T A Q_1$:
+\[
+(Q_1^T A Q_1)^T = Q_1^T A^T Q_1 = Q_1^T A Q_1
+\]
+por la simetría de $A$. Por lo tanto, la submatriz $A_1$ también es simétrica.
+
+\textbf{Paso 4: Aplicación de la hipótesis inductiva.} Por la hipótesis inductiva, existe una matriz ortogonal $P$ tal que $P^T A_1 P = D_1$ es diagonal. Entonces:
+\[
+Q_2 = \begin{pmatrix} 1 & 0 \\ 0 & P \end{pmatrix}
+\]
+es ortogonal, y $Q_2^T (Q_1^T A Q_1) Q_2 = \begin{pmatrix} \lambda_1 & 0 \\ 0 & D_1 \end{pmatrix}$ es diagonal.
+
+Finalmente, $Q = Q_1 Q_2$ es ortogonal (producto de matrices ortogonales) y $Q^T A Q$ es diagonal.
+\end{proof}
+
+\subsection{Test 89: Lema de Zorn}
+
+\begin{theorem}[Lema de Zorn]
+Sea $(P, \leq)$ un conjunto parcialmente ordenado no vacío tal que todo subconjunto totally ordenado (cadena) tiene una cota superior en $P$. Entonces $P$ contiene al menos un elemento maximal.
+\end{theorem}
+
+\begin{proof}
+Demostraremos el Lema de Zorn a partir del \textbf{Axioma de Elección}.
+
+Supongamos, por contradiction, que $P$ no tiene elementos maximales. Entonces para todo $x \in P$, existe $y \in P$ tal que $x < y$ (es decir, $x \leq y$ y $x \neq y$).
+
+Por el \textbf{axioma de elección}, existe una función de elección $f: \mathcal{P}(P) \setminus \{\emptyset\} \to P$ tal que $f(S) \in S$ para todo $S \subseteq P$, $S \neq \emptyset$.
+
+Definimos una función $g: \mathrm{Ord} \to P$ (donde $\mathrm{Ord}$ denota la clase de ordinales) por transfinite induction:
+\begin{itemize}
+    \item $g(0) = f(P)$ (elegimos un elemento arbitrario de $P$).
+    \item Para un ordinal $\alpha$, definimos:
+    \[
+    g(\alpha) = f\left(\{y \in P : y > g(\beta) \text{ para todo } \beta < \alpha\}\right)
+    \]
+\end{itemize}
+
+El conjunto $\{y \in P : y > g(\beta) \text{ para todo } \beta < \alpha\}$ es no vacío porque, por hipótesis, $P$ no tiene elemento maximal, y por lo tanto para cualquier $g(\beta)$ existe un elemento mayor.
+
+\textbf{Clave}: Demostramos que si $\alpha < \beta$, entonces $g(\alpha) < g(\beta)$, es decir, $g$ es estrictamente creciente.
+
+Para $\alpha < \beta$, por construcción $g(\beta) > g(\alpha)$ ya que $g(\beta)$ está en el conjunto $\{y \in P : y > g(\gamma) \text{ para todo } \gamma < \beta\}$ y $\alpha < \beta$ implica $g(\gamma)$ para $\gamma = \alpha$ es una de las condiciones.
+
+Consideremos la imagen $g(\mathrm{Ord}) \subseteq P$. Sea $C = \{g(\alpha) : \alpha \in \mathrm{Ord}\}$. Por la propiedad de ser estrictamente creciente, para ordinales $\alpha < \beta$ distintos, $g(\alpha) \neq g(\beta)$, por lo que $C$ tiene cardinalidad de la clase de ordinales, que es estrictamente mayor que cualquier cardinal.
+
+Sin embargo, $C \subseteq P$ es un conjunto (por el axioma de reemplazo), y toda clase de ordinales que es un conjunto tiene que ser un ordinal (por la paradoja de Burali-Forti). Pero la clase de todos los ordinales no es un conjunto, lo cual es una contradicción.
+
+La contradicción surge de asumir que $P$ no tiene elemento maximal. Por lo tanto, $P$ tiene al menos un elemento maximal.
+\end{proof}
+
+\subsection{Test 90: Teorema de Hahn-Banach}
+
+\begin{theorem}[Teorema de Hahn-Banach]
+Sea $X$ un espacio vectorial real, $p: X \to \mathbb{R}$ una función sublineal (es decir, $p(x+y) \leq p(x) + p(y)$ y $p(tx) = tp(x)$ para $t \geq 0$), $Y$ un subespacio vectorial de $X$, y $f: Y \to \mathbb{R}$ un funcional lineal acotado por $p$, es decir, $f(y) \leq p(y)$ para todo $y \in Y$.
+
+Entonces existe un funcional lineal $F: X \to \mathbb{R}$ tal que:
+\begin{enumerate}
+    \item $F(y) = f(y)$ para todo $y \in Y$ (extensión de $f$).
+    \item $F(x) \leq p(x)$ para todo $x \in X$ (acotado por $p$).
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+\textbf{Paso 1: Extensión de un elemento.} Sea $Z \supseteq Y$ un subespacio donde $f$ ya está extendida a $F: Z \to \mathbb{R}$ con $F \leq p$. Sea $x_0 \in X \setminus Z$. Definimos $Z' = Z \oplus \mathbb{R} x_0 = \{z + t x_0 : z \in Z, t \in \mathbb{R}\}$.
+
+Queremos extender $F$ a $Z'$ definiendo $F'(z + t x_0) = F(z) + t c$ para alguna constante $c$ que satisfaga:
+\[
+F(z) + t c \leq p(z + t x_0) \quad \text{para todo } z \in Z, t \in \mathbb{R}
+\]
+
+Para $t > 0$, dividiendo por $t$:
+\[
+F(z/t) + c \leq p(z/t + x_0)
+\]
+Reemplazando $w = z/t \in Z$:
+\[
+F(w) + c \leq p(w + x_0) \iff c \leq p(w + x_0) - F(w) \quad \text{para todo } w \in Z
+\]
+
+Para $t < 0$, escribiendo $t = -s$ con $s > 0$:
+\[
+F(z) - s c \leq p(z - s x_0) \iff -c \leq \frac{p(z - s x_0) - F(z)}{s}
+\]
+Reemplazando $w = z/s$:
+\[
+-c \leq p(w - x_0) - F(w) \iff c \geq F(w) - p(w - x_0) \quad \text{para todo } w \in Z
+\]
+
+Por lo tanto, necesitamos:
+\[
+\sup_{w \in Z} \{F(w) - p(w - x_0)\} \leq c \leq \inf_{w \in Z} \{p(w + x_0) - F(w)\}
+\]
+
+\textbf{Paso 2: Verificación de consistencia.} Demostramos que $\sup_{w \in Z} \{F(w) - p(w - x_0)\} \leq \inf_{w \in Z} \{p(w + x_0) - F(w)\}$.
+
+Para cualesquiera $w_1, w_2 \in Z$:
+\begin{align*}
+F(w_1) - p(w_1 - x_0) &= F(w_1) + F(w_2) - F(w_2) - p(w_1 - x_0) \\
+&= F(w_1 + w_2) - p(w_1 - x_0) \\
+&\leq p(w_1 + w_2) - p(w_1 - x_0) \quad (\text{ya que } F \leq p \text{ en } Z)
+\end{align*}
+Observamos que $w_1 + w_2 = (w_2 + x_0) + (w_1 - x_0)$, por lo que por sublinealidad:
+\[
+p(w_1 + w_2) \leq p(w_2 + x_0) + p(w_1 - x_0)
+\]
+Por lo tanto:
+\[
+F(w_1) - p(w_1 - x_0) \leq p(w_2 + x_0) + p(w_1 - x_0) - p(w_1 - x_0) = p(w_2 + x_0)
+\]
+Esto implica:
+\[
+F(w_1) - p(w_1 - x_0) \leq p(w_2 + x_0) - F(w_2) + F(w_2) = p(w_2 + x_0) - F(w_2) + F(w_2)
+\]
+Reordenando:
+\[
+F(w_1) - p(w_1 - x_0) \leq p(w_2 + x_0) - F(w_2)
+\]
+Tomando supremo en $w_1$ e ínfimo en $w_2$, la cota superior es menor o igual que la cota inferior. Por lo tanto, existe $c$ en el intervalo.
+
+\textbf{Paso 3: Extensión por el lema de Zorn.} Consideramos el conjunto $\mathcal{F}$ de pares $(Z, F)$ donde $Z$ es un subespacio de $X$ con $Y \subseteq Z$, $F: Z \to \mathbb{R}$ es lineal, $F|_Y = f$, y $F \leq p$ en $Z$. Ordenamos $\mathcal{F}$ por extensión: $(Z_1, F_1) \leq (Z_2, F_2)$ si $Z_1 \subseteq Z_2$ y $F_2|_{Z_1} = F_1$.
+
+\textbf{Toda cadena tiene cota superior}: Si $\{(Z_i, F_i)\}_{i \in I}$ es una cadena, definimos $Z^* = \bigcup_{i \in I} Z_i$ y $F^*: Z^* \to \mathbb{R}$ por $F^*(x) = F_i(x)$ si $x \in Z_i$. Esta definición es consistente por la propiedad de cadena, y $F^*$ es lineal y satisface $F^* \leq p$.
+
+Por el lema de Zorn, existe un elemento maximal $(Z_{\max}, F_{\max})$ en $\mathcal{F}$.
+
+\textbf{Paso 4: El maximal debe ser todo $X$}. Si $Z_{\max} \neq X$, existe $x_0 \in X \setminus Z_{\max}$. Por el Paso 1, podemos extender $F_{\max}$ a $Z_{\max} \oplus \mathbb{R} x_0$, contradiciendo la maximalidad. Por lo tanto, $Z_{\max} = X$ y $F_{\max}: X \to \mathbb{R}$ es la extensión deseada.
+\end{proof}
+
+\end{document}

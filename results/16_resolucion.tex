@@ -1,0 +1,227 @@
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{geometry}
+\usepackage{hyperref}
+
+\geometry{margin=2.5cm}
+
+% Theorem environments
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\title{Soluciones Tests 72--76: Probabilidad y Estadística}
+\author{Mathematical AI Agent}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+Demostraciones formales de resultados fundamentales en teoría de la probabilidad y estadística: la desigualdad de Cauchy--Schwarz para variables aleatorias, la desigualdad de Jensen para funciones convexas, la estabilidad de la distribución normal bajo suma y media, y la propiedad de insesgamiento del estimador de la media muestral.
+\end{abstract}
+
+\section{Problemas}
+
+% ============================================================
+% TEST 72: DESIGUALDAD DE CAUCHY-SCHWARZ
+% ============================================================
+
+\begin{theorem}[Desigualdad de Cauchy--Schwarz para variables aleatorias]
+Sean $X$ y $Y$ variables aleatorias tal que $E[X^2] < \infty$ y $E[Y^2] < \infty$. Entonces
+\[
+(E[XY])^2 \leq E[X^2]\,E[Y^2].
+\]
+\end{theorem}
+
+\begin{proof}
+Para cualquier $t \in \mathbb{R}$, consideramos la función cuadrática en $t$ definida por
+\[
+g(t) = E\bigl[(tX + Y)^2\bigr].
+\]
+Dado que $(tX + Y)^2 \geq 0$ para todo $t$, se tiene $g(t) \geq 0$ para todo $t \in \mathbb{R}$. Desarrollando la expresión interior de la esperanza:
+\[
+g(t) = E\bigl[t^2 X^2 + 2tXY + Y^2\bigr] = t^2\,E[X^2] + 2t\,E[XY] + E[Y^2],
+\]
+donde se ha utilizado la linealidad de la esperanza. Denotamos
+\[
+a = E[X^2], \quad b = E[XY], \quad c = E[Y^2],
+\]
+de modo que $g(t) = at^2 + 2bt + c$. Las hipótesis garantizan que $a \geq 0$ y $c \geq 0$ (son esperanzas de cuadrados).
+
+Como $g(t) \geq 0$ para todo $t \in \mathbb{R}$ y $a \geq 0$, el polinomio cuadrático $at^2 + 2bt + c$ no puede tener dos raíces reales distintas (de lo contrario tomaría valores negativos entre ambas raíces). En el caso $a > 0$, el discriminante del polinomio debe satisfacer
+\[
+\Delta = (2b)^2 - 4ac = 4b^2 - 4ac \leq 0,
+\]
+lo que implica $b^2 \leq ac$, es decir,
+\[
+(E[XY])^2 \leq E[X^2]\,E[Y^2].
+\]
+Si $a = E[X^2] = 0$, entonces $X = 0$ casi seguro (pues $E[X^2] = 0 \Rightarrow X = 0$ c.s.), y la desigualdad se cumple trivialmente: $(E[0 \cdot Y])^2 = 0 \leq 0 \cdot E[Y^2] = 0$.
+\end{proof}
+
+% ============================================================
+% TEST 73: DESIGUALDAD DE JENSEN
+% ============================================================
+
+\begin{theorem}[Desigualdad de Jensen para variables aleatorias]
+Sea $X$ una variable aleatoria tal que $E[|X|] < \infty$, y sea $f \colon \mathbb{R} \to \mathbb{R}$ una función convexa. Entonces
+\[
+f\bigl(E[X]\bigr) \leq E\bigl[f(X)\bigr],
+\]
+siempre que ambas esperanzas estén definidas.
+\end{theorem}
+
+\begin{proof}
+Sea $\mu = E[X]$. La convexidad de $f$ implica que para todo $x \in \mathbb{R}$ existe un vector subgradiente $s_x \in \mathbb{R}$ tal que
+\[
+f(x) \geq f(\mu) + s_x\,(x - \mu).
+\]
+(En particular, si $f$ es diferenciable en $\mu$, podemos tomar $s_\mu = f'(\mu)$.)
+
+Aplicando esta desigualdad al punto $X(\omega)$ para cada resultado elemental $\omega \in \Omega$:
+\[
+f\bigl(X(\omega)\bigr) \geq f(\mu) + s_{X(\omega)}\,\bigl(X(\omega) - \mu\bigr).
+\]
+Tomando esperanza en ambos lados:
+\[
+E\bigl[f(X)\bigr] \geq f(\mu) + E\bigl[s_X\,(X - \mu)\bigr].
+\]
+Para el caso más general, usamos la caracterización de la convexidad por rectas de soporte. Si $f$ es convexa, entonces para todo $x_0 \in \mathbb{R}$ existe una constante $m$ (que depende de $x_0$) tal que
+\[
+f(x) \geq f(x_0) + m(x - x_0) \quad \text{para todo } x \in \mathbb{R}.
+\]
+Tomando $x_0 = \mu = E[X]$ y aplicando al punto $X(\omega)$:
+\[
+f(X(\omega)) \geq f(\mu) + m\,(X(\omega) - \mu).
+\]
+Tomando esperanza:
+\[
+E[f(X)] \geq f(\mu) + m\,E[X - \mu] = f(\mu) + m \cdot 0 = f(\mu).
+\]
+Por lo tanto,
+\[
+f\bigl(E[X]\bigr) \leq E\bigl[f(X)\bigr].
+\]
+\end{proof}
+
+% ============================================================
+% TEST 74: SUMA DE NORMALES INDEPENDIENTES
+% ============================================================
+
+\begin{theorem}[Suma de normales independientes]
+Sean $X \sim N(\mu_1, \sigma_1^2)$ y $Y \sim N(\mu_2, \sigma_2^2)$ variables aleatorias independientes. Entonces
+\[
+X + Y \sim N(\mu_1 + \mu_2,\; \sigma_1^2 + \sigma_2^2).
+\]
+\end{theorem}
+
+\begin{proof}
+Denotamos $Z = X + Y$. Calculamos la función característica de $Z$ usando la independencia:
+\[
+\varphi_Z(t) = E[e^{itZ}] = E[e^{it(X+Y)}] = E[e^{itX}]\,E[e^{itY}] = \varphi_X(t)\,\varphi_Y(t).
+\]
+La función característica de una normal $N(\mu, \sigma^2)$ es
+\[
+\varphi_X(t) = \exp\!\Bigl(i\mu t - \tfrac{1}{2}\sigma^2 t^2\Bigr).
+\]
+Por tanto,
+\begin{align*}
+\varphi_Z(t) &= \exp\!\Bigl(i\mu_1 t - \tfrac{1}{2}\sigma_1^2 t^2\Bigr) \cdot \exp\!\Bigl(i\mu_2 t - \tfrac{1}{2}\sigma_2^2 t^2\Bigr) \\
+&= \exp\!\Bigl(i(\mu_1 + \mu_2)\,t - \tfrac{1}{2}(\sigma_1^2 + \sigma_2^2)\,t^2\Bigr).
+\end{align*}
+Esta es exactamente la función característica de una distribución $N(\mu_1 + \mu_2,\; \sigma_1^2 + \sigma_2^2)$. Como la función característica determina unívocamente la distribución (teorema de unicidad), concluimos que
+\[
+X + Y \sim N(\mu_1 + \mu_2,\; \sigma_1^2 + \sigma_2^2).
+\]
+\end{proof}
+
+% ============================================================
+% TEST 75: MEDIA DE NORMALES INDEPENDIENTES
+% ============================================================
+
+\begin{theorem}[Media de normales independientes]
+Sean $X_1, X_2, \ldots, X_n$ variables aleatorias independientes tales que $X_i \sim N(\mu_i, \sigma_i^2)$ para $i = 1, \ldots, n$. Entonces
+\[
+\bar{X} = \frac{1}{n}\sum_{i=1}^n X_i \sim N\!\left(\frac{1}{n}\sum_{i=1}^n \mu_i,\; \frac{1}{n^2}\sum_{i=1}^n \sigma_i^2\right).
+\]
+En particular, si todas tienen la misma distribución $N(\mu, \sigma^2)$, entonces $\bar{X} \sim N\bigl(\mu,\; \sigma^2/n\bigr)$.
+\end{theorem}
+
+\begin{proof}
+Procedemos por inducción sobre $n$. El caso base $n = 1$ es trivial: $\bar{X} = X_1 \sim N(\mu_1, \sigma_1^2)$.
+
+\textbf{Paso inductivo:} Supongamos que el resultado es cierto para $n - 1$ variables normales independientes. Consideramos $n$ variables $X_1, \ldots, X_n$ con $X_i \sim N(\mu_i, \sigma_i^2)$.
+
+Por la hipótesis inductiva, la media de las primeras $n-1$ variables satisface
+\[
+S_{n-1} = \frac{1}{n-1}\sum_{i=1}^{n-1} X_i \sim N\!\left(\frac{1}{n-1}\sum_{i=1}^{n-1} \mu_i,\; \frac{1}{(n-1)^2}\sum_{i=1}^{n-1} \sigma_i^2\right).
+\]
+Sea $\mu' = \frac{1}{n-1}\sum_{i=1}^{n-1} \mu_i$ y $(\sigma')^2 = \frac{1}{(n-1)^2}\sum_{i=1}^{n-1} \sigma_i^2$, de modo que $S_{n-1} \sim N(\mu', (\sigma')^2)$.
+
+La media de las $n$ variables es
+\[
+\bar{X}_n = \frac{1}{n}\sum_{i=1}^n X_i = \frac{1}{n}\Bigl((n-1)S_{n-1} + X_n\Bigr) = \frac{n-1}{n}\,S_{n-1} + \frac{1}{n}\,X_n.
+\]
+Aplicamos el Teorema 74 (suma de normales independientes) con las variables independientes $\frac{n-1}{n}S_{n-1}$ y $\frac{1}{n}X_n$. Tenemos:
+\begin{itemize}
+\item $\frac{n-1}{n}S_{n-1} \sim N\!\left(\frac{n-1}{n}\mu',\; \left(\frac{n-1}{n}\right)^2(\sigma')^2\right)$,
+\item $\frac{1}{n}X_n \sim N\!\left(\frac{1}{n}\mu_n,\; \frac{1}{n^2}\sigma_n^2\right)$.
+\end{itemize}
+Por el Teorema 74, la suma es normal con:
+\[
+\text{Media: } \frac{n-1}{n}\mu' + \frac{1}{n}\mu_n = \frac{1}{n}\sum_{i=1}^n \mu_i,
+\]
+\[
+\text{Varianza: } \left(\frac{n-1}{n}\right)^2(\sigma')^2 + \frac{1}{n^2}\sigma_n^2 = \frac{1}{n^2}\sum_{i=1}^{n-1}\sigma_i^2 + \frac{1}{n^2}\sigma_n^2 = \frac{1}{n^2}\sum_{i=1}^n \sigma_i^2.
+\]
+Esto completa la inducción.
+\end{proof}
+
+% ============================================================
+% TEST 76: INSESGAMIENTO DE LA MEDIA MUESTRAL
+% ============================================================
+
+\begin{theorem}[Insesgamiento del estimador de la media muestral]
+Sea $X_1, X_2, \ldots, X_n$ una muestra aleatoria (variables independientes e idénticamente distribuidas) con $E[X_i] = \mu$ para todo $i$. Entonces el estimador de la media muestral
+\[
+\bar{X} = \frac{1}{n}\sum_{i=1}^n X_i
+\]
+es insesgado para $\mu$, es decir, $E[\bar{X}] = \mu$.
+\end{theorem}
+
+\begin{proof}
+Aplicamos la linealidad de la esperanza:
+\begin{align*}
+E[\bar{X}] &= E\!\left[\frac{1}{n}\sum_{i=1}^n X_i\right] \\
+&= \frac{1}{n}\,E\!\left[\sum_{i=1}^n X_i\right] \quad \text{(por linealidad de la esperanza)} \\
+&= \frac{1}{n}\sum_{i=1}^n E[X_i] \quad \text{(por linealidad de la esperanza)} \\
+&= \frac{1}{n}\sum_{i=1}^n \mu \quad \text{(por hipótesis: } E[X_i] = \mu \text{ para todo } i\text{)} \\
+&= \frac{1}{n} \cdot n\mu \\
+&= \mu.
+\end{align*}
+Por lo tanto, $E[\bar{X}] = \mu$, lo que demuestra que $\bar{X}$ es un estimador insesgado de $\mu$.
+
+\begin{remark}
+El resultado anterior no requiere independencia ni distribución idéntica; basta con que $E[X_i] = \mu$ para cada $i$. La independencia y la identidad de distribución son necesarias para calcular la varianza de $\bar{X}$:
+\[
+\operatorname{Var}(\bar{X}) = \frac{\sigma^2}{n},
+\]
+donde $\sigma^2 = \operatorname{Var}(X_i)$. Esta propiedad convierte a $\bar{X}$ en un estimador consistente (la varianza tiende a cero cuando $n \to \infty$).
+\end{remark}
+\end{proof}
+
+\end{document}

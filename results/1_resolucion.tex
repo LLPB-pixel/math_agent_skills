@@ -1,0 +1,179 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{geometry}
+\geometry{margin=2.5cm}
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\title{Soluciones Tests 1-5: Álgebra}
+\author{Mathematical AI Agent}
+\date{\today}
+\begin{document}
+\maketitle
+
+\section{Problemas}
+
+\begin{proposition}[Binomio al cubo]
+Para todo $a, b \in \mathbb{R}$, se verifica que
+\[
+(a + b)^3 = a^3 + 3a^2b + 3ab^2 + b^3.
+\]
+\end{proposition}
+
+\begin{proof}
+Empezando por la definición de potencia:
+\[
+(a + b)^3 = (a + b)(a + b)(a + b).
+\]
+Primero calculamos el producto de los dos primeros factores:
+\begin{align*}
+(a + b)(a + b) &= a \cdot a + a \cdot b + b \cdot a + b \cdot b \\
+               &= a^2 + 2ab + b^2.
+\end{align*}
+Ahora multiplicamos por el tercer factor $(a + b)$:
+\begin{align*}
+(a^2 + 2ab + b^2)(a + b) &= a^2 \cdot a + a^2 \cdot b + 2ab \cdot a + 2ab \cdot b + b^2 \cdot a + b^2 \cdot b \\
+                          &= a^3 + a^2b + 2a^2b + 2ab^2 + ab^2 + b^3 \\
+                          &= a^3 + 3a^2b + 3ab^2 + b^3.
+\end{align*}
+La última igualdad se obtiene agrupando los términos semejantes: $a^2b + 2a^2b = 3a^2b$ y $2ab^2 + ab^2 = 3ab^2$.
+\end{proof}
+
+\bigskip
+
+\begin{proposition}[Trinomio al cuadrado]
+Para todo $a, b, c \in \mathbb{R}$, se verifica que
+\[
+(a + b + c)^2 = a^2 + b^2 + c^2 + 2ab + 2ac + 2bc.
+\]
+\end{proposition}
+
+\begin{proof}
+Por definición de potencia:
+\[
+(a + b + c)^2 = (a + b + c)(a + b + c).
+\]
+Realizamos la multiplicación distribuyendo cada término del primer factor sobre cada término del segundo factor:
+\begin{align*}
+(a + b + c)(a + b + c) &= a \cdot a + a \cdot b + a \cdot c \\
+                        &\quad + b \cdot a + b \cdot b + b \cdot c \\
+                        &\quad + c \cdot a + c \cdot b + c \cdot c.
+\end{align*}
+Simplificando cada producto:
+\[
+= a^2 + ab + ac + ba + b^2 + bc + ca + cb + c^2.
+\]
+Dado que la multiplicación en $\mathbb{R}$ es conmutiva, $ba = ab$, $ca = ac$ y $cb = bc$. Agrupando los términos semejantes:
+\[
+= a^2 + b^2 + c^2 + 2ab + 2ac + 2bc.
+\]
+\end{proof}
+
+\bigskip
+
+\begin{proposition}[Suma de cubos con condición]
+Si $a, b, c \in \mathbb{R}$ verifican $a + b + c = 0$, entonces
+\[
+a^3 + b^3 + c^3 = 3abc.
+\]
+\end{proposition}
+
+\begin{proof}
+Se conoce la identidad algebraica general:
+\begin{equation}\label{eq:identidad}
+a^3 + b^3 + c^3 - 3abc = (a + b + c)(a^2 + b^2 + c^2 - ab - ac - bc).
+\end{equation}
+Demostraremos \eqref{eq:identidad} expandiendo el lado derecho:
+\begin{align*}
+&(a + b + c)(a^2 + b^2 + c^2 - ab - ac - bc) \\
+&= a(a^2 + b^2 + c^2 - ab - ac - bc) \\
+&\quad + b(a^2 + b^2 + c^2 - ab - ac - bc) \\
+&\quad + c(a^2 + b^2 + c^2 - ab - ac - bc) \\
+&= a^3 + ab^2 + ac^2 - a^2b - a^2c - abc \\
+&\quad + a^2b + b^3 + bc^2 - ab^2 - abc - b^2c \\
+&\quad + a^2c + b^2c + c^3 - abc - ac^2 - bc^2.
+\end{align*}
+Al simplificar, los términos $ab^2$ y $-ab^2$ se cancelan, $ac^2$ y $-ac^2$ se cancelan, $a^2b$ y $-a^2b$ se cancelan, $a^2c$ y $-a^2c$ se cancelan, $b^2c$ y $-b^2c$ se cancelan, $bc^2$ y $-bc^2$ se cancelan. Queda:
+\[
+= a^3 + b^3 + c^3 - 3abc.
+\]
+Esto demuestra la identidad \eqref{eq:identidad}.
+
+Ahora, supongamos que $a + b + c = 0$. Sustituyendo en la identidad \eqref{eq:identidad}:
+\[
+a^3 + b^3 + c^3 - 3abc = 0 \cdot (a^2 + b^2 + c^2 - ab - ac - bc) = 0.
+\]
+Por lo tanto:
+\[
+a^3 + b^3 + c^3 = 3abc.
+\]
+\end{proof}
+
+\bigskip
+
+\begin{proposition}[Desigualdad cuadrática]
+Para todo $x, y \in \mathbb{R}$, se verifica que
+\[
+(x + y)^2 \leq 2(x^2 + y^2).
+\]
+\end{proposition}
+
+\begin{proof}
+Expandiendo el cuadrado de la suma:
+\[
+(x + y)^2 = x^2 + 2xy + y^2.
+\]
+Consideramos la diferencia:
+\begin{align*}
+2(x^2 + y^2) - (x + y)^2 &= 2x^2 + 2y^2 - x^2 - 2xy - y^2 \\
+                          &= x^2 - 2xy + y^2 \\
+                          &= (x - y)^2.
+\end{align*}
+Dado que $(x - y)^2 \geq 0$ para todo $x, y \in \mathbb{R}$ (pues el cuadrado de cualquier número real es no negativo), se tiene que:
+\[
+2(x^2 + y^2) - (x + y)^2 \geq 0,
+\]
+lo cual equivale a:
+\[
+(x + y)^2 \leq 2(x^2 + y^2).
+\]
+La igualdad se alcanza si y solo si $x = y$.
+\end{proof}
+
+\bigskip
+
+\begin{proposition}[Desigualdad media armónica-geométrica]
+Para todo $x, y > 0$, se verifica que
+\[
+\frac{y}{x} + \frac{x}{y} \geq 2.
+\]
+\end{proposition}
+
+\begin{proof}
+Dado que $x, y > 0$, los cocientes $\frac{y}{x}$ y $\frac{x}{y}$ son ambos estrictamente positivos. Sea $u = \frac{y}{x} > 0$ y $v = \frac{x}{y} > 0$. Entonces $uv = \frac{y}{x} \cdot \frac{x}{y} = 1$.
+
+Consideramos la diferencia:
+\begin{align*}
+\frac{y}{x} + \frac{x}{y} - 2 &= u + v - 2.
+\end{align*}
+Sabemos que para todo $u > 0$:
+\[
+u + \frac{1}{u} - 2 = \frac{u^2 - 2u + 1}{u} = \frac{(u - 1)^2}{u}.
+\]
+Dado que $(u-1)^2 \geq 0$ y $u > 0$, se tiene que $\frac{(u-1)^2}{u} \geq 0$. Por lo tanto:
+\[
+u + \frac{1}{u} \geq 2.
+\]
+Aplicando con $u = \frac{y}{x}$ (y recordando que $\frac{1}{u} = \frac{x}{y}$):
+\[
+\frac{y}{x} + \frac{x}{y} \geq 2.
+\]
+La igualdad se alcanza si y solo si $u = 1$, es decir, si y solo si $x = y$.
+\end{proof}
+
+\end{document}

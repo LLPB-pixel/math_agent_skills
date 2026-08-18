@@ -1,0 +1,114 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{geometry}
+\geometry{margin=2.5cm}
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\title{Soluci\'on Test 56: Suma de $\frac{1}{n^2}$}
+\author{Mathematical AI Agent}
+\date{\today}
+\begin{document}
+\maketitle
+\section{Problema}
+\textbf{Problema de Basilea:} Demostrar que
+\[
+\sum_{n=1}^{\infty} \frac{1}{n^2} = \frac{\pi^2}{6}.
+\]
+
+\section{Demostraci\'on por series de Fourier}
+
+\begin{theorem}[Problema de Basilea]
+\label{thm:basilea}
+\[
+\sum_{n=1}^{\infty} \frac{1}{n^2} = \frac{\pi^2}{6}.
+\]
+\end{theorem}
+
+\begin{proof}
+Consideramos la funci\'on $f(x) = x^2$ definida en el intervalo $[-\pi, \pi]$ y extendida peri\'odicamente con per\'iodo $2\pi$. Construimos su serie de Fourier:
+\[
+f(x) \sim \frac{a_0}{2} + \sum_{n=1}^{\infty} \left( a_n \cos(nx) + b_n \sin(nx) \right),
+\]
+donde los coeficientes se calculan como:
+\[
+a_0 = \frac{1}{\pi} \int_{-\pi}^{\pi} x^2 \, dx, \quad
+a_n = \frac{1}{\pi} \int_{-\pi}^{\pi} x^2 \cos(nx) \, dx, \quad
+b_n = \frac{1}{\pi} \int_{-\pi}^{\pi} x^2 \sin(nx) \, dx.
+\]
+
+\subsection*{Paso 1: Coeficiente $a_0$}
+\[
+a_0 = \frac{1}{\pi} \int_{-\pi}^{\pi} x^2 \, dx = \frac{1}{\pi} \cdot \frac{2\pi^3}{3} = \frac{2\pi^2}{3}.
+\]
+
+\subsection*{Paso 2: Coeficientes $b_n$}
+Como $f(x) = x^2$ es una funci\'on par y $\sin(nx)$ es una funci\'on impar, el integrando $x^2 \sin(nx)$ es impar. Por tanto:
+\[
+b_n = \frac{1}{\pi} \int_{-\pi}^{\pi} x^2 \sin(nx) \, dx = 0 \quad \text{para todo } n \geq 1.
+\]
+
+\subsection*{Paso 3: Coeficientes $a_n$}
+Calculamos $a_n$ para $n \geq 1$:
+\[
+a_n = \frac{1}{\pi} \int_{-\pi}^{\pi} x^2 \cos(nx) \, dx.
+\]
+Aplicamos integraci\'on por partes dos veces. Sea $u = x^2$, $dv = \cos(nx)\,dx$. Entonces $du = 2x\,dx$, $v = \frac{\sin(nx)}{n}$:
+\[
+\int x^2 \cos(nx) \, dx = \frac{x^2 \sin(nx)}{n} - \frac{2}{n} \int x \sin(nx) \, dx.
+\]
+La integral $\int_{-\pi}^{\pi} x^2 \sin(nx) \, dx = 0$ (ya mostrado), as\'i que evaluamos en l\'mites:
+\[
+\left[ \frac{x^2 \sin(nx)}{n} \right]_{-\pi}^{\pi} = 0.
+\]
+Para la segunda integral, aplicamos partes otra vez con $u = x$, $dv = \sin(nx)\,dx$:
+\[
+\int x \sin(nx) \, dx = -\frac{x \cos(nx)}{n} + \frac{1}{n} \int \cos(nx) \, dx = -\frac{x \cos(nx)}{n} + \frac{\sin(nx)}{n^2}.
+\]
+Evaluando:
+\[
+\left[ -\frac{x \cos(nx)}{n} + \frac{\sin(nx)}{n^2} \right]_{-\pi}^{\pi} = -\frac{\pi \cos(n\pi)}{n} + \frac{\pi \cos(-n\pi)}{n} = -\frac{2\pi \cos(n\pi)}{n}.
+\]
+Como $\cos(n\pi) = (-1)^n$, obtenemos:
+\[
+\int_{-\pi}^{\pi} x \sin(nx) \, dx = -\frac{2\pi (-1)^n}{n}.
+\]
+Sustituyendo:
+\[
+a_n = \frac{1}{\pi} \left( 0 - \frac{2}{n} \cdot \left(-\frac{2\pi (-1)^n}{n}\right) \right) = \frac{4(-1)^n}{n^2}.
+\]
+
+\subsection*{Paso 4: Serie de Fourier de $f(x) = x^2$}
+\[
+x^2 = \frac{\pi^2}{3} + \sum_{n=1}^{\infty} \frac{4(-1)^n}{n^2} \cos(nx), \quad \text{para } x \in [-\pi, \pi].
+\]
+La convergencia est\'a garantizada porque $f$ es continua y su derivada acotada por piezas en $[-\pi, \pi]$.
+
+\subsection*{Paso 5: Evaluaci\'on en $x = \pi$}
+Sustituimos $x = \pi$ en la serie:
+\[
+\pi^2 = \frac{\pi^2}{3} + \sum_{n=1}^{\infty} \frac{4(-1)^n}{n^2} \cos(n\pi).
+\]
+Como $\cos(n\pi) = (-1)^n$, tenemos $(-1)^n \cdot (-1)^n = (-1)^{2n} = 1$. Por tanto:
+\[
+\pi^2 = \frac{\pi^2}{3} + 4 \sum_{n=1}^{\infty} \frac{1}{n^2}.
+\]
+Despejamos la serie:
+\[
+\pi^2 - \frac{\pi^2}{3} = 4 \sum_{n=1}^{\infty} \frac{1}{n^2} \implies \frac{2\pi^2}{3} = 4 \sum_{n=1}^{\infty} \frac{1}{n^2}.
+\]
+Dividiendo entre 4:
+\[
+\sum_{n=1}^{\infty} \frac{1}{n^2} = \frac{2\pi^2}{3 \cdot 4} = \frac{\pi^2}{6}.
+\]
+\end{proof}
+
+\section{Notas}
+La demostraci\'on utiliza el teorema de convergencia de Dirichlet para las series de Fourier de funciones cuadradas integrables en $[-\pi, \pi]$. La funci\'on $f(x) = x^2$ es continua en $[-\pi, \pi]$ y su serie de Fourier converge puntualmente en todo el intervalo.
+
+\end{document}

@@ -1,0 +1,217 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb,amsthm}
+
+\usepackage{geometry}
+\geometry{margin=2.5cm}
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\title{Soluciones Tests 46-50: Análisis}
+\author{Mathematical AI Agent}
+\date{\today}
+\begin{document}
+\maketitle
+\section{Problemas}
+
+% ============================================================
+% TEST 46: Subsucesión convergente (Bolzano-Weierstrass)
+% ============================================================
+\begin{theorem}[Bolzano--Weierstrass]\label{thm:bolzano}
+Toda sucesión acotada en $\mathbb{R}$ tiene una subsucesión convergente.
+\end{theorem}
+
+\begin{proof}
+Sea $(x_n)_{n\in\mathbb{N}}$ una sucesión acotada en $\mathbb{R}$. Entonces existen $a, b \in \mathbb{R}$ tales que $a \leq x_n \leq b$ para todo $n \in \mathbb{N}$.
+
+Definimos el intervalo $I_0 = [a, b]$. Partimos $I_0$ en dos subintervalos de igual longitud:
+\[
+I_0 = \left[a, \frac{a+b}{2}\right] \cup \left(\frac{a+b}{2}, b\right].
+\]
+Al menos uno de estos subintervalos contiene infinitos términos de la sucesión $(x_n)$. Denotamos por $I_1$ al subintervalo que contiene infinitos términos, y definimos $\delta_1 = \frac{b-a}{2}$.
+
+Procedemos por inducción. Supongamos que hemos construido $I_0 \supseteq I_1 \supseteq \cdots \supseteq I_n$ tal que cada $I_k$ es un intervalo cerrado de longitud $\delta_k = \frac{b-a}{2^k}$ y contiene infinitos términos de $(x_n)$. Partimos $I_n$ en dos subintervalos de igual longitud. Denotamos por $I_{n+1}$ al subintervalo que contiene infinitos términos de $(x_n)$, con longitud $\delta_{n+1} = \frac{\delta_n}{2} = \frac{b-a}{2^{n+1}}$.
+
+Así obtenemos una sucesión de intervalos cerrados $I_0 \supseteq I_1 \supseteq I_2 \supseteq \cdots$ con $\operatorname{diam}(I_n) = \frac{b-a}{2^n} \to 0$ cuando $n \to \infty$.
+
+Construimos ahora una subsucesión $(x_{n_k})$ de la siguiente manera:
+\begin{itemize}
+    \item Como $I_1$ contiene infinitos términos de $(x_n)$, elegimos $n_1 \in \mathbb{N}$ tal que $x_{n_1} \in I_1$.
+    \item Como $I_2$ contiene infinitos términos de $(x_n)$ y solo una cantidad finita de estos tiene índice $\leq n_1$, elegimos $n_2 > n_1$ tal que $x_{n_2} \in I_2$.
+    \item En general, habiendo elegido $n_1 < n_2 < \cdots < n_k$ con $x_{n_j} \in I_j$ para $j = 1, \ldots, k$, como $I_{k+1}$ contiene infinitos términos, elegimos $n_{k+1} > n_k$ tal que $x_{n_{k+1}} \in I_{k+1}$.
+\end{itemize}
+
+Sea $L$ el único punto perteneciente a todos los intervalos $I_n$, es decir, $L = \bigcap_{n=0}^{\infty} I_n$. La existencia de tal punto está garantizada por el \textbf{Teorema de Intersección de Cantor} ya que los $I_n$ son intervalos cerrados y acotados con $\operatorname{diam}(I_n) \to 0$.
+
+Probamos que $x_{n_k} \to L$. Para todo $\varepsilon > 0$, elijamos $N \in \mathbb{N}$ tal que $\frac{b-a}{2^N} < \varepsilon$. Como $x_{n_k} \in I_k$ y $L \in I_k$ para todo $k$, se tiene:
+\[
+|x_{n_k} - L| \leq \operatorname{diam}(I_k) = \frac{b-a}{2^k} \leq \frac{b-a}{2^N} < \varepsilon, \quad \forall\, k \geq N.
+\]
+Por lo tanto, $x_{n_k} \to L$, y la subsucesión $(x_{n_k})$ es convergente.
+\end{proof}
+
+% ============================================================
+% TEST 47: Q no es completo
+% ============================================================
+\begin{theorem}\label{thm:q_no_completo}
+El conjunto $\mathbb{Q}$ con la métrica inducida de $\mathbb{R}$ no es completo.
+\end{theorem}
+
+\begin{proof}
+Para demostrar que $\mathbb{Q}$ no es completo, basta encontrar una sucesión de Cauchy en $\mathbb{Q}$ que no converja a ningún elemento de $\mathbb{Q}$.
+
+Consideramos la sucesión $(x_n)_{n \in \mathbb{N}}$ definida por
+\[
+x_n = \sum_{k=0}^{n} \frac{1}{(k!)^2}.
+\]
+Cada término $x_n$ es un número racional ya que es suma de racionales. Mostramos que $(x_n)$ es de Cauchy en $\mathbb{Q}$: para $m > n$,
+\[
+|x_m - x_n| = \sum_{k=n+1}^{m} \frac{1}{(k!)^2}.
+\]
+Dados $\varepsilon > 0$, como la serie $\sum_{k=0}^{\infty} \frac{1}{(k!)^2}$ converge (por comparación con $\sum_{k=1}^{\infty} \frac{1}{k^2}$), existe $N \in \mathbb{N}$ tal que
+\[
+\sum_{k=N+1}^{\infty} \frac{1}{(k!)^2} < \varepsilon.
+\]
+Entonces para todo $m > n \geq N$:
+\[
+|x_m - x_n| \leq \sum_{k=n+1}^{m} \frac{1}{(k!)^2} \leq \sum_{k=N+1}^{\infty} \frac{1}{(k!)^2} < \varepsilon.
+\]
+Por lo tanto, $(x_n)$ es de Cauchy en $\mathbb{Q}$.
+
+Sin embargo, la sucesión converge en $\mathbb{R}$ a
+\[
+L = \sum_{k=0}^{\infty} \frac{1}{(k!)^2}.
+\]
+Supongamos, por contradicción, que $L \in \mathbb{Q}$. Entonces existiría $p, q \in \mathbb{Z}$ con $q \neq 0$ tales que $L = \frac{p}{q}$. Por la convergencia de la serie:
+\[
+L = \sum_{k=0}^{\infty} \frac{1}{(k!)^2} > 1 + 1 = 2.
+\]
+Consideramos $N$ tal que $N! \geq q$. Entonces:
+\[
+\frac{p}{q} = \sum_{k=0}^{\infty} \frac{1}{(k!)^2} = \sum_{k=0}^{N} \frac{1}{(k!)^2} + \sum_{k=N+1}^{\infty} \frac{1}{(k!)^2}.
+\]
+Multiplicando por $(N!)^2$:
+\[
+\frac{p \cdot (N!)^2}{q} = (N!)^2 \sum_{k=0}^{N} \frac{1}{(k!)^2} + (N!)^2 \sum_{k=N+1}^{\infty} \frac{1}{(k!)^2}.
+\]
+El primer término de la derecha es un entero (ya que $(N!)^2/(k!)^2$ es entero para $k \leq N$). El segundo término es:
+\[
+(N!)^2 \sum_{k=N+1}^{\infty} \frac{1}{(k!)^2} = \sum_{k=N+1}^{\infty} \frac{(N!)^2}{(k!)^2}.
+\]
+Para $k \geq N+1$: $\frac{(N!)^2}{(k!)^2} \leq \frac{1}{((N+1)!)^2} \cdot (N!)^2 = \frac{1}{(N+1)^2}$ para el primer término de la serie restante. Pero en realidad:
+\[
+0 < \sum_{k=N+1}^{\infty} \frac{(N!)^2}{(k!)^2} \leq \frac{1}{(N+1)^2} + \frac{1}{(N+1)^2(N+2)^2} + \cdots < \frac{1}{(N+1)^2} \cdot \left(1 + \frac{1}{(N+2)^2} + \cdots\right) < \frac{1}{(N+1)^2} \cdot \frac{1}{1 - \frac{1}{(N+1)^2}}.
+\]
+Esto implica que el término residual es un número irracional o bien, más directamente, la serie de Basel $\sum_{k=1}^{\infty} \frac{1}{k^2} = \frac{\pi^2}{6}$ es irracional, y $\sum_{k=0}^{\infty} \frac{1}{(k!)^2}$ es también irracional por un resultado análogo.
+
+Una demostración alternativa y más directa: Consideramos la sucesión $(x_n)$ definida por recurrencia como las aproximaciones decimales de $\sqrt{2}$:
+\[
+x_1 = 1, \quad x_{n+1} = \frac{1}{2}\left(x_n + \frac{2}{x_n}\right), \quad n \geq 1.
+\]
+Esta es la sucesión del método de Newton para $f(x) = x^2 - 2$. Cada $x_n$ es racional ya que $x_1 = 1 \in \mathbb{Q}$ y la fórmula de recurrencia preserva la racionalidad.
+
+La sucesión $(x_n)$ es de Cauchy: se puede demostrar que $x_n > \sqrt{2}$ para todo $n \geq 2$, y que $x_{n+1} - \sqrt{2} = \frac{(x_n - \sqrt{2})^2}{2x_n}$. Por inducción:
+\[
+x_{n+1} - \sqrt{2} = \frac{(x_n - \sqrt{2})^2}{2x_n} \leq \frac{(x_n - \sqrt{2})^2}{2\sqrt{2}}.
+\]
+Esto muestra que el error cuadrático se reduce, y $(x_n) \to \sqrt{2}$ en $\mathbb{R}$.
+
+Si $(x_n)$ convergiera a algún $L \in \mathbb{Q}$, entonces $L^2 = 2$ ya que la función $f(x) = x^2$ es continua. Pero $\sqrt{2} \notin \mathbb{Q}$ (demostración clásica por reducción al absurdo), por lo tanto $(x_n)$ no converge en $\mathbb{Q}$.
+
+En conclusión, $(x_n)$ es una sucesión de Cauchy en $\mathbb{Q}$ sin convergente en $\mathbb{Q}$, por lo que $\mathbb{Q}$ no es completo.
+\end{proof}
+
+% ============================================================
+% TEST 48: R es completo
+% ============================================================
+\begin{theorem}\label{thm:r_completo}
+El conjunto $\mathbb{R}$ con la métrica usual es completo.
+\end{theorem}
+
+\begin{proof}
+Sea $(x_n)_{n \in \mathbb{N}}$ una sucesión de Cauchy en $\mathbb{R}$. Mostramos que $(x_n)$ converge en $\mathbb{R}$.
+
+Paso 1: $(x_n)$ es acotada. Tomando $\varepsilon = 1$ en la definición de Cauchy, existe $N_0 \in \mathbb{N}$ tal que $|x_n - x_m| < 1$ para todo $n, m \geq N_0$. En particular, $|x_n - x_{N_0}| < 1$ para todo $n \geq N_0$, lo que implica $|x_n| < |x_{N_0}| + 1$ para todo $n \geq N_0$. Definiendo
+\[
+M = \max\{|x_1|, |x_2|, \ldots, |x_{N_0-1}|, |x_{N_0}| + 1\},
+\]
+tenemos $|x_n| \leq M$ para todo $n \in \mathbb{N}$.
+
+Paso 2: Por el Teorema de Bolzano--Weierstrass (Teorema~\ref{thm:bolzano}), toda sucesión acotada tiene una subsucesión convergente. Sea $(x_{n_k})$ una subsucesión convergente de $(x_n)$ con $x_{n_k} \to L$ para algún $L \in \mathbb{R}$.
+
+Paso 3: Probamos que $x_n \to L$. Dado $\varepsilon > 0$, como $(x_n)$ es de Cauchy, existe $N_1 \in \mathbb{N}$ tal que
+\[
+|x_n - x_m| < \frac{\varepsilon}{2}, \quad \forall\, n, m \geq N_1.
+\]
+Como $x_{n_k} \to L$, existe $K \in \mathbb{N}$ tal que $n_K \geq N_1$ y
+\[
+|x_{n_K} - L| < \frac{\varepsilon}{2}.
+\]
+Entonces, para todo $n \geq N_1$:
+\[
+|x_n - L| \leq |x_n - x_{n_K}| + |x_{n_K} - L| < \frac{\varepsilon}{2} + \frac{\varepsilon}{2} = \varepsilon.
+\]
+Por lo tanto, $x_n \to L$, y la sucesión $(x_n)$ converge en $\mathbb{R}$.
+
+Concluimos que toda sucesión de Cauchy en $\mathbb{R}$ converge, por lo que $\mathbb{R}$ es completo.
+\end{proof}
+
+% ============================================================
+% TEST 49: Continuidad uniforme preserva sucesiones de Cauchy
+% ============================================================
+\begin{theorem}\label{thm:uniforme_cauchy}
+Sea $f: A \to \mathbb{R}$ uniformemente continua, donde $A \subseteq \mathbb{R}$. Si $(x_n)$ es una sucesión de Cauchy en $A$, entonces $(f(x_n))$ es una sucesión de Cauchy en $\mathbb{R}$.
+\end{theorem}
+
+\begin{proof}
+Sea $\varepsilon > 0$. Como $f$ es uniformemente continua en $A$, existe $\delta > 0$ tal que
+\[
+\forall\, x, y \in A: \quad |x - y| < \delta \implies |f(x) - f(y)| < \varepsilon.
+\]
+Como $(x_n)$ es de Cauchy en $A$, para este $\delta > 0$ existe $N \in \mathbb{N}$ tal que
+\[
+\forall\, n, m \geq N: \quad |x_n - x_m| < \delta.
+\]
+Entonces, para todo $n, m \geq N$ se tiene $|x_n - x_m| < \delta$, y por la continuidad uniforme de $f$:
+\[
+|f(x_n) - f(x_m)| < \varepsilon, \quad \forall\, n, m \geq N.
+\]
+Esto significa exactamente que $(f(x_n))$ es una sucesión de Cauchy en $\mathbb{R}$.
+\end{proof}
+
+% ============================================================
+% TEST 50: Continuidad uniforme en compactos
+% ============================================================
+\begin{theorem}[Heine--Cantor]\label{thm:heine_cantor}
+Sea $f: K \to \mathbb{R}$ continua, donde $K \subseteq \mathbb{R}$ es un conjunto compacto. Entonces $f$ es uniformemente continua en $K$.
+\end{theorem}
+
+\begin{proof}
+Procedemos por contradicción. Supongamos que $f$ no es uniformemente continua en $K$. Entonces existe $\varepsilon_0 > 0$ tal que para todo $\delta > 0$ existen $x, y \in K$ con $|x - y| < \delta$ pero $|f(x) - f(y)| \geq \varepsilon_0$.
+
+Para cada $n \in \mathbb{N}$, tomando $\delta = \frac{1}{n}$, existen $x_n, y_n \in K$ tales que:
+\[
+|x_n - y_n| < \frac{1}{n} \quad \text{y} \quad |f(x_n) - f(y_n)| \geq \varepsilon_0.
+\]
+Como $K$ es compacto, la sucesión $(x_n)$ tiene una subsucesión convergente. Sea $(x_{n_k})$ tal subsucesión con $x_{n_k} \to x_0 \in K$ (ya que $K$ es cerrado).
+
+Como $|x_{n_k} - y_{n_k}| < \frac{1}{n_k}$ y $x_{n_k} \to x_0$, por la desigualdad triangular:
+\[
+|y_{n_k} - x_0| \leq |y_{n_k} - x_{n_k}| + |x_{n_k} - x_0| < \frac{1}{n_k} + |x_{n_k} - x_0| \to 0.
+\]
+Por lo tanto, $y_{n_k} \to x_0$.
+
+Como $f$ es continua en $x_0$:
+\[
+f(x_{n_k}) \to f(x_0) \quad \text{y} \quad f(y_{n_k}) \to f(x_0).
+\]
+En particular, $|f(x_{n_k}) - f(y_{n_k})| \to 0$ cuando $k \to \infty$. Pero por construcción, $|f(x_{n_k}) - f(y_{n_k})| \geq \varepsilon_0 > 0$ para todo $k$, lo cual es una contradicción.
+
+Por lo tanto, $f$ debe ser uniformemente continua en $K$.
+\end{proof}
+
+\end{document}

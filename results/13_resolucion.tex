@@ -1,0 +1,189 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{geometry}
+\geometry{margin=2.5cm}
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\title{Soluciones Tests 57-61: Ecuaciones Diferenciales}
+\author{Mathematical AI Agent}
+\date{\today}
+\begin{document}
+\maketitle
+\section{Problemas}
+
+\subsection{Test 57: Ecuación diferencial exponencial}
+\begin{theorem}[Solución de $y' = ky$]
+Sea $k \in \mathbb{R}$ y $y_0 \in \mathbb{R}$. La única solución del problema de valor inicial
+\[
+y' = ky, \quad y(0) = y_0
+\]
+es $y(t) = y_0 e^{kt}$ para todo $t \in \mathbb{R}$.
+\end{theorem}
+
+\begin{proof}
+Definimos $u(t) = y(t) e^{-kt}$. Derivando con respecto a $t$:
+\[
+u'(t) = y'(t) e^{-kt} - k\, y(t) e^{-kt} = (y'(t) - k\, y(t)) e^{-kt}.
+\]
+Como $y$ satisface $y' = ky$, se tiene que $y'(t) - ky(t) = 0$ para todo $t$, luego:
+\[
+u'(t) = 0 \cdot e^{-kt} = 0.
+\]
+Por lo tanto, $u$ es constante: $u(t) = u(0)$ para todo $t$. Evaluando en $t=0$:
+\[
+u(0) = y(0) e^{0} = y_0.
+\]
+Así, $y(t) e^{-kt} = y_0$, de donde $y(t) = y_0 e^{kt}$.
+
+Para la unicidad, supongamos que $z$ es otra solución. Entonces $w(t) = y(t) - z(t)$ satisface $w' = kw$ con $w(0) = 0$. Por el mismo argumento anterior, $w(t) = w(0) e^{kt} = 0$ para todo $t$, luego $y = z$.
+\end{proof}
+
+\subsection{Test 58: EDO afín}
+\begin{theorem}[Solución de $y' = ay + b$]
+Sea $a, b \in \mathbb{R}$ con $a \neq 0$. La solución general de la ecuación diferencial
+\[
+y' = ay + b
+\]
+es
+\[
+y(t) = C e^{at} - \frac{b}{a}
+\]
+donde $C \in \mathbb{R}$ es una constante arbitraria.
+\end{theorem}
+
+\begin{proof}
+Definimos la función constante $y_p(t) = -b/a$. Se verifica directamente que:
+\[
+y_p'(t) = 0 = a \left(-\frac{b}{a}\right) + b = -b + b = 0.
+\]
+Por lo tanto, $y_p$ es una solución particular de la ecuación.
+
+Sea $y$ cualquier solución. Definimos $u(t) = y(t) - y_p(t) = y(t) + b/a$. Entonces:
+\[
+u'(t) = y'(t) = a\, y(t) + b = a\left(u(t) - \frac{b}{a}\right) + b = a\, u(t).
+\]
+Así, $u$ satisface $u' = au$, cuya solución general por el Test 57 es $u(t) = C e^{at}$. Por lo tanto:
+\[
+y(t) = u(t) + y_p(t) = C e^{at} - \frac{b}{a}.
+\]
+\end{proof}
+
+\subsection{Test 59: Unicidad con condición de Lipschitz}
+\begin{theorem}[Unicidad bajo condición de Lipschitz]
+Sea $f: D \subseteq \mathbb{R} \times \mathbb{R}^n \to \mathbb{R}^n$ continua en un dominio $D$ y supongamos que existe una constante $L > 0$ tal que para todo $(t, y_1), (t, y_2) \in D$:
+\[
+\|f(t, y_1) - f(t, y_2)\| \leq L \|y_1 - y_2\|.
+\]
+Entonces el problema de valor inicial
+\[
+y' = f(t, y), \quad y(t_0) = y_0
+\]
+tiene exactamente una solución local en algún intervalo $[t_0 - h, t_0 + h]$.
+\end{theorem}
+
+\begin{proof}
+\textbf{Existencia (Picard--Lindelöf):} Definimos la sucesión de iteradas de Picard:
+\[
+y_0(t) = y_0, \quad y_{n+1}(t) = y_0 + \int_{t_0}^{t} f(s, y_n(s))\, ds.
+\]
+Sea $M = \max_{|t - t_0| \leq h} \|f(t, y_0)\|$ y elegimos $h > 0$ tal que $hL < 1$. Probamos por inducción que para $n \geq 1$:
+\[
+\|y_{n+1}(t) - y_n(t)\| \leq \frac{(Lh)^n}{n!} M h.
+\]
+El caso base ($n=0$) se verifica por definición. Para el paso inductivo:
+\begin{align*}
+\|y_{n+2}(t) - y_{n+1}(t)\| &\leq \int_{t_0}^{t} \|f(s, y_{n+1}(s)) - f(s, y_n(s))\|\, ds \\
+&\leq L \int_{t_0}^{t} \|y_{n+1}(s) - y_n(s)\|\, ds \\
+&\leq L \int_{t_0}^{t} \frac{(Lh)^n}{n!} M h\, ds = \frac{(Lh)^{n+1}}{(n+1)!} M h.
+\end{align*}
+La serie $\sum_{n=0}^{\infty} \frac{(Lh)^n}{n!} M h$ converge, por lo que la sucesión $(y_n)$ converge uniformemente a una función $y$ continua. Pasando al límite en la integral:
+\[
+y(t) = y_0 + \int_{t_0}^{t} f(s, y(s))\, ds,
+\]
+y por el Teorema Fundamental del Cálculo, $y$ es solución de la EDO con $y(t_0) = y_0$.
+
+\textbf{Unicidad:} Sean $y$ y $z$ dos soluciones. Sea $w(t) = y(t) - z(t)$. Entonces $w(t_0) = 0$ y para $t \geq t_0$:
+\[
+\|w(t)\| = \left\|\int_{t_0}^{t} (f(s, y(s)) - f(s, z(s)))\, ds\right\| \leq L \int_{t_0}^{t} \|w(s)\|\, ds.
+\]
+Por la desigualdad de Gronwall generalizada, $\|w(t)\| \leq 0$ para $t \geq t_0$, luego $w(t) = 0$. Análogamente para $t \leq t_0$, obteniendo $y = z$.
+\end{proof}
+
+\subsection{Test 60: Sistemas lineales y matriz exponencial}
+\begin{theorem}[Solución mediante matriz exponencial]
+Sea $A \in \mathbb{R}^{n \times n}$ una matriz constante. Toda solución del sistema lineal
+\[
+x' = Ax
+\]
+se puede expresar como
+\[
+x(t) = e^{At} x_0
+\]
+donde $x_0 = x(0)$ y $e^{At} = \sum_{k=0}^{\infty} \frac{(At)^k}{k!}$ es la matriz exponencial.
+\end{theorem}
+
+\begin{proof}
+\textbf{Paso 1: $e^{At}$ es una matriz de Lie.} Probamos que $\frac{d}{dt} e^{At} = A e^{At}$. Por definición de la serie de potencias:
+\[
+\frac{d}{dt} e^{At} = \frac{d}{dt} \sum_{k=0}^{\infty} \frac{A^k t^k}{k!} = \sum_{k=1}^{\infty} \frac{A^k t^{k-1}}{(k-1)!} = A \sum_{j=0}^{\infty} \frac{A^j t^j}{j!} = A e^{At}.
+\]
+La convergencia de la serie permite la derivación término a término.
+
+\textbf{Paso 2: $e^{At}$ es la solución fundamental.} Definimos $\Phi(t) = e^{At}$. Entonces $\Phi'(t) = A \Phi(t)$ y $\Phi(0) = I$ (la matriz identidad). Para cualquier $x_0 \in \mathbb{R}^n$, definimos $x(t) = \Phi(t) x_0 = e^{At} x_0$. Entonces:
+\[
+x'(t) = \Phi'(t) x_0 = A \Phi(t) x_0 = A x(t),
+\]
+y $x(0) = \Phi(0) x_0 = x_0$. Así, $x$ es solución del problema de valor inicial.
+
+\textbf{Paso 3: Unicidad.} Sea $y(t)$ cualquier solución de $x' = Ax$ con $y(0) = x_0$. Definimos $z(t) = e^{-At} y(t)$. Entonces:
+\begin{align*}
+z'(t) &= -A e^{-At} y(t) + e^{-At} y'(t) = -A e^{-At} y(t) + e^{-At} A y(t) \\
+&= e^{-At}(-A y(t) + A y(t)) = 0,
+\end{align*}
+donde se usó que $A$ y $e^{-At}$ conmutan. Por lo tanto, $z(t) = z(0) = y(0) = x_0$, luego $y(t) = e^{At} x_0$.
+\end{proof}
+
+\subsection{Test 61: Estabilidad asintótica}
+\begin{theorem}[Estabilidad asintótica por autovalores]
+Sea $A \in \mathbb{R}^{n \times n}$ y supongamos que todos los autovalores $\lambda_1, \ldots, \lambda_n$ de $A$ satisfacen $\operatorname{Re}(\lambda_i) < 0$ para todo $i = 1, \ldots, n$. Entonces el sistema lineal $x' = Ax$ es asintóticamente estable, es decir, toda solución $x(t)$ satisface $\lim_{t \to \infty} x(t) = 0$.
+\end{theorem}
+
+\begin{proof}
+Sea $x(t) = e^{At} x_0$ la solución del sistema con condición inicial $x_0$. Debemos demostrar que $\|e^{At}\| \to 0$ cuando $t \to \infty$, donde $\|\cdot\|$ denota una norma matricial inducida.
+
+\textbf{Caso 1: $A$ es diagonalizable.} Entonces existe una matriz invertible $P$ tal que $A = P D P^{-1}$ con $D = \operatorname{diag}(\lambda_1, \ldots, \lambda_n)$. Entonces:
+\[
+e^{At} = P e^{Dt} P^{-1} = P \operatorname{diag}(e^{\lambda_1 t}, \ldots, e^{\lambda_n t}) P^{-1}.
+\]
+Para cada autovalor $\lambda_i = \alpha_i + i \beta_i$ con $\alpha_i < 0$:
+\[
+|e^{\lambda_i t}| = e^{\alpha_i t} \to 0 \quad \text{cuando } t \to \infty.
+\]
+Por lo tanto, $\|e^{Dt}\| = \max_i |e^{\lambda_i t}| \to 0$, y como:
+\[
+\|e^{At}\| \leq \|P\| \cdot \|e^{Dt}\| \cdot \|P^{-1}\|,
+\]
+se concluye que $\|e^{At}\| \to 0$.
+
+\textbf{Caso 2: $A$ general.} Para toda $\varepsilon > 0$, existe una constante $C_\varepsilon > 0$ tal que para todo $t \geq 0$:
+\[
+\|e^{At}\| \leq C_\varepsilon e^{(\mu + \varepsilon) t}
+\]
+donde $\mu = \max_i \operatorname{Re}(\lambda_i) < 0$. Elegimos $\varepsilon > 0$ suficientemente pequeño tal que $\mu + \varepsilon < 0$. Entonces:
+\[
+\|e^{At}\| \leq C_\varepsilon e^{(\mu + \varepsilon) t} \to 0 \quad \text{cuando } t \to \infty.
+\]
+En particular, para toda solución $x(t) = e^{At} x_0$:
+\[
+\|x(t)\| \leq \|e^{At}\| \cdot \|x_0\| \to 0,
+\]
+lo que prueba la estabilidad asintótica.
+\end{proof}
+
+\end{document}

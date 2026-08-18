@@ -1,0 +1,36 @@
+# Lean / Lake build output (at any level of the repository)
+.lake/
+*.olean
+*.ilean
+
+# LaTeX auxiliary files and generated page previews
+*.aux
+*.log
+*.out
+*.toc
+*.lof
+*.lot
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+*_page-*.png
+
+# Manim and other generated media
+media/
+*.mp4
+*.mov
+*.webm
+
+# Python / Jupyter local state
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ipynb_checkpoints/
+.venv/
+venv/
+
+# Operating-system and editor files
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/

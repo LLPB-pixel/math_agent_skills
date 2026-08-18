@@ -1,0 +1,187 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{geometry}
+\geometry{margin=2.5cm}
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\title{Soluciones Tests 11-15: Álgebra}
+\author{Mathematical AI Agent}
+\date{\today}
+\begin{document}
+\maketitle
+\section{Problemas}
+
+\subsection{Test 11: Autovalores de matrices simétricas}
+
+\begin{proposition}
+Sea $A$ una matriz real simétrica, es decir, $A = A^T$. Entonces todos los autovalores de $A$ son reales.
+\end{proposition}
+
+\begin{proof}
+Sea $\lambda \in \mathbb{C}$ un autovalor de $A$ y sea $v \in \mathbb{C}^n$ un autovector asociado, $v \neq 0$, tal que $Av = \lambda v$.
+
+Consideramos el producto interno hermítico (producto escalar en $\mathbb{C}^n$):
+\[
+\langle Av, v \rangle = v^* A v
+\]
+donde $v^*$ denota el conjugado transuesto de $v$.
+
+Por un lado, usando que $Av = \lambda v$:
+\[
+\langle Av, v \rangle = v^* (\lambda v) = \lambda \, v^* v = \lambda \|v\|^2
+\]
+
+Por otro lado, usando la identidad $v^* Av = (v^* Av)^*$ (ya que $v^* Av$ es un escalar):
+\[
+v^* Av = (v^* Av)^* = v^* A^* (v^*)^* = v^* A^T v
+\]
+ya que $A^* = (A^T)^T = A^T$ y $(v^*)^* = v$. Como $A$ es real y simétrica, $A^* = A^T = A$. Por tanto:
+\[
+v^* Av = v^* Av
+\]
+
+Observemos directamente que $v^* Av$ es un número real. En efecto:
+\[
+v^* Av = \overline{v^* Av} = \overline{(v^* Av)^*} = \overline{v^* A^T v} = \overline{v^* Av}
+\]
+ya que $A^T = A$. Luego $\lambda \|v\|^2$ es real.
+
+Como $\|v\|^2 > 0$ (porque $v \neq 0$), se concluye que $\lambda$ es real.
+\end{proof}
+
+\subsection{Test 12: Autovalores de matrices idempotentes}
+
+\begin{proposition}
+Sea $A$ una matriz (sobre un cuerpo) tal que $A^2 = A$. Entonces los únicos autovalores posibles de $A$ son $0$ y $1$.
+\end{proposition}
+
+\begin{proof}
+Sea $\lambda$ un autovalor de $A$ y sea $v \neq 0$ un autovector asociado, es decir, $Av = \lambda v$.
+
+Aplicando $A$ de nuevo a ambos lados de la ecuación:
+\[
+A^2 v = A(Av) = A(\lambda v) = \lambda (Av) = \lambda^2 v
+\]
+
+Como $A^2 = A$, tenemos:
+\[
+A^2 v = Av = \lambda v
+\]
+
+Igualando las dos expresiones obtenidas para $A^2 v$:
+\[
+\lambda^2 v = \lambda v
+\]
+\[
+(\lambda^2 - \lambda) v = 0
+\]
+
+Como $v \neq 0$, se deduce:
+\[
+\lambda^2 - \lambda = 0 \quad \Longrightarrow \quad \lambda(\lambda - 1) = 0
+\]
+
+Por lo tanto, $\lambda = 0$ o $\lambda = 1$. Estos son los únicos autovalores posibles de una matriz idempotente.
+\end{proof}
+
+\subsection{Test 13: Determinante de un producto}
+
+\begin{theorem}
+Sea $A$ y $B$ matrices $n \times n$ sobre un cuerpo. Entonces $\det(AB) = \det(A)\det(B)$.
+\end{theorem}
+
+\begin{proof}
+Para matrices elementales (elementales de Gauss), el resultado se verifica directamente. Hay tres tipos de matrices elementales:
+
+\textbf{Permutación de filas:} Si $E$ es la matriz de permutación de filas $i$ y $j$, entonces $\det(E) = -1$ y la permutación correspondiente en $AB$ produce $\det(AB) = -\det(A)B$, es decir, $\det(EB) = -\det(B) = \det(E)\det(B)$.
+
+\textbf{Multiplicación de una fila por un escalar:} Si $E = \operatorname{diag}(1,\ldots,c,\ldots,1)$ con $c$ en la posición $i$, entonces $\det(E) = c$ y $EB$ tiene la fila $i$ multiplicada por $c$, luego $\det(EB) = c\det(B) = \det(E)\det(B)$.
+
+\textbf{Adición de un múltiplo de una fila a otra:} Si $E$ representa $F_i \leftarrow F_i + cF_j$ con $i \neq j$, entonces $\det(E) = 1$ y la operación elemental no cambia el determinante, por lo que $\det(EB) = \det(B) = \det(E)\det(B)$.
+
+Ahora bien, toda matriz $A$ no singular puede expresarse como producto de matrices elementales: $A = E_1 E_2 \cdots E_k$. Por la transitividad del caso elemental:
+\begin{align*}
+\det(AB) &= \det(E_1 E_2 \cdots E_k B) \\
+          &= \det(E_1)\det(E_2 \cdots E_k B) = \cdots \\
+          &= \det(E_1)\det(E_2)\cdots\det(E_k)\det(B) \\
+          &= \det(A)\det(B).
+\end{align*}
+
+Si $A$ es singular, entonces $AB$ también es singular (ya que $\operatorname{rank}(AB) \leq \operatorname{rank}(A) < n$). En este caso, $\det(A) = 0$ y $\det(AB) = 0$, luego $\det(AB) = 0 = 0 \cdot \det(B) = \det(A)\det(B)$.
+
+\textbf{Alternativamente}, consideramos la función $B \mapsto \det(AB)$ fijando $A$. Esta función es aditiva en cada fila de $B$ (por la multilinealidad del determinante) y es alternada (si dos filas de $B$ son iguales, las filas correspondientes de $AB$ son iguales y el determinante se anula). Además, $\det(AB) = \det(A)$ cuando $B = I_n$. Por la characterización del determinante como la única función multilineal, alternada y normalizada, se concluye $\det(AB) = \det(A)\det(B)$.
+\end{proof}
+
+\subsection{Test 14: Grupos de orden primo}
+
+\begin{theorem}
+Todo grupo de orden primo es cíclico.
+\end{theorem}
+
+\begin{proof}
+Sea $G$ un grupo de orden $p$, donde $p$ es un número primo. Sea $g \in G$ un elemento distinto de la identidad $e$ (tal elemento existe ya que $p \geq 2$).
+
+Consideremos el subgrupo generado por $g$:
+\[
+\langle g \rangle = \{e, g, g^2, \ldots, g^{k-1}\}
+\]
+donde $k = \operatorname{ord}(g)$ es el orden del elemento $g$.
+
+Por el teorema de Lagrange, el orden de todo subgrupo divide el orden del grupo. En particular:
+\[
+|\langle g \rangle| = k \quad \text{divide} \quad |G| = p
+\]
+
+Como $p$ es primo, sus únicos divisores positivos son $1$ y $p$. Como $g \neq e$, tenemos $k > 1$, por lo tanto $k = p$.
+
+Esto implica que $\langle g \rangle$ tiene exactamente $p$ elementos, y como $\langle g \rangle \subseteq G$ y $|G| = p$, se deduce que $G = \langle g \rangle$.
+
+Por tanto, $G$ es un grupo cíclico generado por $g$.
+\end{proof}
+
+\subsection{Test 15: Subgrupos de grupos cíclicos}
+
+\begin{theorem}
+Todo subgrupo de un grupo cíclico es cíclico.
+\end{theorem}
+
+\begin{proof}
+Sea $G = \langle g \rangle$ un grupo cíclico y sea $H$ un subgrupo de $G$.
+
+Si $H = \{e\}$, entonces $H = \langle e \rangle$ es trivialmente cíclico.
+
+Supongamos que $H \neq \{e\}$. Entonces existe algún elemento $g^k \in H$ con $k \neq 0$. Como $H$ es un subgrupo, si $g^k \in H$, entonces $(g^k)^{-1} = g^{-k} \in H$. Por tanto, existen elementos de $H$ con exponente positivo.
+
+Sea $m$ el menor entero positivo tal que $g^m \in H$ (tal $m$ existe por el principio de buen orden de $\mathbb{Z}$, ya que el conjunto de enteros positivos $k$ tales que $g^k \in H$ es no vacío).
+
+\textbf{Afirmación:} $H = \langle g^m \rangle$.
+
+Probamos la doble inclusión:
+\begin{itemize}
+\item $\langle g^m \rangle \subseteq H$: Como $g^m \in H$ y $H$ es subgrupo, todas las potencias de $g^m$ pertenecen a $H$.
+
+\item $H \subseteq \langle g^m \rangle$: Sea $g^n \in H$ con $n \in \mathbb{Z}$. Por la división euclídea, existen enteros $q$ y $r$ tales que:
+\[
+n = qm + r, \quad 0 \leq r < m
+\]
+Entonces:
+\[
+g^n = g^{qm+r} = (g^m)^q \cdot g^r
+\]
+Como $g^n \in H$ y $(g^m)^q \in H$, se tiene:
+\[
+g^r = g^n \cdot (g^m)^{-q} \in H
+\]
+Si $r > 0$, entonces $g^r \in H$ con $0 < r < m$, lo que contradice la minimalidad de $m$. Por tanto $r = 0$, lo que implica $n = qm$ y $g^n = (g^m)^q \in \langle g^m \rangle$.
+\end{itemize}
+
+Se concluye que $H = \langle g^m \rangle$, por lo que $H$ es cíclico.
+\end{proof}
+
+\end{document}

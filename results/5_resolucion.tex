@@ -1,0 +1,135 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[colorlinks=true,linkcolor=blue]{hyperref}
+\usepackage{geometry}
+\geometry{margin=2.5cm}
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\title{Soluciones Tests 21-25: Cálculo}
+\author{Mathematical AI Agent}
+\date{\today}
+\begin{document}
+\maketitle
+\section{Problemas}
+
+\begin{theorem}[Derivada de $x^n$]\label{thm:derivada-xn}
+Para todo $n \in \mathbb{N}$, se tiene que
+\[
+\frac{d}{dx}x^n = nx^{n-1}.
+\]
+\end{theorem}
+
+\begin{proof}
+Sea $f(x) = x^n$ con $n \in \mathbb{N}$. Por definición de derivada:
+\[
+f'(x) = \lim_{h \to 0} \frac{f(x+h) - f(x)}{h} = \lim_{h \to 0} \frac{(x+h)^n - x^n}{h}.
+\]
+Por el binomio de Newton, expandimos $(x+h)^n$:
+\[
+(x+h)^n = \sum_{k=0}^{n} \binom{n}{k} x^{n-k} h^k = x^n + nx^{n-1}h + \sum_{k=2}^{n} \binom{n}{k} x^{n-k} h^k.
+\]
+Sustituyendo:
+\[
+\frac{(x+h)^n - x^n}{h} = \frac{nx^{n-1}h + \sum_{k=2}^{n} \binom{n}{k} x^{n-k} h^k}{h} = nx^{n-1} + \sum_{k=2}^{n} \binom{n}{k} x^{n-k} h^{k-1}.
+\]
+Tomando el límite cuando $h \to 0$, todos los términos con $h^{k-1}$ para $k \geq 2$ tienden a cero:
+\[
+f'(x) = nx^{n-1} + \lim_{h \to 0} \sum_{k=2}^{n} \binom{n}{k} x^{n-k} h^{k-1} = nx^{n-1}.
+\]
+\end{proof}
+
+\begin{theorem}[Regla del Producto]\label{thm:producto}
+Sean $f, g: \mathbb{R} \to \mathbb{R}$ funciones derivables en $x$. Entonces $fg$ es derivable en $x$ y
+\[
+(fg)'(x) = f'(x)g(x) + f(x)g'(x).
+\]
+\end{theorem}
+
+\begin{proof}
+Sea $h(x) = f(x)g(x)$. Por definición de derivada:
+\[
+h'(x) = \lim_{t \to 0} \frac{f(x+t)g(x+t) - f(x)g(x)}{t}.
+\]
+Añadimos y restamos $f(x+t)g(x)$ en el numerador:
+\begin{align*}
+h'(x) &= \lim_{t \to 0} \frac{f(x+t)g(x+t) - f(x+t)g(x) + f(x+t)g(x) - f(x)g(x)}{t} \\
+&= \lim_{t \to 0} \left[ f(x+t) \cdot \frac{g(x+t) - g(x)}{t} + \frac{f(x+t) - f(x)}{t} \cdot g(x) \right].
+\end{align*}
+Como $f$ es derivable en $x$, es continua en $x$, por lo que $\lim_{t \to 0} f(x+t) = f(x)$. Aplicando propiedades de límites:
+\begin{align*}
+h'(x) &= \left(\lim_{t \to 0} f(x+t)\right) \cdot \left(\lim_{t \to 0} \frac{g(x+t) - g(x)}{t}\right) + \left(\lim_{t \to 0} \frac{f(x+t) - f(x)}{t}\right) \cdot g(x) \\
+&= f(x) \cdot g'(x) + f'(x) \cdot g(x) \\
+&= f'(x)g(x) + f(x)g'(x).
+\end{align*}
+\end{proof}
+
+\begin{theorem}[Regla de la Cadena]\label{thm:cadena}
+Sean $f, g: \mathbb{R} \to \mathbb{R}$ tales que $g$ es derivable en $x$ y $f$ es derivable en $g(x)$. Entonces $f \circ g$ es derivable en $x$ y
+\[
+(f \circ g)'(x) = f'(g(x)) \cdot g'(x).
+\]
+\end{theorem}
+
+\begin{proof}
+Definimos auxiliarmente
+\[
+\phi(y) = \begin{cases}
+\dfrac{f(y) - f(g(x))}{y - g(x)} & \text{si } y \neq g(x), \\[6pt]
+f'(g(x)) & \text{si } y = g(x).
+\end{cases}
+\]
+Como $f$ es derivable en $g(x)$, $\phi$ es continua en $g(x)$. Por continuidad de $g$ en $x$, para $t$ suficientemente pequeño, $g(x+t) \to g(x)$ cuando $t \to 0$.
+
+Para $t$ suficientemente pequeño con $g(x+t) \neq g(x)$:
+\[
+\frac{f(g(x+t)) - f(g(x))}{t} = \frac{f(g(x+t)) - f(g(x))}{g(x+t) - g(x)} \cdot \frac{g(x+t) - g(x)}{t} = \phi(g(x+t)) \cdot \frac{g(x+t) - g(x)}{t}.
+\]
+Si $g(x+t) = g(x)$ para todos los $t$ suficientemente pequeños, entonces $g$ es localmente constante, $g'(x) = 0$, y trivialmente $(f \circ g)'(x) = 0 = f'(g(x)) \cdot 0$.
+
+En caso contrario, tomando límites:
+\[
+(f \circ g)'(x) = \lim_{t \to 0} \phi(g(x+t)) \cdot \frac{g(x+t) - g(x)}{t} = \phi(g(x)) \cdot g'(x) = f'(g(x)) \cdot g'(x),
+\]
+donde la igualdad del límite sigue de la continuidad de $\phi$ en $g(x)$ y la continuidad de $g$ en $x$.
+\end{proof}
+
+\begin{theorem}[Integral de $x^n$]\label{thm:integral-xn}
+Para todo $n \in \mathbb{N} \cup \{0\}$, se tiene
+\[
+\int x^n \, dx = \frac{x^{n+1}}{n+1} + C,
+\]
+donde $C$ es una constante arbitraria.
+\end{theorem}
+
+\begin{proof}
+Sea $F(x) = \frac{x^{n+1}}{n+1}$. Por la \hyperref[thm:derivada-xn]{Derivada de $x^n$} (Teorema~\ref{thm:derivada-xn}), con $n+1 \in \mathbb{N}$:
+\[
+F'(x) = \frac{d}{dx}\left(\frac{x^{n+1}}{n+1}\right) = \frac{1}{n+1} \cdot (n+1)x^{(n+1)-1} = x^n.
+\]
+Por el Teorema Fundamental del Cálculo (parte 1), si $F$ es una primitiva de $f(x) = x^n$, entonces todas las primitivas son de la forma $F(x) + C$. Como $F'(x) = x^n$, concluimos que
+\[
+\int x^n \, dx = \frac{x^{n+1}}{n+1} + C.
+\]
+\end{proof}
+
+\begin{theorem}[Integral Definida de $x^n$ en $0$ a $1$]\label{thm:integral-definida}
+Para todo $n \in \mathbb{N} \cup \{0\}$, se tiene
+\[
+\int_0^1 x^n \, dx = \frac{1}{n+1}.
+\]
+\end{theorem}
+
+\begin{proof}
+Por el Teorema Fundamental del Cálculo (parte 2) y el \hyperref[thm:integral-xn]{Teorema~\ref{thm:integral-xn}}, existe una primitiva de $x^n$ dada por $F(x) = \frac{x^{n+1}}{n+1}$. Por tanto:
+\[
+\int_0^1 x^n \, dx = F(1) - F(0) = \frac{1^{n+1}}{n+1} - \frac{0^{n+1}}{n+1} = \frac{1}{n+1} - 0 = \frac{1}{n+1}.
+\]
+\end{proof}
+
+\end{document}
