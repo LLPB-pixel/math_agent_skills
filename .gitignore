@@ -34,3 +34,7 @@ venv/
 Thumbs.db
 .idea/
 .vscode/
+
+# Proposals
+proposal_*.pdf
+proposal_*.tex
