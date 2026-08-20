@@ -5,6 +5,11 @@ assistant. The repository separates **exploration**, **formal verification**,
 **visualization**, **optimization**, **stochastic modelling**, and **final
 typesetting** instead of treating every computation as a proof.
 
+> **Core principle — Iterate to solve.** These skills are designed for an agent
+> that **iterates**: it formulates a hypothesis, computes, verifies with the
+> appropriate tool, inspects errors, corrects, and re-executes until it
+> converges to a correct result. A single-shot answer is not expected.
+
 ## Design principles
 
 The agent must keep these levels of evidence separate:
@@ -19,6 +24,12 @@ The agent must keep these levels of evidence separate:
 The skills also require explicit domains, assumptions, tolerances, random
 seeds, solver statuses, compilation checks, and honest reporting of failures.
 
+**6. Mandatory iteration — Iterative problem solving.** No result is accepted on
+the first attempt. Each skill defines its own verify-and-correct loop and the
+global orchestrator is cyclic, not linear. A compilation failure, a `sorry` in
+Lean, a non-zero residual in SymPy, a `status != OPTIMAL` in optimization, or a
+`pdflatex` error requires diagnosis, reformulation, and re-execution.
+
 ## Skills
 
 | Skill | Main use | Typical output |
@@ -31,13 +42,78 @@ seeds, solver statuses, compilation checks, and honest reporting of failures.
 | [`optimization-or`](optimization-or/SKILL.md) | LP, MILP, convex and nonlinear optimization | Validated candidate solutions and sensitivity data |
 | [`statistics-stochastics`](statistics-stochastics/SKILL.md) | Probability, simulation, and inference | Estimates with uncertainty and diagnostics |
 
-For multi-step problems, the recommended workflow is:
+## Iterative workflow — The agent must iterate
+
+**These skills require the agent to iterate to solve mathematical problems.**
+Chaining `explore → verify → typeset` once is not enough. Every stage must run
+as a **hypothesis → computation → inspection → correction → re-verification**
+loop until the evidence reaches the level demanded by the rigor hierarchy.
+
+### Global cyclic flow (not linear)
+
+`AGENTS.md` defines a multi-skill flow that is explicitly iterative:
 
 ```text
-explore and compute  →  formalize and verify  →  typeset or visualize
+                    ┌──────────────────────────────────────────────────┐
+                    │                                                  │
+                    ▼                                                  │
+ hypothesis / mathematical idea                                        │
+        │                                                              │
+        ├─► explore & compute  (python-scientific / jupyter) ──────────┤
+        │         │  ▲                                                 │
+        │         │  └──── inspect, compare, refine ───────────────────┤
+        │         ▼                                                    │
+        ├─► formalize & verify (lean) ─────────────────────────────────┤
+        │         │  ▲                                                 │
+        │         │  └──── lean error / sorry → fix → lake build ──────┤
+        │         ▼                                                    │
+        ├─► model & optimize / simulate (optimization-or /             │
+        │      statistics-stochastics) ──► status/feasibility check ───┤
+        │         │  ▲                                                 │
+        │         │  └──── infeasible / non-optimal → reformulate ─────┤
+        │         ▼                                                    │
+        └─► typeset & visualize (latex / manim) ───────────────────────┤
+                  │  ▲                                                 │
+                  │  └──── pdflatex error / overfull box / preview ────┤
+                  ▼                                                    │
+              deliver with labels: exact / numerical approximation /   │
+                    empirical observation / formally verified in Lean ──┘
 ```
 
-Use only the stages that the problem actually requires.
+> Use only the stages the problem actually requires, but **iterate inside each
+> stage** until it compiles, verifies, or converges. An unverified result is
+> never presented as proven.
+
+### Iteration loops by skill
+
+Each skill documents its own internal cycle that the agent must follow:
+
+* **`python-scientific`** — symbolic derivation with SymPy → `simplify(lhs-rhs)==0` → if it does not simplify to zero, do not assume truth; 50 dps numerical check with `verify_identity.py` at deterministic points → if a residual remains, review domain, assumptions, and branches → reformulate and re-execute. Always distinguish exact from floating-point approximation.
+
+* **`jupyter-visualization`** — `hypothesis → build experiment → execute → inspect output → visualize → compare with expected → modify experiment` (SKILL.md § General workflow). Save the notebook executed top-to-bottom with no hidden state and with fixed seeds.
+
+* **`lean`** — `idea → formalize proposition → write proof → lake build / lake env lean → inspect error → fix → recompile` until success without `sorry`/`admit`. A file that compiles with `sorry` is a draft, not a verified proof.
+
+* **`optimization-or`** — model (objective, variables, bounds, duals) → solve → check `status == OPTIMAL / success==True` → verify constraint residuals and recompute objective → if `INFEASIBLE`/`UNBOUNDED`/`OPTIMAL_INACCURATE`, diagnose scaling, convexity, and tolerances → reformulate.
+
+* **`statistics-stochastics`** — define probabilistic model → simulate with explicit seed → estimate with standard error / CI → compare empirical vs. theoretical → if autocorrelation or lack of convergence, adjust `N`, burn-in, thinning, MCMC diagnostics → re-simulate.
+
+* **`latex`** — create `.tex` → `pdflatex -halt-on-error` (two passes) → `compile_and_preview.sh` → inspect PNGs, `overfull boxes`, undefined references, missing figures → fix typography/layout → recompile. Never claim a PDF is complete if it has not compiled cleanly.
+
+* **`manim-animation`** — sketch scene → `manim -ql` (low resolution) → inspect frame/video → adjust `MathTex`/`Axes` → `manim -qh` final render. Animations illustrate; they do not prove.
+
+### What "iterate" means in practice
+
+1. **Execute the real tool** — do not simulate output. Before using it, check that it is available (`lake`, `python3`, `pdflatex`, `manim`, `kpsewhich`).
+2. **Read the diagnostic** — Lean log, SymPy traceback, `prob.status`, `res.success`, LaTeX log.
+3. **Fix the mathematical or technical cause** — do not hide the error by inventing a result.
+4. **Re-execute and record which evidence layer was achieved** — `exact`, `numerical approximation`, `empirical observation`, `formally verified in Lean`.
+5. **Honestly report unresolved failures** — missing dependency, inconclusive simplification, remaining `sorry`.
+
+This iterative behavior is what distinguishes these skills from single-shot use:
+the agent explores, computes, formally verifies when appropriate, and presents,
+refining on each pass until the mathematics is rigorous and the document
+compiles.
 
 ## Repository layout
 
